@@ -89,4 +89,4 @@ Included in the /docs folder:
 
 - UML Class Diagram.
 - Main Use Case Diagram.
-- Individual Use Cases: Login, Register, Create Order, Generate Report, Make Payment.
+- Individual Use Cases: Login, Register, Create Order, Generate Report, Make Payment
