@@ -1,24 +1,16 @@
-'''
-# api/v1/item_routes.py
-from fastapi import APIRouter, Depends, HTTPException
+# app/api/v1/egg_routes.py
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.schemas.item import ItemCreate, ItemResponse
-from app.services.item_service import create_new_item, fetch_item
 from app.db.session import get_db
+from app.schemas.egg import EggCreate, EggResponse
+from app.services.egg_service import create_egg, get_egg
 
 router = APIRouter()
 
+@router.post("/", response_model=EggResponse)
+def create_egg_route(egg: EggCreate, db: Session = Depends(get_db)):
+    return create_egg(db, egg)
 
-@router.post("/", response_model=ItemResponse)
-def create_item_route(item: ItemCreate, db: Session = Depends(get_db)):
-    return create_new_item(db, item)
-
-
-@router.get("/{item_id}", response_model=ItemResponse)
-def get_item_route(item_id: int, db: Session = Depends(get_db)):
-    db_item = fetch_item(db, item_id)
-    if not db_item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return db_item
-
-'''
+@router.get("/{egg_id}", response_model=EggResponse)
+def get_egg_route(egg_id: int, db: Session = Depends(get_db)):
+    return get_egg(db, egg_id)
