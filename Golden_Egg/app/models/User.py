@@ -5,7 +5,9 @@ from app.db.database import Base
 class User(Base):
     __tablename__ = "user"
 
+    # Primary Key
     id = Column(BigInteger, primary_key=True, index=True)
+
     name = Column(String, nullable=False)
     phoneNumber = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
@@ -14,5 +16,5 @@ class User(Base):
     address = Column(String)
     enabled = Column(Boolean, default=True)
 
-    # one to many
+    # One to Many with UserRole
     roles = relationship("UserRole", back_populates="user")

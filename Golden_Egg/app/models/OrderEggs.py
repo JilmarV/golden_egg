@@ -5,16 +5,17 @@ from app.db.database import Base
 class OrderEggs(Base):
     __tablename__ = "order_eggs"
 
+    # Primary Key
     id = Column(BigInteger, primary_key=True, index=True)
 
-    # Clave foranea de la tabla Role
-    order_id = Column(BigInteger, ForeignKey("order.orderId"))
+    # Foreign Key to Order
+    order_id = Column(BigInteger, ForeignKey("order.id"))
 
-    # Clave foranea de la tabla User
+    # Foreign Key to Egg
     egg_id = Column(BigInteger, ForeignKey("egg.id"))
 
-    # Esta relacion pertenece al Role de muchos a uno
-    order = relationship("Order", back_populates="order")
+    # Many to One with Order
+    order_rel = relationship("Order", back_populates="order_eggs")
 
-    # Esta relacion pertenece al User de muchos a uno
-    egg = relationship("Egg", back_populates="egg")
+    # Many to One with Egg
+    egg_rel = relationship("Egg", back_populates="order_eggs")

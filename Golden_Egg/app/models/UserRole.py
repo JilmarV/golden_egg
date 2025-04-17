@@ -5,16 +5,17 @@ from app.db.database import Base
 class UserRole(Base):
     __tablename__ = "user_role"
 
+    # Primary Key
     id = Column(BigInteger, primary_key=True, index=True)
 
-    # Clave foranea de la tabla Role
+    # Foreign Key to Role
     role_id = Column(BigInteger, ForeignKey("role.roleId"))
 
-    # Clave foranea de la tabla User
+    # Foreign Key to User
     user_id = Column(BigInteger, ForeignKey("user.id"))
 
-    # Esta relacion pertenece al Role de muchos a uno
+    # Many to One with Role
     role = relationship("Role", back_populates="user_roles")
 
-    # Esta relacion pertenece al User de muchos a uno
+    # Many to One with User
     user = relationship("User", back_populates="roles")

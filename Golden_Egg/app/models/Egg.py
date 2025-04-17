@@ -5,11 +5,19 @@ from app.db.database import Base
 class Egg(Base):
     __tablename__ = "egg"
 
+    # Primary Key
     id = Column(BigInteger, primary_key=True, index=True)
+
     color = Column(String)
-    expirationDate = Column(Date)
+    price = Column(Double)
 
+    # Foreign Key to TypeEgg
     type_id = Column(BigInteger, ForeignKey("type_egg.id"))
-    # one to one
-    type = relationship("TypeEgg", back_populates="egg")
+    # Many to One with TypeEgg
+    type = relationship("TypeEgg", back_populates="eggs")
 
+    # One to One with Inventory
+    inventory = relationship("Inventory", back_populates="egg", uselist=False)
+
+    # Many to Many with Order
+    orders = relationship("Order", secondary="order_eggs", back_populates="eggs")

@@ -5,16 +5,13 @@ from app.db.database import Base
 class Pay(Base):
     __tablename__ = "pay"
 
+    # Primary Key
     id = Column(BigInteger, primary_key=True)
 
     amountPaid = Column(Double)
     paymetMethod = Column(String)
 
-    client_id = Column(Integer, ForeignKey("client.id"))
-    #one to one
-    client = relationship("Client", back_populates="pay")
-
+    # Foreign Key a Bill
     bill_id = Column(Integer, ForeignKey("bill.id"))
-    #many to one
+    # Many-to-One with Bill
     bill = relationship("Bill", back_populates="pay")
-
