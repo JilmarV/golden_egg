@@ -18,6 +18,5 @@ class Egg(Base):
 
     # One to One with Inventory
     inventory = relationship("Inventory", back_populates="egg", uselist=False)
-
-    # Many to Many with Order
-    orders = relationship("Order", secondary="order_eggs", back_populates="eggs")
+    # One-to-Many with OrderEggs
+    order_eggs = relationship("OrderEggs", back_populates="egg")

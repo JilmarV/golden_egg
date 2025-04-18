@@ -18,3 +18,6 @@ class User(Base):
 
     # One to Many with UserRole
     roles = relationship("UserRole", back_populates="user")
+    # One to Many with Order
+    orders = relationship("Order", back_populates="user")
+

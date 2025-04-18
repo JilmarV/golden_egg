@@ -7,12 +7,15 @@ class Order(Base):
 
     # Primary Key
     id = Column(BigInteger, primary_key=True, index=True)
-    totalPrice = Column(Float)
+    totalPrice = Column(Double)
     orderDate = Column(Date)
     state = Column(String)
-
-    # Many to Many with order_eggs
-    eggs = relationship("Egg", secondary="order_eggs", back_populates="orders")
+    #Foreign Key to User
+    user_id = Column(BigInteger, ForeignKey("user.id"))
 
     # One to One with Bill
     bill = relationship("Bill", back_populates="order", uselist=False)
+    # One to Many with OrderEggs
+    order_eggs = relationship("OrderEggs", back_populates="order")
+    #One to Many with User
+    user = relationship("User", back_populates="orders")

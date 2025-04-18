@@ -9,7 +9,7 @@ class Pay(Base):
     id = Column(BigInteger, primary_key=True)
 
     amountPaid = Column(Double)
-    paymetMethod = Column(String)
+    paymentMethod = Column(String)
 
     # Foreign Key a Bill
     bill_id = Column(Integer, ForeignKey("bill.id"))

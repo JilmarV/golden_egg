@@ -7,6 +7,7 @@ class OrderEggs(Base):
 
     # Primary Key
     id = Column(BigInteger, primary_key=True, index=True)
+    quantity = Column(Integer, nullable=False, default=1)
 
     # Foreign Key to Order
     order_id = Column(BigInteger, ForeignKey("order.id"))
@@ -15,7 +16,7 @@ class OrderEggs(Base):
     egg_id = Column(BigInteger, ForeignKey("egg.id"))
 
     # Many to One with Order
-    order_rel = relationship("Order", back_populates="order_eggs")
+    order = relationship("Order", back_populates="order_eggs")
 
     # Many to One with Egg
-    egg_rel = relationship("Egg", back_populates="order_eggs")
+    egg = relationship("Egg", back_populates="order_eggs")
