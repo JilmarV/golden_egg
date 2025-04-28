@@ -1,8 +1,9 @@
 from pydantic import BaseModel
 from datetime import date
 from typing import Optional
-from Bill.Bill_Schemas import BillResponse
-from Supplier_Schema import SupplierResponse
+from Bill.Bill_Schema import *
+from Inventory.Inventory_Repository import *
+from Supplier.Supplier_Repository import *
 
 # Base schema for Egg, defining common attributes
 class EggBase(BaseModel):
@@ -21,7 +22,7 @@ class EggCreate(EggBase):
 class EggResponse(EggBase):
     id: int  # Unique identifier for the egg
     supplier: Optional[SupplierResponse] = None  # Supplier details (optional)
-    inventory: Optional[InventoryResponse] = None  # Inventory details (optional)
+    #inventory: Optional[InventoryResponse] = None  # Inventory details (optional)
 
     class Config:
         orm_mode = True  # Enable ORM mode for compatibility with ORMs like SQLAlchemy

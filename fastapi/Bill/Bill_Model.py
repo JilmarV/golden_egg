@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from db.database import Base
 
 # Represents a bill issued for an order.
-
 class Bill(Base):
     __tablename__ = "bills"
 
