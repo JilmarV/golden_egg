@@ -1,5 +1,25 @@
-.idea/
+# Ignorar entorno virtual (por si acaso)
 .venv/
-env/
 venv/
-node_modules
+
+# Ignorar archivos de configuración del IDE (JetBrains/PyCharm)
+.idea/
+
+# Ignorar archivos de sistema
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar archivos de entorno
+.env
+
+# Ignorar archivos de bases de datos temporales
+*.sqlite3
+
+# Ignorar logs
+*.log
+
+# Ignorar archivos de configuraciones locales
+*.local
+.DS_Store
