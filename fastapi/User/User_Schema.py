@@ -1,9 +1,9 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 class UserBase(BaseModel):
     name: str
     phone_number: str
-    email: EmailStr
+    email: str
     username: str
     address: str
     enabled: bool

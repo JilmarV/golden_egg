@@ -47,8 +47,8 @@ services:
 
   api:
     build:
-      context: ./Golden_Egg
-    container_name: api-golden-egg
+      context: ./fastapi
+    restart: unless-stopped
     deploy:
       mode: replicated
       replicas: 4
@@ -59,7 +59,6 @@ services:
         reservations:
           cpus: '0.25'
           memory: 512M
-    restart: unless-stopped
     environment:
       - DATABASE_URL=mysql+pymysql://goldenuser:goldenpass@mysql-golden-egg:3306/goldenegg_db
     networks:

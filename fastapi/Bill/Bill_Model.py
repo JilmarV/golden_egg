@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Date, Double, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from db.database import Base
+from Order.Order_Model import Order
 
 # Represents a bill issued for an order.
 class Bill(Base):

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db.session import get_db
 from Bill.Bill_Schema import *
-from Bill_Service import *
+from Bill.Bill_Service import *
 
 router = APIRouter()
 

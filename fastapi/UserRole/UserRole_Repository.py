@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from db.session import get_db
 from fastapi import HTTPException, Depends
-from fastapi.UserRole.UserRole_Model import *
+from UserRole.UserRole_Model import *
 
 
 # Creates a new UserRole in the database

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException
 from db.session import get_db
-from Bill_Repository import *
+from Bill.Bill_Repository import *
 from Bill.Bill_Schema import *
 
 # Service function to read all bills from the database

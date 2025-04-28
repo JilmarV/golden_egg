@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from db.session import get_db
 from fastapi import Depends
-from fastapi.Supplier.Supplier_Schema import *
-from fastapi.Supplier.Supplier_Repository import *
+from Supplier.Supplier_Schema import *
+from Supplier.Supplier_Repository import *
 
 # Service to create a new supplier
 def create_supplier_serv(supplier: SupplierCreate, db: Session = Depends(get_db)):

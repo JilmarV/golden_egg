@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, Float
 from sqlalchemy.orm import relationship
 from db.database import Base
+from User.User_Model import User
+from Bill.Bill_Model import Bill
 
 class Pay(Base):
     #Name Of The Table

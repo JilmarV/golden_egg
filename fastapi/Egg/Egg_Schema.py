@@ -8,7 +8,7 @@ from Supplier.Supplier_Repository import *
 # Base schema for Egg, defining common attributes
 class EggBase(BaseModel):
     type_egg: str  # Type of egg (e.g., chicken, duck)
-    color = str  # Color of the egg
+    color: str  # Color of the egg
     expirationDate: date  # Expiration date of the egg
     category: str  # Category of the egg (e.g., organic, free-range)
     supplier_id: int  # ID of the supplier

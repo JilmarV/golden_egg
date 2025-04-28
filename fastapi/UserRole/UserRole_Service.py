@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from db.session import get_db
-from fastapi.UserRole.UserRole_Repository import *
+from UserRole.UserRole_Repository import *
 
 # Service function to create a new UserRole
 def create_user_role_serv(user_id: int, role_id: int, db: Session = Depends(get_db)):

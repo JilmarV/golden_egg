@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from db.session import get_db
 from fastapi import HTTPException, Depends
-from fastapi.Supplier.Supplier_Model import *
-from fastapi.Supplier.Supplier_Schema import *
+from Supplier.Supplier_Model import *
+from Supplier.Supplier_Schema import *
 
 # Create a new supplier
 def create_supplier(supplier: SupplierCreate, db: Session):
