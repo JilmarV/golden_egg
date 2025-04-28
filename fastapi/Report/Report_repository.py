@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from db.session import get_db
-from Report_Model import Report
+from fastapi.Report.Report_model import Report
 from fastapi import Depends, HTTPException
-from Report_Schema import ReportCreate
+from fastapi.Report.Report_schema import ReportCreate
 
 def create_report(report: ReportCreate, db: Session):
     db_Report = Report(**report.dict())

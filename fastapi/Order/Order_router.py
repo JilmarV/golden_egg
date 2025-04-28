@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db.session import get_db
-from Order_Model import *
-from Order_Schema import OrderCreate, OrderResponse
-from Order_Service import create_order_serv, read_order_serv, read_orders_serv, delete_order_serv, update_order_serv
+from fastapi.Order.Order_model import *
+from fastapi.Order.Order_schema import OrderCreate, OrderResponse
+from fastapi.Order.Order_service import create_order_serv, read_order_serv, read_orders_serv, delete_order_serv, update_order_serv
 
 router = APIRouter()
 

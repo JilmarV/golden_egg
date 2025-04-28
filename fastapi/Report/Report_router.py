@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db.session import get_db
-from Report_Model import *
-from Report_Schema import ReportCreate, ReportResponse
-from Report_Service import create_report_serv, read_report_serv, read_reports_serv, delete_report_serv, update_report_serv
+from fastapi.Report.Report_model import *
+from fastapi.Report.Report_schema import ReportCreate, ReportResponse
+from fastapi.Report.Report_service import create_report_serv, read_report_serv, read_reports_serv, delete_report_serv, update_report_serv
 
 router = APIRouter()
 

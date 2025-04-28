@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from db.session import get_db
-from Pay_Model import Pay
+from fastapi.Pay.Pay_model import Pay
 from fastapi import Depends, HTTPException
-from Pay_Schema import PayCreate
+from fastapi.Pay.Pay_schema import PayCreate
 
 def create_pay(pay: PayCreate, db: Session):
     db_Pay = Pay(**pay.dict())

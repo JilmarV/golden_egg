@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from db.session import get_db   
-from OrderEgg_Schema import OrderEggCreate
-from OrderEgg_Repository import read_orderEgg, read_orderEggs, delete_orderEgg, create_orderEgg
+from fastapi.OrderEgg.OrderEgg_schema import OrderEggCreate
+from fastapi.OrderEgg.OrderEgg_repository import read_orderEgg, read_orderEggs, delete_orderEgg, create_orderEgg
 
 def read_orderEggs_serv(db: Session):
     return read_orderEggs(db)

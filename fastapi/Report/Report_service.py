@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from db.session import get_db   
-from Report_Schema import ReportCreate
-from Report_Repository import read_report, read_reports, delete_report, create_report, update_report
+from fastapi.Report.Report_schema import ReportCreate
+from fastapi.Report.Report_repository import read_report, read_reports, delete_report, create_report, update_report
 
 def read_reports_serv(db: Session):
     return read_reports(db)

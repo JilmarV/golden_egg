@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db.session import get_db
-from Pay_Model import *
-from Pay_Schema import PayCreate, PayResponse
-from Pay_Service import create_pay_serv, read_pay_serv, read_pays_serv, delete_pay_serv, update_pay_serv
+from fastapi.Pay.Pay_model import *
+from fastapi.Pay.Pay_schema import PayCreate, PayResponse
+from fastapi.Pay.Pay_service import create_pay_serv, read_pay_serv, read_pays_serv, delete_pay_serv, update_pay_serv
 
 router = APIRouter()
 

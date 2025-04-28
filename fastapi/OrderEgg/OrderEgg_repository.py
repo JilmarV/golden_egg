@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from db.session import get_db
-from OrderEgg_Model import OrderEgg
+from fastapi.OrderEgg.OrderEgg_model import OrderEgg
 from fastapi import Depends, HTTPException
-from OrderEgg_Schema import OrderEggCreate
+from fastapi.OrderEgg.OrderEgg_schema import OrderEggCreate
 
 def create_orderEgg(orderEgg: OrderEggCreate, db: Session):
     db_OrderEgg = OrderEgg(**orderEgg.dict())

@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from db.session import get_db   
-from Pay_Schema import PayCreate
-from Pay_Repository import read_pay, read_pays, delete_pay, create_pay, update_pay
+from fastapi.Pay.Pay_schema import PayCreate
+from fastapi.Pay.Pay_repository import read_pay, read_pays, delete_pay, create_pay, update_pay
 
 def read_pays_serv(db: Session):
     return read_pays(db)

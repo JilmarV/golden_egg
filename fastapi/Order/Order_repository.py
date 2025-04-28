@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from db.session import get_db
-from Order_Model import Order
+from fastapi.Order.Order_model import Order
 from fastapi import Depends, HTTPException
-from Order_Schema import OrderCreate
+from fastapi.Order.Order_schema import OrderCreate
 
 def create_order(order: OrderCreate, db: Session):
     db_Order = Order(**order.dict())

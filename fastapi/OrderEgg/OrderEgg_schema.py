@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
-from Order.Order_Schema import OrderResponse
+from fastapi.Order.Order_schema import OrderResponse
 #from Egg.Egg_Schema import EggResponse
 
 class OrderEggBase(BaseModel):
