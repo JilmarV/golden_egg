@@ -1,17 +1,9 @@
-from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Table, Column, Integer, ForeignKey
 from db.database import Base
 
-class UserRole(Base):
-    __tablename__ = "user_role"
-
-    id = Column(Integer, primary_key=True)  # Primary Key
-    user_id = Column(Integer, ForeignKey("users.id"))# Foreing Key
-    role_id = Column(Integer, ForeignKey("roles.id"))# Foreing Key
-
-    # Many-to-one with User
-    user = relationship("User", back_populates="user_role")
-
-    # Many-to-one with Role
-    role = relationship("Role", back_populates="user_role")
-    
+user_role = Table(
+    "users_roles",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("user.id"), primary_key=True),
+    Column("role_id", Integer, ForeignKey("role.id"), primary_key=True),
+)

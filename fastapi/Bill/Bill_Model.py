@@ -3,9 +3,8 @@ from sqlalchemy.orm import relationship
 from db.database import Base
 from Order.Order_Model import Order
 
-# Represents a bill issued for an order.
 class Bill(Base):
-    __tablename__ = "bills"
+    __tablename__ = "bill"
 
     id = Column(Integer, primary_key=True, index=True)
     
@@ -21,3 +20,7 @@ class Bill(Base):
     # Associated order for this bill.
     order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
     order = relationship("Order", back_populates="bill")
+
+    payment = relationship("Pay", back_populates="bill", uselist=False)
+
+

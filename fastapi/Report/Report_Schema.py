@@ -3,7 +3,7 @@ from datetime import date
 
 class ReportBase(BaseModel):
     type: str
-    reportDate: date
+    dateReport: date
     content: str
 
 class ReportCreate(ReportBase):

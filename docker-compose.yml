@@ -20,9 +20,9 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: goldenegg_db
-      MYSQL_USER: goldenuser
-      MYSQL_PASSWORD: goldenpass
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -60,7 +60,7 @@ services:
           cpus: '0.25'
           memory: 512M
     environment:
-      - DATABASE_URL=mysql+pymysql://goldenuser:goldenpass@mysql-golden-egg:3306/goldenegg_db
+      - DATABASE_URL=mysql+pymysql://user:password@mysql:3306/mydatabase
     networks:
       - net-golden-egg
     depends_on:
