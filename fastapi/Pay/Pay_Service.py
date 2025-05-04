@@ -1,20 +1,60 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from fastapi import Depends
-from db.session import get_db   
-from Pay.Pay_Schema import *
-from Pay.Pay_Repository import *
+from Pay.Pay_Model import Pay
+from Pay.Pay_Schema import PayCreate
+from User.User_Model import *
+from Bill.Bill_Model import *
 
-def read_pays_serv(db: Session):
-    return read_pays(db)
+def read_pays(db: Session):
+    return db.query(Pay).all()
 
-def read_pay_serv(pay_id: int, db: Session = Depends(get_db)):
-    return read_pay(pay_id, db)
+def read_pay(pay_id: int, db: Session):
+    pay = db.query(Pay).filter(Pay.id == pay_id).first()
+    if not pay:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    return pay
 
-def create_pay_serv(pay: PayCreate, db: Session = Depends(get_db)):
-    return create_pay(pay, db)
+def create_pay(pay_data: PayCreate, db: Session):
+    user = db.query(User).filter(User.id == pay_data.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    bill = db.query(Bill).filter(Bill.id == pay_data.bill_id).first()
+    if not bill:
+        raise HTTPException(status_code=404, detail="Bill not found")
+    new_pay = Pay(
+        amountPaid=pay_data.amountPaid,
+        paymentMethod=pay_data.paymentMethod,
+        user_id=pay_data.user_id,
+        bill_id=pay_data.bill_id
+    )
+    db.add(new_pay)
+    db.commit()
+    db.refresh(new_pay)
+    return new_pay
 
-def delete_pay_serv(pay_id: int, db: Session = Depends(get_db)):
-    return delete_pay(pay_id, db)
+def delete_pay(pay_id: int, db: Session):
+    pay = db.query(Pay).filter(Pay.id == pay_id).first()
+    if not pay:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    db.delete(pay)
+    db.commit()
+    return {"message": "Payment deleted"}
 
-def update_pay_serv(pay_id: int, pay_update: PayCreate, db: Session = Depends(get_db)):
-    return update_pay(pay_id, pay_update, db)
+def update_pay(pay_id: int, pay_data: PayCreate, db: Session):
+    pay = db.query(Pay).filter(Pay.id == pay_id).first()
+    if not pay:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    user = db.query(User).filter(User.id == pay_data.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    bill = db.query(Bill).filter(Bill.id == pay_data.bill_id).first()
+    if not bill:
+        raise HTTPException(status_code=404, detail="Bill not found")
+    pay.amountPaid = pay_data.amountPaid
+    pay.paymentMethod = pay_data.paymentMethod
+    pay.user_id = pay_data.user_id
+    pay.bill_id = pay_data.bill_id
+
+    db.commit()
+    db.refresh(pay)
+    return pays
