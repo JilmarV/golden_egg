@@ -10,10 +10,14 @@ class Egg(Base):
     __tablename__ = "egg"
 
     id = Column(Integer, primary_key=True, index=True)
-    type_egg = Column(String(50), nullable=False)
     color = Column(String(50), nullable=False)
-    expirationDate = Column(Date, nullable=False)
-    category = Column(String(20), nullable=False)
+    buy_price = Column(Double, nullable=False)
+    sale_price = Column(Double, nullable=True)
+    expiration_date = Column(Date, nullable=False)
+    quantity = Column(Integer, nullable=False)
+
+    type_id = Column(Integer, ForeignKey("type_egg.id"), nullable=False)
+    type = relationship("TypeEgg", back_populates="eggs")
     
     supplier_id = Column(Integer, ForeignKey("supplier.id"))
     supplier = relationship("Supplier", back_populates="eggs")

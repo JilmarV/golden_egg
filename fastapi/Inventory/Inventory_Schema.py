@@ -4,7 +4,6 @@ from datetime import date
 class InventoryBase(BaseModel):
     nameProduct: str
     availableQuantity: str
-    price: float
     entryDate: date
 
 class InventoryCreate(InventoryBase):

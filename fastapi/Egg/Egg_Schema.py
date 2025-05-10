@@ -1,28 +1,28 @@
 from pydantic import BaseModel
 from datetime import date
 from typing import Optional
-from Bill.Bill_Schema import *
-from Inventory.Inventory_Repository import *
-from Supplier.Supplier_Repository import *
+from Supplier.Supplier_Schema import SupplierResponse
+from Inventory.Inventory_Schema import InventoryResponse
+from TypeEgg.TypeEgg_Schema import TypeEggResponse
 
-# Base schema for Egg, defining common attributes
 class EggBase(BaseModel):
-    type_egg: str  # Type of egg (e.g., chicken, duck)
-    color: str  # Color of the egg
-    expirationDate: date  # Expiration date of the egg
-    category: str  # Category of the egg (e.g., organic, free-range)
-    supplier_id: int  # ID of the supplier
-    inventory_id: int  # ID of the inventory
-    
-# Schema for creating a new Egg, inheriting from EggBase
+    color: str
+    buy_price: float
+    sale_price: Optional[float] = None
+    expiration_date: date
+    quantity: int
+    type_id: int
+    supplier_id: int
+    inventory_id: int
+
 class EggCreate(EggBase):
     pass
 
-# Response schema for Egg, including additional attributes for response purposes
 class EggResponse(EggBase):
-    id: int  # Unique identifier for the egg
-    supplier: Optional[SupplierResponse] = None  # Supplier details (optional)
-    #inventory: Optional[InventoryResponse] = None  # Inventory details (optional)
+    id: int
+    type: Optional[TypeEggResponse] = None
+    supplier: Optional[SupplierResponse] = None
+    inventory: Optional[InventoryResponse] = None
 
     class Config:
-        orm_mode = True  # Enable ORM mode for compatibility with ORMs like SQLAlchemy
+        orm_mode = True

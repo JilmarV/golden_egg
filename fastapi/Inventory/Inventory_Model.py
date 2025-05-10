@@ -7,8 +7,6 @@ class Inventory(Base):
 
     id = Column(Integer, primary_key=True)
     nameProduct = Column(String(50), nullable=False)
-    availableQuantity = Column(String, nullable=False)
-    price = Column(Double, nullable=False)
     entryDate = Column(Date, nullable=False)
     
     eggs = relationship("Egg", back_populates="inventory")
