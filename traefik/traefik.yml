@@ -12,7 +12,7 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    network: eam-elecitva-balancer
+    network: net-golden-egg
     watch: true
 
 log:
