@@ -9,10 +9,10 @@ class Report(Base):
     id = Column(Integer, primary_key=True)
     
     #Type Of Report
-    type = Column(String)
+    type = Column(String(500))
     
     #Date Of Creation
     dateReport = Column(DateTime, default=datetime.utcnow)
     
     #Content Of The Report
-    content = Column(String)
+    content = Column(String(50))

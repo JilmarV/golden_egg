@@ -18,7 +18,7 @@ class Order(Base):
     orderDate = Column(DateTime, default=datetime.utcnow)
     
     #State Of The Order
-    state = Column(String)
+    state = Column(String(50))
     
     #many-to-one with User
     user_id = Column(Integer, ForeignKey("user.id"))

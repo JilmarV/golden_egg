@@ -6,7 +6,7 @@ class Supplier(Base):
     __tablename__ = "supplier"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    address = Column(String, nullable=False)
+    name = Column(String(50), nullable=False)
+    address = Column(String(50), nullable=False)
     
     eggs = relationship("Egg", back_populates="supplier")

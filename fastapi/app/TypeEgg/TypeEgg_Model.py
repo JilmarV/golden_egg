@@ -6,6 +6,6 @@ class TypeEgg(Base):
     __tablename__ = "typeEgg"
 
     id = Column(Integer, primary_key=True)  # Primary Key
-    name = Column(String, unique=True, nullable=False)
+    name = Column(String(50), unique=True, nullable=False)
 
     eggs = relationship("Egg", back_populates="type_egg")

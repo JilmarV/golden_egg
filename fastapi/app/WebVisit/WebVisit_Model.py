@@ -6,5 +6,5 @@ class WebVisit(Base):
     __tablename__ = "web_visit"
 
     id = Column(Integer, primary_key=True, index=True)
-    ip = Column(String, nullable=False)
+    ip = Column(String(50), nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)

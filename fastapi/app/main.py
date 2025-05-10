@@ -1,14 +1,32 @@
 from fastapi import FastAPI
-from app.User import User_Router
-from app.Role import Role_Router
-from app.Supplier import Supplier_Router
-from app.Pay import Pay_Router
-from app.Order import Order_Router
-from app.Report import Report_Router
-from app.Egg import Egg_Router
-from app.Bill import Bill_Router
+from app.User import User_Router, User_Model
+from app.Role import Role_Router, Role_Model
+from app.Supplier import Supplier_Router, Supplier_Model
+from app.Pay import Pay_Router, Pay_Model
+from app.Order import Order_Router, Order_Model
+from app.Report import Report_Router, Report_Model
+from app.Egg import Egg_Router, Egg_Model
+from app.Bill import Bill_Router, Bill_Model
+from app.OrderEgg import OrderEgg_Model
+from app.TypeEgg import TypeEgg_Model
+from app.UserRole import UserRole_Model
+from app.WebVisit import WebVisit_Model
+from app.db.database import engine
 
 import os
+
+User_Model.Base.metadata.create_all(bind=engine)
+Role_Model.Base.metadata.create_all(bind=engine)
+Supplier_Model.Base.metadata.create_all(bind=engine)
+Pay_Model.Base.metadata.create_all(bind=engine)
+Order_Model.Base.metadata.create_all(bind=engine)
+Report_Model.Base.metadata.create_all(bind=engine)
+Egg_Model.Base.metadata.create_all(bind=engine)
+Bill_Model.Base.metadata.create_all(bind=engine)
+OrderEgg_Model.Base.metadata.create_all(bind=engine)
+TypeEgg_Model.Base.metadata.create_all(bind=engine)
+UserRole_Model.Base.metadata.create_all(bind=engine)
+WebVisit_Model.Base.metadata.create_all(bind=engine)
 
 # FastAPI app
 app = FastAPI(

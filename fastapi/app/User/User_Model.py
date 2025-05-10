@@ -8,12 +8,12 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)  # Primary Key
-    name = Column(String)
-    phone_number = Column(String)
-    email = Column(String)
-    username = Column(String)
-    password = Column(String)
-    address = Column(String)
+    name = Column(String(50))
+    phone_number = Column(String(50))
+    email = Column(String(50))
+    username = Column(String(50))
+    password = Column(String(50))
+    address = Column(String(50))
     enabled = Column(Boolean)
 
     orders = relationship("Order", back_populates="user")

@@ -8,7 +8,7 @@ load_dotenv()
 
 MYSQL_USER = os.getenv("MYSQL_USER", "user")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "password")
-MYSQL_HOST = os.getenv("MYSQL_HOST", "mysql")
+MYSQL_HOST = os.getenv("MYSQL_HOST", "mysql-golden-egg")
 MYSQL_DB = os.getenv("MYSQL_DB", "mydatabase")
 
 
@@ -19,3 +19,8 @@ engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+try:
+    Base.metadata.create_all(bind=engine)
+    print("Tablas creadas correctamente.")
+except Exception as e:
+    print(f"Error al crear tablas: {e}")

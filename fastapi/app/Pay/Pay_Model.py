@@ -14,7 +14,7 @@ class Pay(Base):
     amountPaid = Column(Float)
     
     #Payment Method Used By The Client
-    paymentMethod = Column(String)
+    paymentMethod = Column(String(50))
     
     #Customer Who Did The Payment
     user_id = Column(Integer, ForeignKey("user.id"))
