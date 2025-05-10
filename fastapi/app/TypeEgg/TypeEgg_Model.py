@@ -1,0 +1,11 @@
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from app.db.database import Base
+
+class TypeEgg(Base):
+    __tablename__ = "typeEgg"
+
+    id = Column(Integer, primary_key=True)  # Primary Key
+    name = Column(String, unique=True, nullable=False)
+
+    eggs = relationship("Egg", back_populates="type_egg")
