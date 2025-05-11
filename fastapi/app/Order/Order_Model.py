@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, ForeignKey, String, DateTime, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.db.database import Base
-from app.User.User_Model import User
+from fastapi.app.User.user_model import User
 from app.OrderEgg.OrderEgg_Model import OrderEgg
 
 class Order(Base):

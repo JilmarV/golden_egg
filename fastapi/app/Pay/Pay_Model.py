@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, Float
 from sqlalchemy.orm import relationship
 from app.db.database import Base
-from app.User.User_Model import User
+from fastapi.app.User.user_model import User
 from app.Bill.Bill_Model import Bill
 
 class Pay(Base):

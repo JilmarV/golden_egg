@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from app.Egg.Egg_Model import *
 from app.Egg.Egg_Schema import *
 from app.Egg.Egg_Repository import *
-from app.Supplier.Supplier_Model import *
+from fastapi.app.Supplier.supplier_model import *
 from app.TypeEgg.TypeEgg_Model import *
 
 # Service to create a new egg

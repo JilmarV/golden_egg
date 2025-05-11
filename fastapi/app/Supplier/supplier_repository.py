@@ -1,31 +1,39 @@
-from sqlalchemy.orm import Session
-from app.db.session import get_db
-from fastapi import HTTPException, Depends
-from app.Supplier.Supplier_Model import *
-from app.Supplier.Supplier_Schema import *
+"""Repository functions for managing supplier data in the database."""
 
-# Create a new supplier
+# pylint: disable=import-error, no-name-in-module, too-few-public-methods
+
+from sqlalchemy.orm import Session
+from fastapi import HTTPException, Depends
+
+from app.db.session import get_db
+from app.Supplier.Supplier_Model import Supplier
+from app.Supplier.Supplier_Schema import SupplierCreate
+
+
 def create_supplier(supplier: SupplierCreate, db: Session):
+    """Creates a new supplier."""
     db_supplier = Supplier(**supplier.dict())
     db.add(db_supplier)
     db.commit()
     db.refresh(db_supplier)
     return db_supplier
 
-# Get all suppliers
-def read_suppliers(db: Session = Depends(get_db)):
-    suppliers = db.query(Supplier).all()
-    return suppliers
 
-# Get a specific supplier by ID
+def read_suppliers(db: Session = Depends(get_db)):
+    """Retrieves all suppliers."""
+    return db.query(Supplier).all()
+
+
 def read_supplier(supplier_id: int, db: Session = Depends(get_db)):
+    """Retrieves a specific supplier by ID."""
     supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
     if supplier is None:
         raise HTTPException(status_code=404, detail="Supplier not found")
     return supplier
 
-# Update a supplier by ID
+
 def update_supplier(supplier_id: int, supplier_update: SupplierCreate, db: Session = Depends(get_db)):
+    """Updates an existing supplier by ID."""
     supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
     if supplier is None:
         raise HTTPException(status_code=404, detail="Supplier not found")
@@ -37,8 +45,9 @@ def update_supplier(supplier_id: int, supplier_update: SupplierCreate, db: Sessi
     db.refresh(supplier)
     return supplier
 
-# Delete a supplier by ID
+
 def delete_supplier(supplier_id: int, db: Session = Depends(get_db)):
+    """Deletes a supplier by ID."""
     supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
     if supplier is None:
         raise HTTPException(status_code=404, detail="Supplier not found")

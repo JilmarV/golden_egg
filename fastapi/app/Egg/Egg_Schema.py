@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 from app.Bill.Bill_Schema import *
-from app.Supplier.Supplier_Repository import *
+from fastapi.app.Supplier.supplier_repository import *
 
 # Base schema for Egg, defining common attributes
 class EggBase(BaseModel):

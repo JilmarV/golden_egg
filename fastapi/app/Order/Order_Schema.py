@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
-from app.User.User_Schema import *
+from fastapi.app.User.user_schema import *
 
 class OrderBase(BaseModel):
     totalPrice: float

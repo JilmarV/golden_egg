@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.Pay.Pay_Model import Pay
 from app.Pay.Pay_Schema import PayCreate
-from app.User.User_Model import *
+from fastapi.app.User.user_model import *
 from app.Bill.Bill_Model import *
 
 def read_pays(db: Session):

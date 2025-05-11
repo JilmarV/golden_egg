@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.db.database import Base
-from app.UserRole.UserRole_Model import user_role
+from fastapi.app.UserRole.userrole_model import user_role
 
 
 class Role(Base):

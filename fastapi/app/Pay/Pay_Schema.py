@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from app.User.User_Schema import *
+from fastapi.app.User.user_schema import *
 from app.Bill.Bill_Schema import *
 
 class PayBase(BaseModel):
