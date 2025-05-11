@@ -3,11 +3,12 @@
 # pylint: disable=import-error, no-name-in-module, too-few-public-methods
 
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, Depends
 
 from app.db.session import get_db
-from app.Supplier.Supplier_Model import Supplier
-from app.Supplier.Supplier_Schema import SupplierCreate
+from app.Supplier.supplier_model import Supplier
+from app.Supplier.supplier_schema import SupplierCreate
+
+from fastapi import HTTPException, Depends
 
 
 def create_supplier(supplier: SupplierCreate, db: Session):
@@ -32,7 +33,11 @@ def read_supplier(supplier_id: int, db: Session = Depends(get_db)):
     return supplier
 
 
-def update_supplier(supplier_id: int, supplier_update: SupplierCreate, db: Session = Depends(get_db)):
+def update_supplier(
+    supplier_id: int,
+    supplier_update: SupplierCreate,
+    db: Session = Depends(get_db),
+):
     """Updates an existing supplier by ID."""
     supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
     if supplier is None:
