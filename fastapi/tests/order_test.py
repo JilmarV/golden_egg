@@ -1,0 +1,152 @@
+"""Test cases for Order endpoints."""
+
+# pylint: disable=import-error, no-name-in-module, too-few-public-methods, redefined-outer-name
+
+# Standard library
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+
+# Third-party
+import pytest
+from fastapi.testclient import TestClient
+
+# Application
+from fastapi.app.main import app
+from app.db.database import Base
+from app.db.session import get_db
+
+# In-memory database
+SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+@pytest.fixture(scope="function")
+def test_db():
+    """Creates a fresh database for each test."""
+    Base.metadata.create_all(bind=engine)
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+        Base.metadata.drop_all(bind=engine)
+
+
+@pytest.fixture
+def client(test_db):
+    """Overrides the dependency to use the test database."""
+    def override_get_db():
+        yield test_db
+
+    app.dependency_overrides[get_db] = override_get_db
+    with TestClient(app) as test_client:
+        yield test_client
+    app.dependency_overrides.clear()
+
+
+def test_create_order(client):
+    """Test creating an order."""
+    response = client.post(
+        "/order/",
+        json={
+            "totalPrice": 20000,
+            "orderDate": "2025-05-01",
+            "state": "pending",
+            "user_id": 1,
+        },
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["totalPrice"] == 20000
+    assert data["orderDate"] == "2025-05-01"
+    assert data["state"] == "pending"
+    assert "id" in data
+    assert data["user_id"] == 1
+
+
+def test_get_orders(client):
+    """Test retrieving all orders."""
+    client.post(
+        "/order/",
+        json={
+            "totalPrice": 40000,
+            "orderDate": "2025-04-29",
+            "state": "pending",
+            "user_id": 1,
+        },
+    )
+    response = client.get("/order/")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+
+def test_get_order(client):
+    """Test retrieving a specific order."""
+    response = client.post(
+        "/order/",
+        json={
+            "totalPrice": 40000,
+            "orderDate": "2025-04-29",
+            "state": "pending",
+            "user_id": 1,
+        },
+    )
+    created_order = response.json()
+    response = client.get(f"/order/{created_order['id']}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["totalPrice"] == 40000
+
+
+def test_update_order(client):
+    """Test updating an order."""
+    response = client.post(
+        "/order/",
+        json={
+            "totalPrice": 40000,
+            "orderDate": "2025-04-29",
+            "state": "pending",
+            "user_id": 1,
+        },
+    )
+    created_order = response.json()
+    response = client.put(
+        f"/order/{created_order['id']}",
+        json={
+            "totalPrice": 50000,
+            "orderDate": "2025-04-30",
+            "state": "shipped",
+            "user_id": 1,
+        },
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["totalPrice"] == 50000
+    assert data["orderDate"] == "2025-04-30"
+    assert data["state"] == "shipped"
+    assert data["user_id"] == 1
+
+
+def test_delete_order(client):
+    """Test deleting an order."""
+    response = client.post(
+        "/order/",
+        json={
+            "totalPrice": 40000,
+            "orderDate": "2025-04-29",
+            "state": "pending",
+            "user_id": 1,
+        },
+    )
+    created_order = response.json()
+    response = client.delete(f"/order/{created_order['id']}")
+    assert response.status_code == 200
+    get_response = client.get(f"/order/{created_order['id']}")
+    assert get_response.status_code == 404
