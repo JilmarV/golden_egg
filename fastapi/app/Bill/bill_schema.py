@@ -1,4 +1,4 @@
-"""Schema module for Egg models."""
+"""Schema module for Bill models."""
 
 # pylint: disable=too-few-public-methods
 
