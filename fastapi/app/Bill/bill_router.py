@@ -1,4 +1,4 @@
-"""Router module for Egg endpoints."""
+"""Router module for Bill endpoints."""
 
 # pylint: disable=import-error, no-name-in-module
 
