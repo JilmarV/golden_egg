@@ -1,4 +1,4 @@
-"""SQLAlchemy model for the Pay (egg) table."""
+"""SQLAlchemy model for the Egg table."""
 
 # pylint: disable=too-few-public-methods
 
