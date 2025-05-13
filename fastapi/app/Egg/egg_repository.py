@@ -1,4 +1,4 @@
-"""Repository module for Pay operations."""
+"""Repository module for Egg operations."""
 
 # pylint: disable=import-error, no-name-in-module, too-few-public-methods, wrong-import-order, ungrouped-imports
 
