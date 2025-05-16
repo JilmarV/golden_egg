@@ -7,8 +7,9 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 
 from fastapi import APIRouter, Depends
-from app.Bill.bill_schema import BillCreate, BillResponse
-from app.Bill.bill_service import (
+from ...app.Bill.bill_schema import BillCreate, BillResponse
+from ...app.Bill.bill_service import (
+    count_customer_bills_current_month_serv,
     create_bill_serv,
     delete_bill_serv,
     get_all_bills_for_company_serv,
@@ -61,7 +62,7 @@ def read_bills_route(db: Session = Depends(get_db)):
     Handles the HTTP GET request to retrieve all bills.
 
     Args:
-        db (Session): Database session dependency injected by 
+        db (Session): Database session dependency injected by
 
     Returns:
         List[Bill]: A list of bills retrieved from the database.
@@ -117,7 +118,7 @@ def get_customer_bills_count_route(db: Session = Depends(get_db)):
     Returns:
         int: The number of bills for the customer.
     """
-    return get_customer_bills_count_serv(db)
+    return count_customer_bills_current_month_serv(db)
 
 
 @router.get("/bestCustomer")

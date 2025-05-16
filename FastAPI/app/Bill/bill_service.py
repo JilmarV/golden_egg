@@ -16,7 +16,7 @@ from app.Bill.bill_repository import (
     get_bill_by_id,
     get_db,
     update_bill,
-    count_customer_bills_in_range
+    count_customer_bills_in_range,
 )
 from app.Bill.bill_schema import BillCreate
 
