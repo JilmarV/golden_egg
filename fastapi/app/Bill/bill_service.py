@@ -3,18 +3,23 @@
 # pylint: disable=no-name-in-module
 
 
+from datetime import datetime, timedelta
 from pytest import Session
 from fastapi import Depends, HTTPException
 from fastapi.app.Order.order_model import Order
 from fastapi.app.Bill.bill_model import Bill
 from fastapi.app.Bill.bill_repository import (
+    count_customer_bills_in_date_range,
     create_bill,
     delete_bill,
+    get_all_bills_for_company,
+    get_best_customer_of_month,
     get_bill_by_id,
     get_db,
     update_bill,
 )
 from fastapi.app.Bill.bill_schema import BillCreate
+
 
 # Service function to read all bills from the database
 def read_bills_serv(db: Session):
@@ -71,3 +76,38 @@ def update_bill_serv(
         )
 
     return update_bill(bill_id, bill_update, db)
+
+
+def count_customer_bills_current_month_serv(db: Session) -> int:
+    """
+    Count the number of bills for users with role 'CUSTOMER'
+    issued during the current month.
+    """
+    now = datetime.now()
+    start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    end = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+
+    count = count_customer_bills_in_date_range(start, end, db)
+    return count or 0
+
+
+def get_best_customer_of_month_serv(db: Session) -> str:
+    """
+    Get the best customer of the month based on the number of bills issued.
+    """
+    now = datetime.now()
+    start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    end = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+
+    best_customer = get_best_customer_of_month(start, end, db)
+    return best_customer or "Sin compras este mes"
+
+
+def get_all_bills_for_company_serv(db: Session = Depends(get_db)):
+    """
+    Retrieve all bills for the company.
+    """
+    bills = get_all_bills_for_company(db)
+    if not bills:
+        raise HTTPException(status_code=404, detail="No bills found")
+    return bills

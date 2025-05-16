@@ -11,6 +11,9 @@ from fastapi.app.Bill.bill_schema import BillCreate, BillResponse
 from fastapi.app.Bill.bill_service import (
     create_bill_serv,
     delete_bill_serv,
+    get_all_bills_for_company_serv,
+    get_best_customer_of_month_serv,
+    get_customer_bills_count_serv,
     read_bill_serv,
     read_bills_serv,
     update_bill_serv,
@@ -101,3 +104,51 @@ def update_bill_route(
         The updated bill object or the result of the update operation.
     """
     return update_bill_serv(bill_id, bill_update, db)
+
+
+@router.get("/countThisMonth")
+def get_customer_bills_count_route(db: Session = Depends(get_db)):
+    """
+    Retrieve the count of bills associated with a customer.
+
+    Args:
+        db (Session, optional): SQLAlchemy database session.
+        Automatically injected by FastAPI dependency.
+
+    Returns:
+        int: The number of bills for the customer.
+    """
+    return get_customer_bills_count_serv(db)
+
+
+@router.get("/bestCustomer")
+def get_best_customer_route(db: Session = Depends(get_db)):
+    """
+    Retrieve the best customer based on the number of bills.
+
+    Args:
+        db (Session, optional): SQLAlchemy database session.
+        Automatically injected by FastAPI dependency.
+
+    Returns:
+        dict: The best customer and their bill count.
+    """
+    return get_best_customer_of_month_serv(db)
+
+
+@router.get("/getAllOfCompany")
+def get_all_bills_of_company_route(db: Session = Depends(get_db)):
+    """
+    Retrieve all bills associated with a company.
+
+    This route handler fetches and returns the count of customer bills
+    for a company from the database.
+
+    Args:
+        db (Session, optional): SQLAlchemy database session dependency.
+        Defaults to Depends(get_db).
+
+    Returns:
+        int: The count of customer bills for the company.
+    """
+    return get_all_bills_for_company_serv(db)
