@@ -13,7 +13,9 @@ from ...app.Bill.bill_service import (
     create_bill_serv,
     delete_bill_serv,
     get_all_bills_for_company_serv,
+    get_all_bills_for_customers_serv,
     get_best_customer_of_month_serv,
+    get_monthly_sales_total_serv,
     read_bill_serv,
     read_bills_serv,
     update_bill_serv,
@@ -152,3 +154,34 @@ def get_all_bills_of_company_route(db: Session = Depends(get_db)):
         int: The count of customer bills for the company.
     """
     return get_all_bills_for_company_serv(db)
+
+
+@router.get("/getAllOfCustomers")
+def get_all_customer_bills_route(db: Session = Depends(get_db)):
+    """
+    Retrieve all bills associated with customers (users with the "CUSTOMER" role).
+
+    Args:
+        db (Session, optional): SQLAlchemy database session dependency.
+        Defaults to Depends(get_db).
+
+    Returns:
+        List: A list of bills associated with customers.
+    """
+    return get_all_bills_for_customers_serv(db)
+
+
+@router.get("/monthlySalesTotal")
+def get_monthly_sales_total_route(db: Session = Depends(get_db)):
+    """
+    Retrieves the total amount of sales for the current month.
+    Only bills from customers are considered in the calculation.
+
+    Args:
+        db (Session, optional): SQLAlchemy database session dependency.
+        Defaults to Depends(get_db).
+
+    Returns:
+        float: The total monthly sales amount.
+    """
+    return get_monthly_sales_total_serv(db)

@@ -111,21 +111,6 @@ def get_best_customer_of_month(start, end, db: Session) -> str:
     return best_customer.name if best_customer else None
 
 
-def get_monthly_sales_total(db: Session) -> float:
-    """
-    Retrieves the total sales for the current month.
-    """
-    total_sales = (
-        db.query(func.sum(Bill.totalPrice))  # pylint: disable=not-callable
-        .filter(
-            func.strftime("%Y-%m", Bill.issueDate)
-            == func.strftime("%Y-%m", func.now())  # pylint: disable=not-callable
-        )
-        .scalar()
-    )
-    return total_sales if total_sales else 0.0
-
-
 def get_all_bills_for_company(db: Session = Depends(get_db)):
     """
     Retrieves all bills for users with specific roles.
@@ -142,3 +127,52 @@ def get_all_bills_for_company(db: Session = Depends(get_db)):
         .all()
     )
     return bills
+
+
+def get_all_bills_for_customers(db: Session = Depends(get_db)):
+    """
+    Retrieves all bills for users with the 'CUSTOMER' role.
+    
+    Args:
+        db (Session): The database session dependency.
+        
+    Returns:
+        List: A list of bills associated with customers.
+    """
+    bills = (
+        db.query(Bill)
+        .join(Bill.order)
+        .join(Order.user)
+        .join(User.roles)
+        .filter(func.lower(Role.name) == "CUSTOMER")
+        .all()
+    )
+    return bills
+
+
+def get_monthly_sales_total(start, end, db: Session = Depends(get_db)) -> float:
+    """
+    Calculates the total amount of sales for bills within a given date range.
+    Only considers bills from customers (users with the 'CUSTOMER' role).
+    
+    Args:
+        start (datetime): The start date of the period.
+        end (datetime): The end date of the period.
+        db (Session): The database session dependency.
+        
+    Returns:
+        float: The total sales amount for the specified period.
+    """
+    total_amount = (
+        db.query(func.sum(Bill.amount))  # pylint: disable=not-callable
+        .join(Bill.order)
+        .join(Order.user)
+        .join(User.roles)
+        .filter(
+            Bill.issueDate >= start,
+            Bill.issueDate <= end,
+            func.lower(Role.name) == "CUSTOMER"
+        )
+        .scalar()
+    )
+    return total_amount or 0.0

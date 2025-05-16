@@ -3,7 +3,7 @@
 # pylint: disable=no-name-in-module
 
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from pytest import Session
 from fastapi import Depends, HTTPException
 from app.Order.order_model import Order
@@ -12,11 +12,13 @@ from app.Bill.bill_repository import (
     create_bill,
     delete_bill,
     get_all_bills_for_company,
+    get_all_bills_for_customers,
     get_best_customer_of_month,
     get_bill_by_id,
     get_db,
     update_bill,
     count_customer_bills_in_range,
+    get_monthly_sales_total,
 )
 from app.Bill.bill_schema import BillCreate
 
@@ -85,7 +87,7 @@ def count_customer_bills_current_month_serv(db: Session) -> int:
     """
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+    end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
 
     count = count_customer_bills_in_range(start, end, db)
     return count or 0
@@ -97,7 +99,7 @@ def get_best_customer_of_month_serv(db: Session) -> str:
     """
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+    end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
 
     best_customer = get_best_customer_of_month(start, end, db)
     return best_customer or "Sin compras este mes"
@@ -111,3 +113,38 @@ def get_all_bills_for_company_serv(db: Session = Depends(get_db)):
     if not bills:
         raise HTTPException(status_code=404, detail="No bills found")
     return bills
+
+
+def get_all_bills_for_customers_serv(db: Session = Depends(get_db)):
+    """
+    Retrieve all bills associated with customers (users with the "CUSTOMER" role).
+    
+    Args:
+        db (Session): The database session dependency.
+        
+    Returns:
+        List: A list of bills associated with customers.
+    """
+    bills = get_all_bills_for_customers(db)
+    if not bills:
+        raise HTTPException(status_code=404, detail="No customer bills found")
+    return bills
+
+
+def get_monthly_sales_total_serv(db: Session = Depends(get_db)) -> float:
+    """
+    Retrieves the total amount of sales for the current month.
+    Only bills from customers are considered in the calculation.
+    
+    Args:
+        db (Session): The database session dependency.
+        
+    Returns:
+        float: The total monthly sales amount.
+    """
+    now = datetime.now()
+    start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+    
+    total = get_monthly_sales_total(start, end, db)
+    return total or 0.0
