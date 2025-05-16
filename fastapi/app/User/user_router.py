@@ -12,6 +12,7 @@ from app.User.user_service import (
     delete_user_serv,
     read_users_serv,
     update_user_serv,
+    read_users_by_role
 )
 
 from fastapi import APIRouter, Depends
@@ -48,3 +49,7 @@ def read_users_route(db: Session = Depends(get_db)):
 def update_user_route(user_id: int, user_update: UserCreate, db: Session = Depends(get_db)):
     """Updates a user by ID."""
     return update_user_serv(user_id, user_update, db)
+
+@router.get("/user/byrole/{role_id}", response_model = UserResponse)
+def get_users_by_role(role_id: id, db: Session = Depends(get_db)):
+    return read_users_by_role(role_id, db)

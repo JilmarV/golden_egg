@@ -9,6 +9,7 @@ from fastapi.app.Order.order_repository import (
     read_order,
     read_orders,
     update_order,
+    read_orders_by_month
 )
 from fastapi.app.Order.order_schema import OrderCreate
 from fastapi.app.User.user_model import User
@@ -50,3 +51,6 @@ def update_order_serv(
 def delete_order_serv(order_id: int, db: Session = Depends(get_db)):
     """Delete an order by ID, or raise 404 if not found."""
     return delete_order(order_id, db)
+
+def get_orders_by_month_serv(year: int, month: int, db: Session = Depends(get_db)) -> float:
+    return read_orders_by_month(db, year, month)

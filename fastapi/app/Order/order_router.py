@@ -11,6 +11,7 @@ from fastapi.app.Order.order_service import (
     delete_order_serv,
     read_orders_serv,
     update_order_serv,
+    get_orders_by_month_serv
 )
 from fastapi.app.db.session import (
     get_db,
@@ -106,3 +107,6 @@ def update_order_route(
         The updated order object or the result of the update operation.
     """
     return update_order_serv(order_id, order_update, db)
+
+def total_pay_month_route(year: int, month: int, db: Session = Depends(get_db)):
+    return get_orders_by_month_serv(year, month, db)

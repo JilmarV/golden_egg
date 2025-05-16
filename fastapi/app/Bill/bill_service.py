@@ -16,7 +16,6 @@ from fastapi.app.Bill.bill_repository import (
 )
 from fastapi.app.Bill.bill_schema import BillCreate
 
-
 # Service function to read all bills from the database
 def read_bills_serv(db: Session):
     """Retrieve all bills from the database."""

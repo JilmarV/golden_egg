@@ -5,16 +5,17 @@
 from datetime import date
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from fastapi.app.Egg.egg_schema import EggCreate
-from fastapi.app.Egg.egg_repository import (
+from app.Egg.egg_schema import EggCreate
+from app.Egg.egg_repository import (
     create_egg,
     get_all_eggs,
     get_egg_by_id,
     update_egg,
     delete_egg,
+    search_eggs_stock
 )
-from fastapi.app.Supplier.supplier_model import Supplier
-from fastapi.app.TypeEgg.typeegg_model import TypeEgg
+from app.Supplier.supplier_model import Supplier
+from app.TypeEgg.typeegg_model import TypeEgg
 
 
 # Service to create a new egg
@@ -86,3 +87,6 @@ def delete_egg_service(egg_id: int, db: Session):
     if not egg:
         raise HTTPException(status_code=404, detail="Egg not found")
     return delete_egg(egg_id, db)
+
+def get_eggs_stock_service(type_egg_id: int, db: Session):
+    return search_eggs_stock(type_egg_id, db)

@@ -5,14 +5,8 @@
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from fastapi.app.Egg.egg_schema import EggCreate, EggResponse
-from fastapi.app.Egg.egg_service import (
-    create_egg_service,
-    get_all_eggs_service,
-    get_egg_by_id_service,
-    update_egg_service,
-    delete_egg_service,
-)
+from app.Egg.egg_service import *
+from app.Egg.egg_schema import EggCreate, EggResponse
 from fastapi import APIRouter, Depends
 
 router = APIRouter()
@@ -98,3 +92,7 @@ def update_egg_route(egg_id: int, egg_update: EggCreate, db: Session = Depends(g
         The updated egg object or the result of the update operation.
     """
     return update_egg_service(egg_id, egg_update, db)
+
+@router.get("/egg/stock/{type_egg_id}", response_model = EggResponse)
+def get_eggs_stock(type_egg_id: int, db: Session = Depends(get_db)):
+    return get_eggs_stock_service(type_egg_id, db)

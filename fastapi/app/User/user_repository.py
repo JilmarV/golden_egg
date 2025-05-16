@@ -4,6 +4,7 @@
 
 from app.db.session import get_db
 from app.User.user_model import User
+from app.Role.role_model import Role
 from app.User.user_schema import UserCreate
 
 from sqlalchemy.orm import Session
@@ -54,3 +55,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     db.delete(user)
     db.commit()
     return {"message": "User deleted successfully"}
+
+def read_users_by_role(db: Session, role_id: int):
+    return db.query(User).join(User.roles).filter(Role.id == role_id).all()

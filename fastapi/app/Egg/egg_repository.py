@@ -5,8 +5,8 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 from app.db.session import get_db
-from fastapi.app.Egg.egg_schema import EggCreate
-from fastapi.app.Egg.egg_model import Egg
+from app.Egg.egg_schema import EggCreate
+from app.Egg.egg_model import Egg
 
 
 # Create a new egg in the database
@@ -62,3 +62,6 @@ def delete_egg(egg_id: int, db: Session = Depends(get_db)):
     db.delete(db_egg)
     db.commit()
     return {"message": "Egg deleted successfully"}
+
+def search_eggs_stock(type_egg_id: int, db: Session):
+    return db.query(Egg).filter(Egg.type_egg_id == type_egg_id).all()

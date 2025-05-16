@@ -5,14 +5,14 @@
 from datetime import date
 from typing import Optional
 from pydantic import BaseModel
-from fastapi.app.Supplier.supplier_schema import SupplierResponse
+from app.Supplier.supplier_schema import SupplierResponse
+from app.TypeEgg.typeegg_schema import TypeEggResponse
 
 
 # Base schema for Egg, defining common attributes
 class EggBase(BaseModel):
     """Base schema for Egg model."""
 
-    nameProduct: str
     avalibleQuantity: int
     entryDate: date
     expirationDate: date
@@ -21,7 +21,6 @@ class EggBase(BaseModel):
     color: str  # Color of the egg
     category: str  # Category of the egg (e.g., organic, free-range)
     supplier_id: int  # ID of the supplier
-    inventory_id: int  # ID of the inventory
     type_egg_id: int
 
 
@@ -39,8 +38,7 @@ class EggResponse(EggBase):
 
     id: int
     supplier: Optional[SupplierResponse] = None
-    # inventory: Optional[InventoryResponse] = None
-
+    type: Optional[TypeEggResponse] = None
     class Config:
         """Pydantic configuration for ORM mode."""
 

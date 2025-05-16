@@ -5,7 +5,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 from app.db.database import Base
-from fastapi.app.UserRole.userrole_model import user_role
+from app.UserRole.userrole_model import user_role
 
 
 class User(Base):

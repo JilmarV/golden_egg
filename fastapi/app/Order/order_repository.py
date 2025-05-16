@@ -4,6 +4,8 @@
 
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func, and_
+from datetime import datetime, timedelta
 from fastapi.app.Order.order_schema import OrderCreate
 from fastapi.app.db.database import get_db
 from fastapi.app.Order.order_model import Order
@@ -92,3 +94,12 @@ def update_order(
     db.commit()
     db.refresh(order)
     return order
+
+def read_orders_by_month(db: Session, year: int, month:int) -> float:
+    start_date = datetime(year, month, 1)
+    if month == 12:
+        end_date = datetime(year + 1, 1, 1)
+    else:
+        end_date = datetime(year, month + 1, 1)
+    
+    return db.query(Order).filter(Order.orderDate >= start_date, Order.orderDate < end_date).all()

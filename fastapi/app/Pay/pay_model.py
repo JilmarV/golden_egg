@@ -1,10 +1,10 @@
 """SQLAlchemy model for the Pay (payment) table."""
 
 # pylint: disable=too-few-public-methods
-
-from sqlalchemy import Column, Integer, ForeignKey, String, Float
+from datetime import datetime
+from sqlalchemy import Column, Integer, ForeignKey, String, Float, DateTime
 from sqlalchemy.orm import relationship
-from ..db.database import Base
+from fastapi.app.db.database import Base
 
 
 class Pay(Base):
@@ -14,7 +14,9 @@ class Pay(Base):
     id = Column(Integer, primary_key=True)  # Unique identifier for the payment
     amount_paid = Column(Float)  # Total amount paid
     payment_method = Column(String(50))  # Payment method
-
+    # Date when the pay was issued.
+    issueDate = Column(DateTime, default=datetime.utcnow, nullable=False)
+    
     user_id = Column(Integer, ForeignKey("user.id"))  # Reference to the user who paid
     user = relationship("User", back_populates="payment")
 
