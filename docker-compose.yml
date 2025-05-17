@@ -47,7 +47,7 @@ services:
 
   api:
     build:
-      context: ./fastapi
+      context: ./FastAPI
     restart: unless-stopped
     deploy:
       mode: replicated
