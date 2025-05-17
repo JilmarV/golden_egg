@@ -65,3 +65,17 @@ def delete_egg(egg_id: int, db: Session = Depends(get_db)):
 
 def search_eggs_stock(type_egg_id: int, db: Session):
     return db.query(Egg).filter(Egg.type_egg_id == type_egg_id).all()
+
+
+def get_total_egg_quantity (db: Session):
+    """
+    Get the total quantity of eggs in the database.
+    
+    Args:
+        db (Session): The database session.
+        
+    Returns:
+        int: The total quantity of eggs.
+    """
+    count = db.query(Egg).count()
+    return count

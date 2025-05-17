@@ -10,6 +10,7 @@ from app.Egg.egg_repository import (
     create_egg,
     get_all_eggs,
     get_egg_by_id,
+    get_total_egg_quantity,
     update_egg,
     delete_egg,
     search_eggs_stock
@@ -90,3 +91,10 @@ def delete_egg_service(egg_id: int, db: Session):
 
 def get_eggs_stock_service(type_egg_id: int, db: Session):
     return search_eggs_stock(type_egg_id, db)
+
+def get_total_egg_quantity_serv(db: Session):
+    """Get the total quantity of eggs in stock."""
+    count = get_total_egg_quantity(db)
+    if not count:
+        raise HTTPException(status_code=404, detail="No eggs found")
+    return count or 0
