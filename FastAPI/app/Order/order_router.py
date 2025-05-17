@@ -6,7 +6,9 @@ from pytest import Session
 from fastapi import APIRouter, Depends
 from app.Order.order_schema import OrderCreate, OrderResponse
 from app.Order.order_service import (
+    count_orders_in_current_month_serv,
     create_order_serv,
+    get_orders_in_current_month_serv,
     read_order_serv,
     delete_order_serv,
     read_orders_serv,
@@ -108,6 +110,45 @@ def update_order_route(
     """
     return update_order_serv(order_id, order_update, db)
 
+
 @router.get("/totalOrdersMonth")
 def total_orders_by_month_route(year: int, month: int, db: Session = Depends(get_db)):
+    """
+    Retrieves the total number of orders for a specific month.
+    Args:
+        year (int): The year for which to retrieve the total orders.
+        month (int): The month for which to retrieve the total orders.
+        db (Session, optional): The database session dependency.
+        Defaults to the session provided by `get_db`.
+    Returns:
+        float: The total number of orders for the specified month.
+    """
     return get_orders_by_month_serv(year, month, db)
+
+
+@router.get("/currentMonth")
+def get_orders_in_current_month_route(db: Session = Depends(get_db)):
+    """
+    Retrieves all orders in the current month.
+
+    Args:
+        db (Session): The database session dependency.
+
+    Returns:
+        List[Order]: A list of orders for the current month.
+    """
+    return get_orders_in_current_month_serv(db)
+
+
+@router.get("/countCurrentMonth")
+def count_orders_in_current_month_route(db: Session = Depends(get_db)):
+    """
+    Retrieves the total number of orders in the current month.
+
+    Args:
+        db (Session): The database session dependency.
+
+    Returns:
+        int: The total number of orders for the current month.
+    """
+    return count_orders_in_current_month_serv(db)
