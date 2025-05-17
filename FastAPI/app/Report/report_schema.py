@@ -24,3 +24,8 @@ class ReportResponse(ReportBase):
     class Config:
         """Pydantic configuration for ORM compatibility."""
         from_attributes = True
+
+
+class TopSpenderResponse(BaseModel):
+    """Schema for top-spending client name."""
+    name: str

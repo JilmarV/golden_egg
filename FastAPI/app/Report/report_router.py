@@ -3,17 +3,22 @@
 # pylint: disable=import-error, no-name-in-module, too-few-public-methods
 
 from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends
 
 from app.db.session import get_db
-from app.Report.report_schema import ReportCreate, ReportResponse
+from app.Report.report_schema import ReportCreate, ReportResponse, TopSpenderResponse
+from app.Bill.bill_schema import BillResponse
 from app.Report.report_service import (
     create_report_serv,
     read_report_serv,
     delete_report_serv,
     read_reports_serv,
     update_report_serv,
+    get_staff_bills_serv,
+    get_client_bills_serv,
+    get_monthly_total_client_bills_serv,
+    get_top_client_this_month_serv,
 )
-from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
@@ -46,3 +51,27 @@ def read_reports_route(db: Session = Depends(get_db)):
 def update_report_route(report_id: int, report_update: ReportCreate, db: Session = Depends(get_db)):
     """Updates a report by ID."""
     return update_report_serv(report_id, report_update, db)
+
+
+@router.get("/bills/staff", response_model=list[BillResponse])
+def get_bills_staff_route(db: Session = Depends(get_db)):
+    """Returns bills where user is Admin or Employee."""
+    return get_staff_bills_serv(db)
+
+
+@router.get("/bills/clients", response_model=list[BillResponse])
+def get_bills_client_route(db: Session = Depends(get_db)):
+    """Returns bills where user is Client."""
+    return get_client_bills_serv(db)
+
+
+@router.get("/bills/clients/month-total", response_model=float)
+def get_total_client_bills_route(db: Session = Depends(get_db)):
+    """Returns total price of client bills this month."""
+    return get_monthly_total_client_bills_serv(db)
+
+
+@router.get("/bills/clients/top-spender", response_model=TopSpenderResponse)
+def get_top_spender_route(db: Session = Depends(get_db)):
+    """Returns the name of the client who spent the most this month."""
+    return {"name": get_top_client_this_month_serv(db)}
