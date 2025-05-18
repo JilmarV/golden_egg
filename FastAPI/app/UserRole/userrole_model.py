@@ -1,9 +1,7 @@
 """SQLAlchemy association table between users and roles."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy import Table, Column, Integer, ForeignKey
-from app.db.database import Base
+from FastAPI.app.db.database import Base
 
 user_role = Table(
     "users_roles",

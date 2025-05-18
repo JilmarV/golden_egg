@@ -2,13 +2,13 @@
 
 # pylint: disable=too-few-public-methods
 
-from typing import Optional
 from pydantic import BaseModel
 
 
 # Base schema for a Bill, containing common fields
 class BillBase(BaseModel):
     """Shared properties of a bill."""
+
     totalprice: float  # The total price of the bill
     paid: bool  # Indicates whether the bill has been paid
     order_id: int  # The ID of the associated order

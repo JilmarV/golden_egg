@@ -1,12 +1,10 @@
 """Router for TypeEgg endpoints in the FastAPI application."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy.orm import Session
 
-from app.db.session import get_db
-from app.TypeEgg.typeegg_schema import TypeEggCreate, TypeEggResponse
-from app.TypeEgg.typeegg_service import (
+from FastAPI.app.db.session import get_db
+from FastAPI.app.TypeEgg.typeegg_schema import TypeEggCreate, TypeEggResponse
+from FastAPI.app.TypeEgg.typeegg_service import (
     create_typeegg_service,
     read_typeegg_service,
     read_typeeggs_service,

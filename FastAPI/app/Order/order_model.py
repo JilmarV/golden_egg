@@ -1,10 +1,11 @@
 """SQLAlchemy model for the Order table."""
 
 # pylint: disable=too-few-public-methods
+
 from datetime import datetime
-from sqlalchemy import Column, Integer, ForeignKey, String, Float, DateTime
+from sqlalchemy import Column, DateTime, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
-from ..db.database import Base
+from FastAPI.app.db.database import Base
 
 
 class Order(Base):

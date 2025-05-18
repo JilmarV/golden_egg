@@ -1,16 +1,16 @@
 """Repository module for Bill operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, wrong-import-order, ungrouped-imports
+# pylint: disable=no-name-in-module
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from app.db.session import get_db
-from app.Bill.bill_model import Bill
-from app.Bill.bill_schema import BillCreate
-from app.Order.order_model import Order
-from app.User.user_model import User
-from app.Role.role_model import Role
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Bill.bill_model import Bill
+from FastAPI.app.Bill.bill_schema import BillCreate
+from FastAPI.app.Order.order_model import Order
+from FastAPI.app.User.user_model import User
+from FastAPI.app.Role.role_model import Role
 
 
 # Create a new bill in database
@@ -132,10 +132,10 @@ def get_all_bills_for_company(db: Session = Depends(get_db)):
 def get_all_bills_for_customers(db: Session = Depends(get_db)):
     """
     Retrieves all bills for users with the 'CUSTOMER' role.
-    
+
     Args:
         db (Session): The database session dependency.
-        
+
     Returns:
         List: A list of bills associated with customers.
     """
@@ -154,12 +154,12 @@ def get_monthly_sales_total(start, end, db: Session = Depends(get_db)) -> float:
     """
     Calculates the total amount of sales for bills within a given date range.
     Only considers bills from customers (users with the 'CUSTOMER' role).
-    
+
     Args:
         start (datetime): The start date of the period.
         end (datetime): The end date of the period.
         db (Session): The database session dependency.
-        
+
     Returns:
         float: The total sales amount for the specified period.
     """
@@ -171,7 +171,7 @@ def get_monthly_sales_total(start, end, db: Session = Depends(get_db)) -> float:
         .filter(
             Bill.issueDate >= start,
             Bill.issueDate <= end,
-            func.lower(Role.name) == "CUSTOMER"
+            func.lower(Role.name) == "CUSTOMER",
         )
         .scalar()
     )

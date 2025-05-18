@@ -6,9 +6,9 @@
 from datetime import datetime
 from pytest import Session
 from fastapi import Depends, HTTPException
-from app.Order.order_model import Order
-from app.Bill.bill_model import Bill
-from app.Bill.bill_repository import (
+from FastAPI.app.Order.order_model import Order
+from FastAPI.app.Bill.bill_model import Bill
+from FastAPI.app.Bill.bill_repository import (
     create_bill,
     delete_bill,
     get_all_bills_for_company,
@@ -20,7 +20,7 @@ from app.Bill.bill_repository import (
     count_customer_bills_in_range,
     get_monthly_sales_total,
 )
-from app.Bill.bill_schema import BillCreate
+from FastAPI.app.Bill.bill_schema import BillCreate
 
 
 # Service function to read all bills from the database
@@ -118,10 +118,10 @@ def get_all_bills_for_company_serv(db: Session = Depends(get_db)):
 def get_all_bills_for_customers_serv(db: Session = Depends(get_db)):
     """
     Retrieve all bills associated with customers (users with the "CUSTOMER" role).
-    
+
     Args:
         db (Session): The database session dependency.
-        
+
     Returns:
         List: A list of bills associated with customers.
     """
@@ -135,16 +135,16 @@ def get_monthly_sales_total_serv(db: Session = Depends(get_db)) -> float:
     """
     Retrieves the total amount of sales for the current month.
     Only bills from customers are considered in the calculation.
-    
+
     Args:
         db (Session): The database session dependency.
-        
+
     Returns:
         float: The total monthly sales amount.
     """
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
-    
+
     total = get_monthly_sales_total(start, end, db)
     return total or 0.0

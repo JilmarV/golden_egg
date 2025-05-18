@@ -1,10 +1,8 @@
 """Service layer for TypeEgg operations."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy.orm import Session
 
-from app.TypeEgg.typeegg_repository import (
+from FastAPI.app.TypeEgg.typeegg_repository import (
     create_typeegg,
     read_typeegg,
     read_typeeggs,
@@ -12,7 +10,7 @@ from app.TypeEgg.typeegg_repository import (
     delete_typeegg,
     get_db,
 )
-from app.TypeEgg.typeegg_schema import TypeEggCreate
+from FastAPI.app.TypeEgg.typeegg_schema import TypeEggCreate
 
 from fastapi import Depends
 

@@ -1,13 +1,18 @@
 """Router module for Egg endpoints."""
 
-# pylint: disable=import-error, no-name-in-module
-
-from sqlalchemy.orm import Session
-
-from app.db.session import get_db
-from app.Egg.egg_service import *
-from app.Egg.egg_schema import EggCreate, EggResponse
 from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Egg.egg_service import (
+    create_egg_service,
+    get_all_eggs_service,
+    get_egg_by_id_service,
+    get_total_egg_quantity_serv,
+    update_egg_service,
+    delete_egg_service,
+    get_eggs_stock_service,
+)
+from FastAPI.app.Egg.egg_schema import EggCreate, EggResponse
 
 router = APIRouter()
 
@@ -93,11 +98,20 @@ def update_egg_route(egg_id: int, egg_update: EggCreate, db: Session = Depends(g
     """
     return update_egg_service(egg_id, egg_update, db)
 
-@router.get("/stock/{type_egg_id}", response_model = EggResponse)
+
+@router.get("/stock/{type_egg_id}", response_model=EggResponse)
 def get_eggs_stock(type_egg_id: int, db: Session = Depends(get_db)):
+    """Retrieves eggs in stock by type egg ID.
+    Args:
+        type_egg_id (int): The ID of the type egg to search for.
+        db (Session): The database session dependency.
+    Returns:
+        list[Egg]: A list of eggs that match the type egg ID.
+    """
     return get_eggs_stock_service(type_egg_id, db)
 
-@router.get("/countThisMonth", response_model = int):
+
+@router.get("/countThisMonth", response_model=int)
 def get_total_egg_quantity_route(db: Session = Depends(get_db)):
     """
     Retrieves the total quantity of eggs in the database.

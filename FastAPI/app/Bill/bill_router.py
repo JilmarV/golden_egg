@@ -1,14 +1,11 @@
 """Router module for Bill endpoints."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy.orm import Session
 
-from app.db.session import get_db
-
 from fastapi import APIRouter, Depends
-from ...app.Bill.bill_schema import BillCreate, BillResponse
-from ...app.Bill.bill_service import (
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Bill.bill_schema import BillCreate, BillResponse
+from FastAPI.app.Bill.bill_service import (
     count_customer_bills_current_month_serv,
     create_bill_serv,
     delete_bill_serv,

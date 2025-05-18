@@ -5,7 +5,7 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
-from app.db.database import Base
+from FastAPI.app.db.database import Base
 
 
 class Egg(Base):

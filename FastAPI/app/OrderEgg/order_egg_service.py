@@ -4,15 +4,15 @@
 
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from app.OrderEgg.order_egg_repository import (
+from FastAPI.app.OrderEgg.order_egg_repository import (
     read_order_eggs,
     read_order_egg,
     create_order_egg,
     update_order_egg,
     delete_order_egg,
 )
-from app.OrderEgg.order_egg_schema import OrderEggCreate
-from app.db.session import get_db
+from FastAPI.app.OrderEgg.order_egg_schema import OrderEggCreate
+from FastAPI.app.db.session import get_db
 
 
 def read_order_eggs_serv(db: Session):

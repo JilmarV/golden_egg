@@ -1,19 +1,17 @@
 """Service layer for user-related operations."""
 
-# pylint: disable=import-error, no-name-in-module
+# pylint: disable=no-name-in-module
 
 from sqlalchemy.orm import Session
-from app.db.session import get_db
-from app.User.user_schema import UserCreate
-from app.User.user_repository import (
+from FastAPI.app.User.user_schema import UserCreate
+from FastAPI.app.User.user_repository import (
     read_users,
     read_user,
     create_user,
     delete_user,
     update_user,
-    read_users_by_role
+    read_users_by_role,
 )
-
 
 
 def read_users_serv(db: Session):
@@ -40,5 +38,7 @@ def update_user_serv(user_id: int, user_update: UserCreate, db: Session):
     """Service to update a user by ID."""
     return update_user(user_id, user_update, db)
 
-def read_users_by_role(role_id: int, db: Session):
+
+def read_users_by_role_serv(role_id: int, db: Session):
+    """Service to get users by role ID."""
     return read_users_by_role(role_id, db)

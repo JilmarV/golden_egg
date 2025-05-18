@@ -1,14 +1,11 @@
 """Repository module for Order operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, wrong-import-order, ungrouped-imports
-
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import func, and_
-from datetime import datetime, timedelta
-from app.Order.order_schema import OrderCreate
-from app.db.session import get_db
-from app.Order.order_model import Order
+from datetime import datetime
+from FastAPI.app.Order.order_schema import OrderCreate
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Order.order_model import Order
 
 
 def create_order(order: OrderCreate, db: Session):
@@ -95,7 +92,8 @@ def update_order(
     db.refresh(order)
     return order
 
-def read_orders_by_month(db: Session, year: int, month:int) -> float:
+
+def read_orders_by_month(db: Session, year: int, month: int) -> float:
     """Get all orders in a specific month.
     Args:
         db (Session): The database session.
@@ -109,8 +107,12 @@ def read_orders_by_month(db: Session, year: int, month:int) -> float:
         end_date = datetime(year + 1, 1, 1)
     else:
         end_date = datetime(year, month + 1, 1)
-    
-    return db.query(Order).filter(Order.orderDate >= start_date, Order.orderDate < end_date).all()
+
+    return (
+        db.query(Order)
+        .filter(Order.orderDate >= start_date, Order.orderDate < end_date)
+        .all()
+    )
 
 
 def get_orders_in_current_month(db, start, end):
@@ -134,4 +136,6 @@ def count_orders_in_current_month(db, start, end):
     Returns:
         int: The count of orders in the current month.
     """
-    return db.query(Order).filter(Order.orderDate >= start, Order.orderDate < end).count()
+    return (
+        db.query(Order).filter(Order.orderDate >= start, Order.orderDate < end).count()
+    )

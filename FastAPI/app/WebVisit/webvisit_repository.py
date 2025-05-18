@@ -1,7 +1,7 @@
 """Repository functions for managing web visit data."""
 
 from sqlalchemy.orm import Session
-from app.WebVisit.webvisit_model import WebVisit
+from FastAPI.app.WebVisit.webvisit_model import WebVisit
 
 
 def save_visit(ip: str, db: Session):

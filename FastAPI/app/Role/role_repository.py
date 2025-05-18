@@ -3,9 +3,9 @@
 # pylint: disable=import-error, no-name-in-module, too-few-public-methods
 
 from sqlalchemy.orm import Session
-from app.db.session import get_db
-from app.Role.role_model import Role
-from app.Role.role_schema import RoleCreate
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Role.role_model import Role
+from FastAPI.app.Role.role_schema import RoleCreate
 from fastapi import Depends, HTTPException
 
 

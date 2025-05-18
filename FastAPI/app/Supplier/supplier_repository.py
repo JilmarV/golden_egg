@@ -1,12 +1,10 @@
 """Repository functions for managing supplier data in the database."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy.orm import Session
 
-from app.db.session import get_db
-from app.Supplier.supplier_model import Supplier
-from app.Supplier.supplier_schema import SupplierCreate
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Supplier.supplier_model import Supplier
+from FastAPI.app.Supplier.supplier_schema import SupplierCreate
 
 from fastapi import HTTPException, Depends
 

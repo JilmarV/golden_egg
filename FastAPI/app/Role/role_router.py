@@ -1,12 +1,10 @@
 """Router for handling role-related API endpoints."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy.orm import Session
 
-from app.db.session import get_db
-from app.Role.role_schema import RoleCreate, RoleResponse
-from app.Role.role_service import (
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Role.role_schema import RoleCreate, RoleResponse
+from FastAPI.app.Role.role_service import (
     create_role_serv,
     read_role_serv,
     read_roles_serv,
@@ -38,7 +36,9 @@ def get_roles_route(db: Session = Depends(get_db)):
 
 
 @router.put("/{role_id}", response_model=RoleResponse)
-def update_role_route(role_id: int, role_update: RoleCreate, db: Session = Depends(get_db)):
+def update_role_route(
+    role_id: int, role_update: RoleCreate, db: Session = Depends(get_db)
+):
     """Updates a role by ID."""
     return update_role_serv(role_id, role_update, db)
 

@@ -1,17 +1,15 @@
 """Service layer for supplier operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy.orm import Session
-from app.Supplier.supplier_schema import SupplierCreate
-from app.Supplier.supplier_repository import (
+from FastAPI.app.Supplier.supplier_schema import SupplierCreate
+from FastAPI.app.Supplier.supplier_repository import (
     create_supplier,
     read_suppliers,
     read_supplier,
     update_supplier,
     delete_supplier,
 )
-from app.db.session import get_db
+from FastAPI.app.db.session import get_db
 from fastapi import Depends
 
 

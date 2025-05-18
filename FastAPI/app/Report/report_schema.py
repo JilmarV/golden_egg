@@ -1,6 +1,6 @@
 """Schemas for Report data validation and serialization."""
 
-# pylint: disable=import-error, too-few-public-methods
+# pylint: disable=too-few-public-methods
 
 from datetime import date
 from pydantic import BaseModel
@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 class ReportBase(BaseModel):
     """Base fields for a report."""
+
     type: str
     dateReport: date
     content: str
@@ -19,13 +20,16 @@ class ReportCreate(ReportBase):
 
 class ReportResponse(ReportBase):
     """Schema for returning a report with ID."""
+
     id: int
 
     class Config:
         """Pydantic configuration for ORM compatibility."""
+
         from_attributes = True
 
 
 class TopSpenderResponse(BaseModel):
     """Schema for top-spending client name."""
+
     name: str

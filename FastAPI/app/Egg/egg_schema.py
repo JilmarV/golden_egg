@@ -5,8 +5,8 @@
 from datetime import date
 from typing import Optional
 from pydantic import BaseModel
-from app.Supplier.supplier_schema import SupplierResponse
-from app.TypeEgg.typeegg_schema import TypeEggResponse
+from FastAPI.app.Supplier.supplier_schema import SupplierResponse
+from FastAPI.app.TypeEgg.typeegg_schema import TypeEggResponse
 
 
 # Base schema for Egg, defining common attributes
@@ -22,15 +22,19 @@ class EggBase(BaseModel):
     type_egg_id: int
     supplier_id: int  # ID of the supplier
 
+
 class EggCreate(EggBase):
     """Input schema for creating a new egg."""
 
 
 class EggResponse(EggBase):
     """Output schema for returning egg data, including related supplier."""
+
     id: int
     supplier: Optional[SupplierResponse] = None
     type_egg: Optional[TypeEggResponse] = None
+
     class Config:
         """Pydantic configuration for ORM mode."""
+
         from_attributes = True

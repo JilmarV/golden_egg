@@ -1,14 +1,16 @@
 """Router for handling report-related API endpoints."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 
-from app.db.session import get_db
-from app.Report.report_schema import ReportCreate, ReportResponse, TopSpenderResponse
-from app.Bill.bill_schema import BillResponse
-from app.Report.report_service import (
+from FastAPI.app.db.session import get_db
+from FastAPI.app.Report.report_schema import (
+    ReportCreate,
+    ReportResponse,
+    TopSpenderResponse,
+)
+from FastAPI.app.Bill.bill_schema import BillResponse
+from FastAPI.app.Report.report_service import (
     create_report_serv,
     read_report_serv,
     delete_report_serv,
@@ -48,7 +50,9 @@ def read_reports_route(db: Session = Depends(get_db)):
 
 
 @router.put("/{report_id}", response_model=ReportResponse)
-def update_report_route(report_id: int, report_update: ReportCreate, db: Session = Depends(get_db)):
+def update_report_route(
+    report_id: int, report_update: ReportCreate, db: Session = Depends(get_db)
+):
     """Updates a report by ID."""
     return update_report_serv(report_id, report_update, db)
 

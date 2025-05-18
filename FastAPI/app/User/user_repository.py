@@ -2,10 +2,10 @@
 
 # pylint: disable=import-error, no-name-in-module
 
-from app.db.session import get_db
-from app.User.user_model import User
-from app.Role.role_model import Role
-from app.User.user_schema import UserCreate
+from FastAPI.app.db.session import get_db
+from FastAPI.app.User.user_model import User
+from FastAPI.app.Role.role_model import Role
+from FastAPI.app.User.user_schema import UserCreate
 
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
@@ -56,5 +56,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "User deleted successfully"}
 
-def read_users_by_role(db: Session, role_id: int):
+
+def read_users_by_role_serv(db: Session, role_id: int):
     return db.query(User).join(User.roles).filter(Role.id == role_id).all()

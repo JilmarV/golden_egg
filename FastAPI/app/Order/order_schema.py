@@ -5,8 +5,7 @@
 
 from typing import Optional
 from pydantic import BaseModel
-
-from app.User.user_schema import UserResponse
+from FastAPI.app.User.user_schema import UserResponse
 
 
 class OrderBase(BaseModel):
