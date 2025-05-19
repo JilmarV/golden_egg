@@ -28,8 +28,10 @@ class PayResponse(PayBase):
     """Output schema for returning payment data, including related user and bill."""
 
     id: int
+    amount_paid: float
+    payment_method: str
+    bill_id: int
     user: Optional[UserResponse] = None
-    bill: Optional[BillResponse] = None
 
     class Config:
         """Pydantic configuration for ORM mode."""

@@ -29,7 +29,7 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="orders")
 
-    bill = relationship("Bill", back_populates="order", uselist=False)
+    bill = relationship("Bill", back_populates="order")
 
     # one-to.many with Order
     order_eggs = relationship("OrderEgg", back_populates="order")

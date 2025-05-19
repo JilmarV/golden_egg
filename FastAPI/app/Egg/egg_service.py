@@ -96,6 +96,7 @@ def get_eggs_stock_service(type_egg_id: int, db: Session):
 def get_total_egg_quantity_serv(db: Session):
     """Get the total quantity of eggs in stock."""
     count = get_total_egg_quantity(db)
+    print(count)
     if not count:
         raise HTTPException(status_code=404, detail="No eggs found")
     return count or 0

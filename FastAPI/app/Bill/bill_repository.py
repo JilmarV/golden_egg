@@ -14,7 +14,7 @@ from app.Role.role_model import Role
 
 
 # Create a new bill in database
-def create_bill(bill: BillCreate, db: Session = Depends(get_db)):
+def create_bill(bill: BillCreate, db: Session):
     """Create a new bill record in the database."""
     db_bill = Bill(**bill.dict())
     db.add(db_bill)
@@ -24,14 +24,14 @@ def create_bill(bill: BillCreate, db: Session = Depends(get_db)):
 
 
 # Retrieves all bills from the database
-def get_all_bills(db: Session = Depends(get_db)):
+def get_all_bills(db: Session):
     """Retrieve all bill records from the database."""
     bills = db.query(Bill).all()
     return bills
 
 
 # Retrieves a specific bill garden by its ID
-def get_bill_by_id(bill_id: int, db: Session = Depends(get_db)):
+def get_bill_by_id(bill_id: int, db: Session):
     """Retrieve a specific bill record by its ID."""
     bill = db.query(Bill).filter(Bill.id == bill_id).first()
 
@@ -41,7 +41,7 @@ def get_bill_by_id(bill_id: int, db: Session = Depends(get_db)):
 
 
 # Updates a specific bill in the database
-def update_bill(bill_id: int, bill: BillCreate, db: Session = Depends(get_db)):
+def update_bill(bill_id: int, bill: BillCreate, db: Session):
     """Update a specific bill record by its ID."""
     db_bill = db.query(Bill).filter(Bill.id == bill_id).first()
 
@@ -56,7 +56,7 @@ def update_bill(bill_id: int, bill: BillCreate, db: Session = Depends(get_db)):
 
 
 # Deletes a specific bill from the database
-def delete_bill(bill_id: int, db: Session = Depends(get_db)):
+def delete_bill(bill_id: int, db: Session):
     """Delete a specific bill record by its ID."""
     db_bill = db.query(Bill).filter(Bill.id == bill_id).first()
 
@@ -75,18 +75,18 @@ def count_customer_bills_in_range(start, end, db: Session):
     between the given start and end dates.
     """
     count = (
-        db.query(func.count(Bill.id))  # pylint: disable=not-callable
+        db.query(Bill)  # pylint: disable=not-callable
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)
         .filter(
             Bill.issueDate >= start,
             Bill.issueDate <= end,
-            func.lower(Role.name) == "CUSTOMER",
+            Role.name == "CUSTOMER",
         )
-        .scalar()
+        .all()
     )
-
+    print(count)
     return count
 
 
@@ -101,7 +101,7 @@ def get_best_customer_of_month(start, end, db: Session) -> str:
         .filter(
             Bill.issueDate >= start,
             Bill.issueDate <= end,
-            func.lower(Role.name) == "CUSTOMER",
+            Role.name == "CUSTOMER",
         )
         .group_by(User.id)
         .order_by(func.count(Bill.id).desc())  # pylint: disable=not-callable
@@ -111,7 +111,7 @@ def get_best_customer_of_month(start, end, db: Session) -> str:
     return best_customer.name if best_customer else None
 
 
-def get_all_bills_for_company(db: Session = Depends(get_db)):
+def get_all_bills_for_company(db: Session):
     """
     Retrieves all bills for users with specific roles.
     This function filters bills based on the roles of the users associated with them.
@@ -123,13 +123,13 @@ def get_all_bills_for_company(db: Session = Depends(get_db)):
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)
-        .filter(func.lower(Role.name).in_(roles_to_filter))
+        .filter(Role.name.in_(roles_to_filter))
         .all()
     )
     return bills
 
 
-def get_all_bills_for_customers(db: Session = Depends(get_db)):
+def get_all_bills_for_customers(db: Session):
     """
     Retrieves all bills for users with the 'CUSTOMER' role.
 
@@ -144,13 +144,13 @@ def get_all_bills_for_customers(db: Session = Depends(get_db)):
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)
-        .filter(func.lower(Role.name) == "CUSTOMER")
+        .filter(Role.name == "CUSTOMER")
         .all()
     )
     return bills
 
 
-def get_monthly_sales_total(start, end, db: Session = Depends(get_db)) -> float:
+def get_monthly_sales_total(start, end, db: Session) -> float:
     """
     Calculates the total amount of sales for bills within a given date range.
     Only considers bills from customers (users with the 'CUSTOMER' role).
@@ -164,7 +164,7 @@ def get_monthly_sales_total(start, end, db: Session = Depends(get_db)) -> float:
         float: The total sales amount for the specified period.
     """
     total_amount = (
-        db.query(func.sum(Bill.amount))  # pylint: disable=not-callable
+        db.query(func.sum(Bill.totalprice))  # pylint: disable=not-callable
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)

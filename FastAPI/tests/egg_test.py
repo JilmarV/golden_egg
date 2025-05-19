@@ -187,3 +187,38 @@ def test_delete_egg(client):
     assert response.status_code == 200
     get_response = client.get(f"/egg/{created_egg['id']}")
     assert get_response.status_code == 404
+
+def test_get_month_egg(client):
+    """Test retrieving all eggs."""
+    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    client.post(
+        "/egg/",
+        json={
+            "avalibleQuantity": 30,
+            "expirationDate": "2026-02-01",
+            "entryDate": "2025-05-21",
+            "sellPrice": 100,
+            "entryPrice": 90,
+            "color": "White",
+            "type_egg_id": 1,
+            "supplier_id": 1
+        }
+    )
+    client.post(
+        "/egg/",
+        json={
+            "avalibleQuantity": 91,
+            "expirationDate": "2026-02-01",
+            "entryDate": "2025-05-21",
+            "sellPrice": 100,
+            "entryPrice": 90,
+            "color": "White",
+            "type_egg_id": 1,
+            "supplier_id": 1
+        }
+    )
+    response = client.get("/egg/countThisMonth/")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) > 0

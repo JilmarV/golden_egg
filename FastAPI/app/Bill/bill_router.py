@@ -1,9 +1,13 @@
 """Router module for Bill endpoints."""
 
+# pylint: disable=import-error, no-name-in-module
+
 from sqlalchemy.orm import Session
 
-from fastapi import APIRouter, Depends
 from app.db.session import get_db
+
+from fastapi import APIRouter, Depends
+from app.User.user_schema import UserResponse
 from app.Bill.bill_schema import BillCreate, BillResponse
 from app.Bill.bill_service import (
     count_customer_bills_current_month_serv,
@@ -105,8 +109,8 @@ def update_bill_route(
     return update_bill_serv(bill_id, bill_update, db)
 
 
-@router.get("/countThisMonth")
-def get_customer_bills_count_route(db: Session = Depends(get_db)):
+@router.get("/customer/countThisMonth")
+def get_customer_bills_count_route(db: Session = Depends(get_db), response_model=int):
     """
     Retrieve the count of bills associated with a customer.
 
@@ -120,8 +124,8 @@ def get_customer_bills_count_route(db: Session = Depends(get_db)):
     return count_customer_bills_current_month_serv(db)
 
 
-@router.get("/bestCustomer")
-def get_best_customer_route(db: Session = Depends(get_db)):
+@router.get("/customer/bestCustomer")
+def get_best_customer_route(db: Session = Depends(get_db), response_model=[UserResponse]):
     """
     Retrieve the best customer based on the number of bills.
 
@@ -135,8 +139,8 @@ def get_best_customer_route(db: Session = Depends(get_db)):
     return get_best_customer_of_month_serv(db)
 
 
-@router.get("/getAllOfCompany")
-def get_all_bills_of_company_route(db: Session = Depends(get_db)):
+@router.get("/company/getAllOfCompany")
+def get_all_bills_of_company_route(db: Session = Depends(get_db), response_model=list):
     """
     Retrieve all bills associated with a company.
 
@@ -153,8 +157,8 @@ def get_all_bills_of_company_route(db: Session = Depends(get_db)):
     return get_all_bills_for_company_serv(db)
 
 
-@router.get("/getAllOfCustomers")
-def get_all_customer_bills_route(db: Session = Depends(get_db)):
+@router.get("/customer/getAllOfCustomers")
+def get_all_customer_bills_route(db: Session = Depends(get_db), response_model=list[BillResponse]):
     """
     Retrieve all bills associated with customers (users with the "CUSTOMER" role).
 
@@ -168,8 +172,8 @@ def get_all_customer_bills_route(db: Session = Depends(get_db)):
     return get_all_bills_for_customers_serv(db)
 
 
-@router.get("/monthlySalesTotal")
-def get_monthly_sales_total_route(db: Session = Depends(get_db)):
+@router.get("/company/monthlySalesTotal")
+def get_monthly_sales_total_route(db: Session = Depends(get_db), response_model=float):
     """
     Retrieves the total amount of sales for the current month.
     Only bills from customers are considered in the calculation.

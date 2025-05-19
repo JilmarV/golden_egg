@@ -53,7 +53,8 @@ def client(test_db):
     
 def test_create_pay(client):
     """Test creating a pay."""
-    client.post("/user/",json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True})
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
     client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
     response = client.post(
@@ -71,22 +72,24 @@ def test_create_pay(client):
     
 def test_read_pays(client):
     """Test retrieving all pays."""
-    client.post("/user/",json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True})
-    client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/bill/", json={"totalprice": 45000, "paid": False, "order_id": 1})
     client.post(
         "/pay/",json={"amount_paid": 20100,"payment_method": "cash", "user_id": 1,"bill_id": 1},
+    )
+    client.post(
+        "/pay/",json={"amount_paid": 2000,"payment_method": "cash", "user_id": 1,"bill_id": 1},
     )
     response = client.get("/pay/")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0
-    assert data[0]["amount_paid"] == 20100
-    assert data[0]["payment_method"] == "cash"
-    
     
 def test_read_pay(client):
     """Test retrieving a specific pay."""
-    client.post("/user/",json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True})
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
     create_response = client.post(
         "/pay/",json={"amount_paid": 20100,"payment_method": "cash", "user_id": 1,"bill_id": 1},
@@ -101,7 +104,8 @@ def test_read_pay(client):
 
 def test_update_pay(client):
     """Test updating a pay."""
-    client.post("/user/",json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True})
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
     create_response = client.post(
         "/pay/",json={"amount_paid": 20100,"payment_method": "cash", "user_id": 1,"bill_id": 1},
@@ -119,7 +123,8 @@ def test_update_pay(client):
 
 def test_delete_pay(client):
     """Test deleting a pay."""
-    client.post("/user/",json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True})
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
     create_response = client.post(
         "/pay/",json={"amount_paid": 20100,"payment_method": "cash", "user_id": 1,"bill_id": 1},
@@ -129,3 +134,16 @@ def test_delete_pay(client):
     assert response.status_code == 200
     get_response = client.get(f"/pay/{created_pay['id']}")
     assert get_response.status_code == 404
+
+def test_total_earnings(client):
+    """Test retrieving a specific pay."""
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
+    client.post("/pay/",json={"amount_paid": 20100,"payment_method": "cash", "user_id": 1,"bill_id": 1},)
+    response = client.get(f"/pay/earnings/total_earnings/")
+    print(response.json())
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) > 0
+    

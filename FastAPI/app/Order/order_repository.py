@@ -23,7 +23,7 @@ def create_order(order: OrderCreate, db: Session):
     return db_order
 
 
-def read_orders(db: Session = Depends(get_db)):
+def read_orders(db: Session):
     """Get all orders from the database.
     Args:
         db (Session): The database session.
@@ -34,7 +34,7 @@ def read_orders(db: Session = Depends(get_db)):
     return orders
 
 
-def read_order(order_id: int, db: Session = Depends(get_db)):
+def read_order(order_id: int, db: Session):
     """Get a specific order by ID from the database.
     Args:
         order_id (int): The ID of the order to retrieve.
@@ -50,7 +50,7 @@ def read_order(order_id: int, db: Session = Depends(get_db)):
     return order
 
 
-def delete_order(order_id: int, db: Session = Depends(get_db)):
+def delete_order(order_id: int, db: Session):
     """Delete a specific order by ID from the database.
     Args:
         order_id (int): The ID of the order to delete.
@@ -68,9 +68,7 @@ def delete_order(order_id: int, db: Session = Depends(get_db)):
     return {"message": "Order deleted successfully"}
 
 
-def update_order(
-    order_id: int, order_update: OrderCreate, db: Session = Depends(get_db)
-):
+def update_order(order_id: int, order_update: OrderCreate, db: Session):
     """Update a specific order by ID in the database.
     Args:
         order_id (int): The ID of the order to update.

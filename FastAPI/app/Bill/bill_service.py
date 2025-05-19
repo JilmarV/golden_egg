@@ -4,6 +4,7 @@
 
 
 from datetime import datetime
+from calendar import monthrange
 from pytest import Session
 from fastapi import Depends, HTTPException
 from app.Order.order_model import Order
@@ -33,7 +34,7 @@ def read_bills_serv(db: Session):
 
 
 # Service function to read a specific bill by its ID
-def read_bill_serv(bill_id: int, db: Session = Depends(get_db)):
+def read_bill_serv(bill_id: int, db: Session):
     """Retrieve a single bill by ID, or raise 404 if not found."""
     bill = get_bill_by_id(bill_id, db)
     if not bill:
@@ -42,7 +43,7 @@ def read_bill_serv(bill_id: int, db: Session = Depends(get_db)):
 
 
 # Service function to create a new bill in the database
-def create_bill_serv(bill: BillCreate, db: Session = Depends(get_db)):
+def create_bill_serv(bill: BillCreate, db: Session):
     """Create a new bill after validating that the order exists."""
     order = db.query(Order).filter(Order.id == bill.order_id).first()
     if not order:
@@ -54,7 +55,7 @@ def create_bill_serv(bill: BillCreate, db: Session = Depends(get_db)):
 
 
 # Service function to delete a bill by its ID
-def delete_bill_serv(bill_id: int, db: Session = Depends(get_db)):
+def delete_bill_serv(bill_id: int, db: Session):
     """Delete a bill by ID, or raise 404 if not found."""
     bill = get_bill_by_id(bill_id, db)
     if not bill:
@@ -64,7 +65,7 @@ def delete_bill_serv(bill_id: int, db: Session = Depends(get_db)):
 
 # Service function to update an existing bill by its ID
 def update_bill_serv(
-    bill_id: int, bill_update: BillCreate, db: Session = Depends(get_db)
+    bill_id: int, bill_update: BillCreate, db: Session
 ):
     """Update an existing bill after validating that the order exists."""
     bill = get_bill_by_id(bill_id, db)
@@ -80,17 +81,17 @@ def update_bill_serv(
     return update_bill(bill_id, bill_update, db)
 
 
-def count_customer_bills_current_month_serv(db: Session) -> int:
+def count_customer_bills_current_month_serv(db: Session):
     """
     Count the number of bills for users with role 'CUSTOMER'
     issued during the current month.
     """
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+    last_day = monthrange(now.year, now.month)[1]
+    end = now.replace(day=last_day, hour=23, minute=59, second=59, microsecond=999999)
 
-    count = count_customer_bills_in_range(start, end, db)
-    return count or 0
+    return count_customer_bills_in_range(start, end, db)
 
 
 def get_best_customer_of_month_serv(db: Session) -> str:
@@ -100,12 +101,10 @@ def get_best_customer_of_month_serv(db: Session) -> str:
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
-
-    best_customer = get_best_customer_of_month(start, end, db)
-    return best_customer or "Sin compras este mes"
+    return get_best_customer_of_month(start, end, db)
 
 
-def get_all_bills_for_company_serv(db: Session = Depends(get_db)):
+def get_all_bills_for_company_serv(db: Session):
     """
     Retrieve all bills for the company.
     """
@@ -115,7 +114,7 @@ def get_all_bills_for_company_serv(db: Session = Depends(get_db)):
     return bills
 
 
-def get_all_bills_for_customers_serv(db: Session = Depends(get_db)):
+def get_all_bills_for_customers_serv(db: Session):
     """
     Retrieve all bills associated with customers (users with the "CUSTOMER" role).
 
@@ -131,7 +130,7 @@ def get_all_bills_for_customers_serv(db: Session = Depends(get_db)):
     return bills
 
 
-def get_monthly_sales_total_serv(db: Session = Depends(get_db)) -> float:
+def get_monthly_sales_total_serv(db: Session) -> float:
     """
     Retrieves the total amount of sales for the current month.
     Only bills from customers are considered in the calculation.

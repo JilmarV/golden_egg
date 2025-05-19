@@ -1,7 +1,6 @@
 """Repository functions for managing supplier data in the database."""
 
 from sqlalchemy.orm import Session
-
 from app.db.session import get_db
 from app.Supplier.supplier_model import Supplier
 from app.Supplier.supplier_schema import SupplierCreate
@@ -57,3 +56,6 @@ def delete_supplier(supplier_id: int, db: Session = Depends(get_db)):
     db.delete(supplier)
     db.commit()
     return {"message": "Supplier deleted successfully"}
+
+def check_previous_supplier(db: Session, field_name: str, value: str):
+    return db.query(Supplier).filter(getattr(Supplier, field_name) == value).first()
