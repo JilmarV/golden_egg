@@ -29,8 +29,9 @@ class BillCreate(BillBase):
 # Schema for responding with Bill data, inherits from BillBase
 class BillResponse(BillBase):
     """Output schema for returning bill data."""
-
     id: int  # The unique identifier for the bill
+    totalprice: float  # The total price of the bill
+    paid: bool  # Indicates whether the bill has been paid
     issueDate: datetime
     class Config:
         """Pydantic configuration for ORM mode."""

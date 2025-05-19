@@ -109,7 +109,7 @@ def update_bill_route(
 
 
 @router.get("/countThisMonth")
-def get_customer_bills_count_route(db: Session = Depends(get_db)):
+def get_customer_bills_count_route(db: Session = Depends(get_db), response_model=int):
     """
     Retrieve the count of bills associated with a customer.
 
@@ -124,7 +124,7 @@ def get_customer_bills_count_route(db: Session = Depends(get_db)):
 
 
 @router.get("/bestCustomer")
-def get_best_customer_route(db: Session = Depends(get_db)):
+def get_best_customer_route(db: Session = Depends(get_db), response_model=dict):
     """
     Retrieve the best customer based on the number of bills.
 
@@ -139,7 +139,7 @@ def get_best_customer_route(db: Session = Depends(get_db)):
 
 
 @router.get("/getAllOfCompany")
-def get_all_bills_of_company_route(db: Session = Depends(get_db)):
+def get_all_bills_of_company_route(db: Session = Depends(get_db), response_model=list):
     """
     Retrieve all bills associated with a company.
 
@@ -157,7 +157,7 @@ def get_all_bills_of_company_route(db: Session = Depends(get_db)):
 
 
 @router.get("/getAllOfCustomers")
-def get_all_customer_bills_route(db: Session = Depends(get_db)):
+def get_all_customer_bills_route(db: Session = Depends(get_db), response_model=list):
     """
     Retrieve all bills associated with customers (users with the "CUSTOMER" role).
 
@@ -172,7 +172,7 @@ def get_all_customer_bills_route(db: Session = Depends(get_db)):
 
 
 @router.get("/monthlySalesTotal")
-def get_monthly_sales_total_route(db: Session = Depends(get_db)):
+def get_monthly_sales_total_route(db: Session = Depends(get_db), response_model=float):
     """
     Retrieves the total amount of sales for the current month.
     Only bills from customers are considered in the calculation.

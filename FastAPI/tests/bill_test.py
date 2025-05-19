@@ -127,7 +127,7 @@ def test_delete_bill(client):
 def test_count_this_month_bills(client):
     """Test counting bills for the current month."""
     client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewh2ere","enabled": True, "role_ids": [1]})
     client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
@@ -147,7 +147,7 @@ def test_count_this_month_bills(client):
 def test_best_client(client):
     """Test the customer with the most bills."""
     client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewh2ere","enabled": True, "role_ids": [1]})
     client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
@@ -156,6 +156,7 @@ def test_best_client(client):
     client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
     client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
     response = client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
+    print(response.json())
     response = client.get("/bill/bestCustomer/")
     print(response.json())
     assert response.status_code == 200
@@ -165,7 +166,7 @@ def test_get_all_company(client):
     """Test the customer with the most bills."""
     client.post("/role/", json={"name": "EMPLOYEE"})
     client.post("/role/", json={"name": "ADMIN"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewh2ere","enabled": True, "role_ids": [1]})
     client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [2]})
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
@@ -179,11 +180,11 @@ def test_get_all_company(client):
     assert response.status_code == 200
     print(response.json())
 
-def test_get_all_from_customer(client):
+def test_get_all_from_customers(client):
     """Test the customer with the most bills."""
     client.post("/role/", json={"name": "EMPLOYEE"})
     client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewh2ere","enabled": True, "role_ids": [1]})
     client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [2]})
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
@@ -202,7 +203,7 @@ def test_get_all_monthly_from_customer(client):
     client.post("/role/", json={"name": "EMPLOYEE"})
     client.post("/role/", json={"name": "CUSTOMER"})
     client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [2]})
+    client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewhere2","enabled": True, "role_ids": [2]})
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
     client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
