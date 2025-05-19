@@ -24,18 +24,21 @@ def read_orders_serv(db: Session):
     return read_orders(db)
 
 
-def read_order_serv(order_id: int, db: Session = Depends(get_db)):
+def read_order_serv(order_id: int, db: Session):
     """Retrieve a single order by ID, or raise 404 if not found."""
     return read_order(order_id, db)
 
 
-def create_order_serv(order: OrderCreate, db: Session = Depends(get_db)):
+def create_order_serv(order: OrderCreate, db: Session):
     """Create a new order after validating that user exists."""
+    user = db.query(User).filter(User.id == order.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     return create_order(order, db)
 
 
 def update_order_serv(
-    order_id: int, order_update: OrderCreate, db: Session = Depends(get_db)
+    order_id: int, order_update: OrderCreate, db: Session
 ):
     """Update an existing order after validating that user exists."""
     existing_order = read_order(order_id, db)
@@ -49,17 +52,17 @@ def update_order_serv(
     return update_order(order_id, order_update, db)
 
 
-def delete_order_serv(order_id: int, db: Session = Depends(get_db)):
+def delete_order_serv(order_id: int, db: Session):
     """Delete an order by ID, or raise 404 if not found."""
     return delete_order(order_id, db)
 
 
-def get_orders_by_month_serv(year: int, month: int, db: Session = Depends(get_db)) -> float:
+def get_orders_by_month_serv(year: int, month: int, db: Session):
     """Get all orders in a specific month."""
     return read_orders_by_month(db, year, month)
 
 
-def get_orders_in_current_month_serv(db: Session = Depends(get_db)):
+def get_orders_in_current_month_serv(db: Session):
     """Get all orders in the current month."""
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -67,7 +70,7 @@ def get_orders_in_current_month_serv(db: Session = Depends(get_db)):
     return get_orders_in_current_month(db, start, end)
 
 
-def count_orders_in_current_month_serv(db: Session = Depends(get_db)):
+def count_orders_in_current_month_serv(db: Session):
     """Count all orders in the current month."""
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)

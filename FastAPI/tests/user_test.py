@@ -220,6 +220,7 @@ def test_get_users_by_role(client):
                                })
     # Get all users
     response = client.get("/user/byrole/1")
+    print(response.json())
     assert response.status_code == 200
     data = response.json()
     assert len(data) >= 1
