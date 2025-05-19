@@ -74,13 +74,13 @@ def get_bills_by_staff_roles(db: Session = Depends(get_db)):
     )
 
 def get_bills_by_client_role(db: Session = Depends(get_db)):
-    """Returns all bills where the user in the order has role Client."""
+    """Returns all bills where the user in the order has role CUSTOMER."""
     return (
         db.query(Bill)
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)
-        .filter(Role.name == "Client")
+        .filter(Role.name == "CUSTOMER")
         .all()
     )
 
@@ -92,7 +92,7 @@ def get_total_client_bills_this_month(db: Session = Depends(get_db)):
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)
-        .filter(Role.name == "Client", Bill.issueDate >= start_of_month)
+        .filter(Role.name == "CUSTOMER", Bill.issueDate >= start_of_month)
         .scalar()
     )
     return total or 0.0
@@ -105,7 +105,7 @@ def get_top_client_spender_this_month(db: Session = Depends(get_db)):
         .join(User.orders)
         .join(Order.bill)
         .join(User.roles)
-        .filter(Role.name == "Client", Bill.issueDate >= start_of_month)
+        .filter(Role.name == "CUSTOMER", Bill.issueDate >= start_of_month)
         .group_by(User.id)
         .order_by(desc("total_spent"))
         .first()

@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 
 from fastapi import APIRouter, Depends
-from ...app.Bill.bill_schema import BillCreate, BillResponse
-from ...app.Bill.bill_service import (
+from app.Bill.bill_schema import BillCreate, BillResponse
+from app.Bill.bill_service import (
     count_customer_bills_current_month_serv,
     create_bill_serv,
     delete_bill_serv,

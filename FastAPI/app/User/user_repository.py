@@ -11,9 +11,18 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 
 
-def create_user(user: UserCreate, db: Session):
-    """Creates a new user in the database."""
-    db_user = User(**user.dict())
+def create_user(user_data: UserCreate, roles: list[Role], db: Session):
+    """Creates a new user and assigns the given roles."""
+    db_user = User(
+        name=user_data.name,
+        phone_number=user_data.phone_number,
+        email=user_data.email,
+        username=user_data.username,
+        password=user_data.password,
+        address=user_data.address,
+        enabled=user_data.enabled,
+        roles=roles
+    )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -46,6 +55,8 @@ def update_user(user_id: int, user_update: UserCreate, db: Session = Depends(get
     db.refresh(user)
     return user
 
+def check_previous_user(db: Session, field_name: str, value: str):
+    return db.query(User).filter(getattr(User, field_name) == value).first()
 
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     """Deletes a user from the database by its ID."""
@@ -56,5 +67,5 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "User deleted successfully"}
 
-def read_users_by_role(db: Session, role_id: int):
-    return db.query(User).join(User.roles).filter(Role.id == role_id).all()
+def read_users_by_role(role_id: int,db: Session):
+    return db.query(User).filter(User.roles.any(Role.id == role_id)).all()

@@ -157,3 +157,55 @@ def test_delete_report(client):
     # Verify that the report no longer exists
     response = client.get(f"/report/{report_id}")
     assert response.status_code == 404
+
+def test_get_total_client_bills_route(client):
+    """Test retrieving all reports."""
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
+    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
+    client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
+    client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
+    client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
+    client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
+    response = client.post(
+        "/report/",
+        json={
+            "type": "Monthly Report",
+            "dateReport": "2025-11-12",
+            "content": "This is the content of the report.",
+        },
+    )
+    assert response.status_code == 201
+    data = response.json()
+    response = client.get("/bills/clients/month-total")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) > 0
+
+def test_get_top_client_spender_this_month(client):
+    """Test retrieving all reports."""
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
+    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
+    client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
+    client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
+    client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
+    client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
+    response = client.post(
+        "/report/",
+        json={
+            "type": "Monthly Report",
+            "dateReport": "2025-11-12",
+            "content": "This is the content of the report.",
+        },
+    )
+    assert response.status_code == 201
+    data = response.json()
+    response = client.get("/bills/monthlySalesTotal")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) > 0

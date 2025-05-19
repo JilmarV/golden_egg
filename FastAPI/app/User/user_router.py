@@ -4,6 +4,7 @@
 
 from sqlalchemy.orm import Session
 
+from typing import List
 from app.db.session import get_db
 from app.User.user_schema import UserCreate, UserResponse
 from app.User.user_service import (
@@ -12,7 +13,7 @@ from app.User.user_service import (
     delete_user_serv,
     read_users_serv,
     update_user_serv,
-    read_users_by_role
+    read_users_by_role_serv
 )
 
 from fastapi import APIRouter, Depends
@@ -50,7 +51,7 @@ def update_user_route(user_id: int, user_update: UserCreate, db: Session = Depen
     """Updates a user by ID."""
     return update_user_serv(user_id, user_update, db)
 
-@router.get("/byrole/{role_id}", response_model = UserResponse)
+@router.get("/byrole/{role_id}", response_model = List[UserResponse])
 def get_users_by_role(role_id: int, db: Session = Depends(get_db)):
     """Selects users by Role."""
-    return read_users_by_role(role_id, db)
+    return read_users_by_role_serv(role_id, db)

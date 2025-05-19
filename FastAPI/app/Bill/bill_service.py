@@ -4,6 +4,7 @@
 
 
 from datetime import datetime
+from calendar import monthrange
 from pytest import Session
 from fastapi import Depends, HTTPException
 from app.Order.order_model import Order
@@ -80,17 +81,17 @@ def update_bill_serv(
     return update_bill(bill_id, bill_update, db)
 
 
-def count_customer_bills_current_month_serv(db: Session) -> int:
+def count_customer_bills_current_month_serv(db: Session):
     """
     Count the number of bills for users with role 'CUSTOMER'
     issued during the current month.
     """
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+    last_day = monthrange(now.year, now.month)[1]
+    end = now.replace(day=last_day, hour=23, minute=59, second=59, microsecond=999999)
 
-    count = count_customer_bills_in_range(start, end, db)
-    return count or 0
+    return count_customer_bills_in_range(start, end, db)
 
 
 def get_best_customer_of_month_serv(db: Session) -> str:
@@ -100,9 +101,7 @@ def get_best_customer_of_month_serv(db: Session) -> str:
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
-
-    best_customer = get_best_customer_of_month(start, end, db)
-    return best_customer or "Sin compras este mes"
+    return get_best_customer_of_month(start, end, db)
 
 
 def get_all_bills_for_company_serv(db: Session = Depends(get_db)):

@@ -53,3 +53,6 @@ def delete_role(role_id: int, db: Session = Depends(get_db)):
     db.delete(role)
     db.commit()
     return {"message": "Role deleted successfully"}
+
+def check_previous_role(db: Session, field_name: str, value: str):
+    return db.query(Role).filter(getattr(Role, field_name) == value).first()

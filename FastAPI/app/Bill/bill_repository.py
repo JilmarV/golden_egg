@@ -75,18 +75,18 @@ def count_customer_bills_in_range(start, end, db: Session):
     between the given start and end dates.
     """
     count = (
-        db.query(func.count(Bill.id))  # pylint: disable=not-callable
+        db.query(Bill)  # pylint: disable=not-callable
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)
         .filter(
             Bill.issueDate >= start,
             Bill.issueDate <= end,
-            func.lower(Role.name) == "CUSTOMER",
+            Role.name == "CUSTOMER",
         )
-        .scalar()
+        .all()
     )
-
+    print(count)
     return count
 
 

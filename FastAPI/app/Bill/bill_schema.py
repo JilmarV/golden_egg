@@ -3,6 +3,7 @@
 # pylint: disable=too-few-public-methods
 
 from typing import Optional
+from datetime import datetime
 from pydantic import BaseModel
 
 
@@ -30,7 +31,7 @@ class BillResponse(BillBase):
     """Output schema for returning bill data."""
 
     id: int  # The unique identifier for the bill
-
+    issueDate: datetime
     class Config:
         """Pydantic configuration for ORM mode."""
 
