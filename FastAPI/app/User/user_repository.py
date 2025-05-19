@@ -57,5 +57,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     return {"message": "User deleted successfully"}
 
 
-def read_users_by_role_serv(db: Session, role_id: int):
+def read_users_by_role(db: Session, role_id: int):
+    """Retrieves all users with a specific role."""
     return db.query(User).join(User.roles).filter(Role.id == role_id).all()

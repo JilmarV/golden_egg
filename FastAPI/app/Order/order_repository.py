@@ -18,7 +18,7 @@ def create_order(order: OrderCreate, db: Session):
     """
     db_order = Order(**order.dict())
     db.add(db_order)
-    db.
+    db.commit()
     db.refresh(db_order)
     return db_order
 

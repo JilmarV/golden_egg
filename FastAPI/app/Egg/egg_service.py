@@ -90,7 +90,7 @@ def delete_egg_service(egg_id: int, db: Session):
 
 def get_eggs_stock_service(type_egg_id: int, db: Session):
     """Get eggs in stock by type egg ID."""
-    return search_eggs_stock(type_egg
+    return search_eggs_stock(type_egg_id, db)
 
 
 def get_total_egg_quantity_serv(db: Session):

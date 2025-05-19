@@ -2,6 +2,7 @@
 
 # pylint: disable= undefined-variable
 # App module imports
+from app.Report import report_model
 from app.db.database import engine
 from app.User import user_router, user_model
 from app.Role import role_router, role_model

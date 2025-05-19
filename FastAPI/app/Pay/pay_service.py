@@ -52,4 +52,4 @@ def get_total_earnings_by_month_serv(
     year: int, month: int, db: Session = Depends(get_db)
 ) -> float:
     """Get total earnings for a specific month and year."""
-    return total_earnings_by_month(db, year,
+    return total_earnings_by_month(db, year, month)
