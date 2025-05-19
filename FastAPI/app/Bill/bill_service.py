@@ -117,10 +117,10 @@ def get_all_bills_for_company_serv(db: Session):
 def get_all_bills_for_customers_serv(db: Session):
     """
     Retrieve all bills associated with customers (users with the "CUSTOMER" role).
-    
+
     Args:
         db (Session): The database session dependency.
-        
+
     Returns:
         List: A list of bills associated with customers.
     """
@@ -134,16 +134,16 @@ def get_monthly_sales_total_serv(db: Session) -> float:
     """
     Retrieves the total amount of sales for the current month.
     Only bills from customers are considered in the calculation.
-    
+
     Args:
         db (Session): The database session dependency.
-        
+
     Returns:
         float: The total monthly sales amount.
     """
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
-    
+
     total = get_monthly_sales_total(start, end, db)
     return total or 0.0

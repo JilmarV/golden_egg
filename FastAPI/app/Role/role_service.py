@@ -1,7 +1,5 @@
 """Service layer for role operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.db.session import get_db
@@ -36,7 +34,9 @@ def read_roles_serv(db: Session = Depends(get_db)):
     return read_roles(db)
 
 
-def update_role_serv(role_id: int, role_update: RoleCreate, db: Session = Depends(get_db)):
+def update_role_serv(
+    role_id: int, role_update: RoleCreate, db: Session = Depends(get_db)
+):
     """Updates an existing role by ID."""
     return update_role(role_id, role_update, db)
 

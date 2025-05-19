@@ -1,7 +1,5 @@
 """API Router for supplier endpoints."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.Supplier.supplier_schema import SupplierCreate, SupplierResponse

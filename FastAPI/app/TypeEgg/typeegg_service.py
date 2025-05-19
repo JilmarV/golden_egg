@@ -1,7 +1,5 @@
 """Service layer for TypeEgg operations."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy.orm import Session
 
 from app.TypeEgg.typeegg_repository import (

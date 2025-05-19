@@ -9,6 +9,7 @@ from app.db.database import Base
 
 class Pay(Base):
     """Represents a payment record."""
+
     __tablename__ = "payment"
 
     id = Column(Integer, primary_key=True)  # Unique identifier for the payment
@@ -16,7 +17,7 @@ class Pay(Base):
     payment_method = Column(String(50))  # Payment method
     # Date when the pay was issued.
     issueDate = Column(DateTime, default=datetime.utcnow, nullable=False)
-    
+
     user_id = Column(Integer, ForeignKey("user.id"))  # Reference to the user who paid
     user = relationship("User", back_populates="payment")
 

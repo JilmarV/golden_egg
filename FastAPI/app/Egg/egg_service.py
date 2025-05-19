@@ -1,7 +1,5 @@
 """Service module for Egg operations."""
 
-# pylint: disable=no-name-in-module
-
 from datetime import date
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
@@ -13,7 +11,7 @@ from app.Egg.egg_repository import (
     get_total_egg_quantity,
     update_egg,
     delete_egg,
-    search_eggs_stock
+    search_eggs_stock,
 )
 from app.Supplier.supplier_model import Supplier
 from app.TypeEgg.typeegg_model import TypeEgg
@@ -89,8 +87,11 @@ def delete_egg_service(egg_id: int, db: Session):
         raise HTTPException(status_code=404, detail="Egg not found")
     return delete_egg(egg_id, db)
 
+
 def get_eggs_stock_service(type_egg_id: int, db: Session):
+    """Get eggs in stock by type egg ID."""
     return search_eggs_stock(type_egg_id, db)
+
 
 def get_total_egg_quantity_serv(db: Session):
     """Get the total quantity of eggs in stock."""

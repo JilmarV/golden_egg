@@ -1,7 +1,5 @@
 """Repository module for Egg operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, wrong-import-order, ungrouped-imports
-
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 from app.db.session import get_db
@@ -63,17 +61,25 @@ def delete_egg(egg_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Egg deleted successfully"}
 
+
 def search_eggs_stock(type_egg_id: int, db: Session):
+    """Search for eggs in stock by type egg ID.
+    Args:
+        type_egg_id (int): The ID of the type egg to search for.
+        db (Session): The database session.
+    Returns:
+        list[Egg]: A list of eggs that match the type egg ID.
+    """
     return db.query(Egg).filter(Egg.type_egg_id == type_egg_id).all()
 
 
-def get_total_egg_quantity (db: Session):
+def get_total_egg_quantity(db: Session):
     """
     Get the total quantity of eggs in the database.
-    
+
     Args:
         db (Session): The database session.
-        
+
     Returns:
         int: The total quantity of eggs.
     """

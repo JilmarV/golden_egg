@@ -1,15 +1,15 @@
 """Main entry point for FastAPI application, including all routers and database initialization."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
+# pylint: disable= undefined-variable
 # App module imports
+from app.Report import report_model
 from app.db.database import engine
 from app.User import user_router, user_model
 from app.Role import role_router, role_model
 from app.Supplier import supplier_router, supplier_model
 from app.Pay import pay_router, pay_model
 from app.Order import order_router, order_model
-from app.Report import report_router, report_model
+from app.Report import report_router
 from app.Egg import egg_router, egg_model
 from app.Bill import bill_router, bill_model
 from app.OrderEgg import order_egg_model, order_egg_router
@@ -45,7 +45,7 @@ app = FastAPI(
     },
 )
 
-#PYTHONPATH=/app pytest
+# PYTHONPATH=/app pytest
 
 # routers
 app.include_router(user_router.router, prefix="/user")

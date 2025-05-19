@@ -1,11 +1,12 @@
 """Router for tracking and retrieving web visit data."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.WebVisit.webvisit_service import save_visit_service, get_visit_count_service
+from app.WebVisit.webvisit_service import (
+    save_visit_service,
+    get_visit_count_service,
+)
 from app.WebVisit.webvisit_schema import WebVisitResponse
 
 from fastapi import APIRouter, Request, Depends

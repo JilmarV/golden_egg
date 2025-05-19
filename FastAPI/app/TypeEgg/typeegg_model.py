@@ -1,10 +1,9 @@
 """SQLAlchemy model for the egg type (TypeEgg)."""
 
-# pylint: disable=too-few-public-methods, import-error
-
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.db.database import Base
+
 
 class TypeEgg(Base):
     """Represents an egg type in the system."""

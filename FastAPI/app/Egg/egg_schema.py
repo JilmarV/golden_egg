@@ -22,15 +22,19 @@ class EggBase(BaseModel):
     type_egg_id: int
     supplier_id: int  # ID of the supplier
 
+
 class EggCreate(EggBase):
     """Input schema for creating a new egg."""
 
 
 class EggResponse(EggBase):
     """Output schema for returning egg data, including related supplier."""
+
     id: int
     supplier: Optional[SupplierResponse] = None
     type_egg: Optional[TypeEggResponse] = None
+
     class Config:
         """Pydantic configuration for ORM mode."""
+
         from_attributes = True

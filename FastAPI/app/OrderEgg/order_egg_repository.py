@@ -1,12 +1,10 @@
 """Repository module for OrderEgg operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, wrong-import-order, ungrouped-imports
-
 from sqlalchemy.orm import Session
-from app.db.session import get_db
 from fastapi import Depends, HTTPException
 from app.OrderEgg.order_egg_model import OrderEgg
 from app.OrderEgg.order_egg_schema import OrderEggCreate
+from app.db.session import get_db
 
 
 def create_order_egg(order_egg: OrderEggCreate, db: Session):

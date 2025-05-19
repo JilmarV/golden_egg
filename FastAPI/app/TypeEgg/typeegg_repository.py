@@ -1,9 +1,6 @@
 """Repository functions for managing TypeEggs in the database."""
 
-# pylint: disable=no-name-in-module, import-error
-
 from sqlalchemy.orm import Session
-
 from app.TypeEgg.typeegg_model import TypeEgg
 from app.TypeEgg.typeegg_schema import TypeEggCreate
 from app.db.session import get_db

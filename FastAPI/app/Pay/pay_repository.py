@@ -1,19 +1,18 @@
 """Repository module for Pay operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, wrong-import-order, ungrouped-imports
-
+from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
-from datetime import datetime, timedelta
 from fastapi import HTTPException
 from app.Pay.pay_model import Pay
 from app.Pay.pay_schema import PayCreate
 from app.User.user_model import User
-from app.Pay.pay_model import Pay
+
 
 def read_pays(db: Session):
     """Retrieve all payments from the database."""
     return db.query(Pay).all()
+
 
 def read_pay(pay_id: int, db: Session):
     """Retrieve a single payment by ID, or raise 404 if not found."""
@@ -63,17 +62,24 @@ def update_pay(pay_id: int, pay: PayCreate, db: Session):
     db.refresh(db_pay)
     return db_pay
 
-def total_earnings_by_month(db: Session, year: int, month:int) -> float:
+
+def total_earnings_by_month(db: Session, year: int, month: int) -> float:
+    """Calculate the total earnings for a specific month and year."""
     start_date = datetime(year, month, 1)
     if month == 12:
         end_date = datetime(year + 1, 1, 1)
     else:
         end_date = datetime(year, month + 1, 1)
-    
-    total = db.query(sum(Pay.amount_paid)).filter(and_(Pay.issueDate >= start_date, Pay.issueDate < end_date)).scalar()
+
+    total = (
+        db.query(sum(Pay.amount_paid))
+        .filter(and_(Pay.issueDate >= start_date, Pay.issueDate < end_date))
+        .scalar()
+    )
     return total or 0.0
+
 
 def total_earnings(db: Session):
     """Retrieve all payments from the database."""
-    total = db.query(func.sum(Pay.amount_paid)).scalar()
+    total = db.query(func.sum(Pay.amount_paid)).scalar()  # pylint: disable=not-callable
     return total or 0.0

@@ -1,7 +1,5 @@
 """SQLAlchemy association table between users and roles."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from app.db.database import Base
 

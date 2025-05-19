@@ -1,7 +1,6 @@
 """Router module for OrderEgg endpoints."""
 
-# pylint: disable=import-error, no-name-in-module
-
+from fastapi import APIRouter, Depends
 from pytest import Session
 from app.OrderEgg.order_egg_schema import OrderEggCreate, OrderEggResponse
 from app.OrderEgg.order_egg_service import (
@@ -11,7 +10,6 @@ from app.OrderEgg.order_egg_service import (
     read_order_eggs_serv,
     update_order_egg_serv,
 )
-from fastapi import APIRouter, Depends
 from app.db.session import get_db
 
 router = APIRouter()
@@ -72,7 +70,7 @@ def read_order_eggs_route(db: Session = Depends(get_db)):
     Handles the HTTP GET request to retrieve all order eggs.
 
     Args:
-        db (Session): Database session dependency injected by 
+        db (Session): Database session dependency injected by
 
     Returns:
         List[OrderEgg]: A list of order eggs retrieved from the database.
