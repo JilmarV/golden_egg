@@ -28,4 +28,4 @@ class Bill(Base):
     order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
     order = relationship("Order", back_populates="bill")
 
-    payment = relationship("Pay", back_populates="bill", uselist=False)
+    payment = relationship("Pay", back_populates="bill")

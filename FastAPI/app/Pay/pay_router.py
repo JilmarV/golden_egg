@@ -56,7 +56,7 @@ def total_pay_route(db: Session = Depends(get_db)):
     return get_total_earnings_serv(db)
 
 #Añadir como obtiene el mes y año
-@router.get("/total_earnings_month")
+@router.get("/earnings/total_earnings_month")
 def total_pay_month_route(year: int, month: int, db: Session = Depends(get_db)):
     total = get_total_earnings_by_month_serv(year, month, db)
     return {"Total Pagado": total, "En el año:": year, "Del mes:": month}

@@ -137,7 +137,7 @@ def test_count_this_month_bills(client):
     client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
     response = client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
     print(response.json())
-    response = client.get("/bill/count_this_month/")
+    response = client.get("/bill/customer/countThisMonth")
     print(response.json())
     assert response.status_code == 200
     count = response.json()
@@ -155,15 +155,14 @@ def test_best_client(client):
     client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
     client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
     client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
-    response = client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
-    print(response.json())
-    response = client.get("/bill/bestCustomer/")
+    client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
+    response = client.get("/bill/customer/bestCustomer")
     print(response.json())
     assert response.status_code == 200
     print(response.json())
 
 def test_get_all_company(client):
-    """Test the customer with the most bills."""
+    """Test the employees procesed bills."""
     client.post("/role/", json={"name": "EMPLOYEE"})
     client.post("/role/", json={"name": "ADMIN"})
     client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewh2ere","enabled": True, "role_ids": [1]})
@@ -174,14 +173,15 @@ def test_get_all_company(client):
     client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
     client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
     client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
-    response = client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
-    response = client.get("/bill/getAllOfCompany/")
+    client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
+    response = client.get("/bill/company/getAllOfCompany")
     print(response.json())
     assert response.status_code == 200
+    assert len(response.json()) == 5
     print(response.json())
 
 def test_get_all_from_customers(client):
-    """Test the customer with the most bills."""
+    """Test the customer's bills."""
     client.post("/role/", json={"name": "EMPLOYEE"})
     client.post("/role/", json={"name": "CUSTOMER"})
     client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewh2ere","enabled": True, "role_ids": [1]})
@@ -190,12 +190,13 @@ def test_get_all_from_customers(client):
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
     client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
     client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
-    client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
+    client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 2})
     client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
-    response = client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
-    response = client.get("/bill/getAllOfCustomers/")
+    client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
+    response = client.get("/bill/customer/getAllOfCustomers")
     print(response.json())
     assert response.status_code == 200
+    assert len(response.json()) == 3
     print(response.json())
 
 def test_get_all_monthly_from_customer(client):
@@ -211,7 +212,7 @@ def test_get_all_monthly_from_customer(client):
     client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
     client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
     response = client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 2})
-    response = client.get("/bill/monthlySalesTotal")
+    response = client.get("/bill/company/monthlySalesTotal")
     print(response.json())
     assert response.status_code == 200
     print(response.json())
