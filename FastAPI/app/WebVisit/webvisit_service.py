@@ -1,7 +1,7 @@
 """Service layer for handling web visit operations."""
 
 from sqlalchemy.orm import Session
-from FastAPI.app.WebVisit.webvisit_repository import save_visit, get_visit_count
+from app.WebVisit.webvisit_repository import save_visit, get_visit_count
 
 
 def save_visit_service(ip: str, db: Session):

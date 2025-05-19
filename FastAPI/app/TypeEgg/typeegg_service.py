@@ -2,7 +2,7 @@
 
 from sqlalchemy.orm import Session
 
-from FastAPI.app.TypeEgg.typeegg_repository import (
+from app.TypeEgg.typeegg_repository import (
     create_typeegg,
     read_typeegg,
     read_typeeggs,
@@ -10,7 +10,7 @@ from FastAPI.app.TypeEgg.typeegg_repository import (
     delete_typeegg,
     get_db,
 )
-from FastAPI.app.TypeEgg.typeegg_schema import TypeEggCreate
+from app.TypeEgg.typeegg_schema import TypeEggCreate
 
 from fastapi import Depends
 

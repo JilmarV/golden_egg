@@ -2,9 +2,9 @@
 
 from sqlalchemy.orm import Session
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.TypeEgg.typeegg_schema import TypeEggCreate, TypeEggResponse
-from FastAPI.app.TypeEgg.typeegg_service import (
+from app.db.session import get_db
+from app.TypeEgg.typeegg_schema import TypeEggCreate, TypeEggResponse
+from app.TypeEgg.typeegg_service import (
     create_typeegg_service,
     read_typeegg_service,
     read_typeeggs_service,

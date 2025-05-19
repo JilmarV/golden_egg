@@ -5,8 +5,8 @@
 from datetime import date
 from typing import Optional
 from pydantic import BaseModel
-from FastAPI.app.Supplier.supplier_schema import SupplierResponse
-from FastAPI.app.TypeEgg.typeegg_schema import TypeEggResponse
+from app.Supplier.supplier_schema import SupplierResponse
+from app.TypeEgg.typeegg_schema import TypeEggResponse
 
 
 # Base schema for Egg, defining common attributes

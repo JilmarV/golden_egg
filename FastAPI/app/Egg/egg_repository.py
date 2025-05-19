@@ -2,9 +2,9 @@
 
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Egg.egg_schema import EggCreate
-from FastAPI.app.Egg.egg_model import Egg
+from app.db.session import get_db
+from app.Egg.egg_schema import EggCreate
+from app.Egg.egg_model import Egg
 
 
 # Create a new egg in the database

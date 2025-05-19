@@ -2,15 +2,15 @@
 
 from fastapi import APIRouter, Depends
 from pytest import Session
-from FastAPI.app.OrderEgg.order_egg_schema import OrderEggCreate, OrderEggResponse
-from FastAPI.app.OrderEgg.order_egg_service import (
+from app.OrderEgg.order_egg_schema import OrderEggCreate, OrderEggResponse
+from app.OrderEgg.order_egg_service import (
     create_order_egg_serv,
     delete_order_egg_serv,
     read_order_egg_serv,
     read_order_eggs_serv,
     update_order_egg_serv,
 )
-from FastAPI.app.db.session import get_db
+from app.db.session import get_db
 
 router = APIRouter()
 

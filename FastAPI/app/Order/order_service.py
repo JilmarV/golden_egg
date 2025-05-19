@@ -5,7 +5,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from FastAPI.app.Order.order_repository import (
+from app.Order.order_repository import (
     create_order,
     delete_order,
     get_orders_in_current_month,
@@ -14,9 +14,9 @@ from FastAPI.app.Order.order_repository import (
     update_order,
     read_orders_by_month,
 )
-from FastAPI.app.Order.order_schema import OrderCreate
-from FastAPI.app.User.user_model import User
-from FastAPI.app.db.session import get_db
+from app.Order.order_schema import OrderCreate
+from app.User.user_model import User
+from app.db.session import get_db
 
 
 def read_orders_serv(db: Session):

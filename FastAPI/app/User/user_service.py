@@ -3,8 +3,8 @@
 # pylint: disable=no-name-in-module
 
 from sqlalchemy.orm import Session
-from FastAPI.app.User.user_schema import UserCreate
-from FastAPI.app.User.user_repository import (
+from app.User.user_schema import UserCreate
+from app.User.user_repository import (
     read_users,
     read_user,
     create_user,

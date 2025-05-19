@@ -4,9 +4,9 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
 from fastapi import HTTPException
-from FastAPI.app.Pay.pay_model import Pay
-from FastAPI.app.Pay.pay_schema import PayCreate
-from FastAPI.app.User.user_model import User
+from app.Pay.pay_model import Pay
+from app.Pay.pay_schema import PayCreate
+from app.User.user_model import User
 
 
 def read_pays(db: Session):

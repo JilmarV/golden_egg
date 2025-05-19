@@ -3,9 +3,9 @@
 from sqlalchemy.orm import Session
 
 from fastapi import APIRouter, Depends
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Bill.bill_schema import BillCreate, BillResponse
-from FastAPI.app.Bill.bill_service import (
+from app.db.session import get_db
+from app.Bill.bill_schema import BillCreate, BillResponse
+from app.Bill.bill_service import (
     count_customer_bills_current_month_serv,
     create_bill_serv,
     delete_bill_serv,

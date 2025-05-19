@@ -3,9 +3,9 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Report.report_schema import ReportCreate
-from FastAPI.app.Report.report_repository import (
+from app.db.session import get_db
+from app.Report.report_schema import ReportCreate
+from app.Report.report_repository import (
     read_reports,
     read_report,
     create_report,

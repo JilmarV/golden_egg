@@ -5,8 +5,8 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from FastAPI.app.User.user_schema import UserResponse
-from FastAPI.app.Bill.bill_schema import BillResponse
+from app.User.user_schema import UserResponse
+from app.Bill.bill_schema import BillResponse
 
 
 class PayBase(BaseModel):

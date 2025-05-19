@@ -2,8 +2,8 @@
 
 from pytest import Session
 from fastapi import APIRouter, Depends
-from FastAPI.app.Order.order_schema import OrderCreate, OrderResponse
-from FastAPI.app.Order.order_service import (
+from app.Order.order_schema import OrderCreate, OrderResponse
+from app.Order.order_service import (
     count_orders_in_current_month_serv,
     create_order_serv,
     get_orders_in_current_month_serv,
@@ -13,7 +13,7 @@ from FastAPI.app.Order.order_service import (
     update_order_serv,
     get_orders_by_month_serv,
 )
-from FastAPI.app.db.session import (
+from app.db.session import (
     get_db,
 )
 

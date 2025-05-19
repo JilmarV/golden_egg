@@ -4,8 +4,8 @@
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from FastAPI.app.db.database import Base
-from FastAPI.app.UserRole.userrole_model import user_role
+from app.db.database import Base
+from app.UserRole.userrole_model import user_role
 
 
 class Role(Base):

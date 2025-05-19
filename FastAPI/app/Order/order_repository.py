@@ -3,9 +3,9 @@
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
-from FastAPI.app.Order.order_schema import OrderCreate
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Order.order_model import Order
+from app.Order.order_schema import OrderCreate
+from app.db.session import get_db
+from app.Order.order_model import Order
 
 
 def create_order(order: OrderCreate, db: Session):
@@ -18,7 +18,7 @@ def create_order(order: OrderCreate, db: Session):
     """
     db_order = Order(**order.dict())
     db.add(db_order)
-    db.commit()
+    db.
     db.refresh(db_order)
     return db_order
 

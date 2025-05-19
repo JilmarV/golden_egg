@@ -1,6 +1,6 @@
 """Database connection module for FastAPI application."""
 
-from FastAPI.app.db.database import SessionLocal
+from app.db.database import SessionLocal
 
 
 def get_db():

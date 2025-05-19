@@ -2,9 +2,9 @@
 
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from FastAPI.app.OrderEgg.order_egg_model import OrderEgg
-from FastAPI.app.OrderEgg.order_egg_schema import OrderEggCreate
-from FastAPI.app.db.session import get_db
+from app.OrderEgg.order_egg_model import OrderEgg
+from app.OrderEgg.order_egg_schema import OrderEggCreate
+from app.db.session import get_db
 
 
 def create_order_egg(order_egg: OrderEggCreate, db: Session):

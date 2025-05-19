@@ -2,9 +2,9 @@
 
 from sqlalchemy.orm import Session
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.User.user_schema import UserCreate, UserResponse
-from FastAPI.app.User.user_service import (
+from app.db.session import get_db
+from app.User.user_schema import UserCreate, UserResponse
+from app.User.user_service import (
     create_user_serv,
     read_user_serv,
     delete_user_serv,

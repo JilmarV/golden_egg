@@ -3,14 +3,14 @@
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Report.report_schema import (
+from app.db.session import get_db
+from app.Report.report_schema import (
     ReportCreate,
     ReportResponse,
     TopSpenderResponse,
 )
-from FastAPI.app.Bill.bill_schema import BillResponse
-from FastAPI.app.Report.report_service import (
+from app.Bill.bill_schema import BillResponse
+from app.Report.report_service import (
     create_report_serv,
     read_report_serv,
     delete_report_serv,

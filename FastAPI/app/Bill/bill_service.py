@@ -6,9 +6,9 @@
 from datetime import datetime
 from pytest import Session
 from fastapi import Depends, HTTPException
-from FastAPI.app.Order.order_model import Order
-from FastAPI.app.Bill.bill_model import Bill
-from FastAPI.app.Bill.bill_repository import (
+from app.Order.order_model import Order
+from app.Bill.bill_model import Bill
+from app.Bill.bill_repository import (
     create_bill,
     delete_bill,
     get_all_bills_for_company,
@@ -20,7 +20,7 @@ from FastAPI.app.Bill.bill_repository import (
     count_customer_bills_in_range,
     get_monthly_sales_total,
 )
-from FastAPI.app.Bill.bill_schema import BillCreate
+from app.Bill.bill_schema import BillCreate
 
 
 # Service function to read all bills from the database

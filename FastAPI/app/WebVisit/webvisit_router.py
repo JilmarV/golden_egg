@@ -2,12 +2,12 @@
 
 from sqlalchemy.orm import Session
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.WebVisit.webvisit_service import (
+from app.db.session import get_db
+from app.WebVisit.webvisit_service import (
     save_visit_service,
     get_visit_count_service,
 )
-from FastAPI.app.WebVisit.webvisit_schema import WebVisitResponse
+from app.WebVisit.webvisit_schema import WebVisitResponse
 
 from fastapi import APIRouter, Request, Depends
 

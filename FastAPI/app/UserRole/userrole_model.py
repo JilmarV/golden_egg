@@ -1,7 +1,7 @@
 """SQLAlchemy association table between users and roles."""
 
 from sqlalchemy import Table, Column, Integer, ForeignKey
-from FastAPI.app.db.database import Base
+from app.db.database import Base
 
 user_role = Table(
     "users_roles",

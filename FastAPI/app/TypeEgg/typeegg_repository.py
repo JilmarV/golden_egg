@@ -1,9 +1,9 @@
 """Repository functions for managing TypeEggs in the database."""
 
 from sqlalchemy.orm import Session
-from FastAPI.app.TypeEgg.typeegg_model import TypeEgg
-from FastAPI.app.TypeEgg.typeegg_schema import TypeEggCreate
-from FastAPI.app.db.session import get_db
+from app.TypeEgg.typeegg_model import TypeEgg
+from app.TypeEgg.typeegg_schema import TypeEggCreate
+from app.db.session import get_db
 
 from fastapi import Depends, HTTPException
 

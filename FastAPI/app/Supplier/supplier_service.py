@@ -1,15 +1,15 @@
 """Service layer for supplier operations."""
 
 from sqlalchemy.orm import Session
-from FastAPI.app.Supplier.supplier_schema import SupplierCreate
-from FastAPI.app.Supplier.supplier_repository import (
+from app.db.session import get_db
+from app.Supplier.supplier_schema import SupplierCreate
+from app.Supplier.supplier_repository import (
     create_supplier,
     read_suppliers,
     read_supplier,
     update_supplier,
     delete_supplier,
 )
-from FastAPI.app.db.session import get_db
 from fastapi import Depends
 
 

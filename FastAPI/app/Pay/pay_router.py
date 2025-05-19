@@ -4,9 +4,9 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Pay.pay_schema import PayCreate, PayResponse
-from FastAPI.app.Pay.pay_service import (
+from app.db.session import get_db
+from app.Pay.pay_schema import PayCreate, PayResponse
+from app.Pay.pay_service import (
     create_pay_serv,
     read_pays_serv,
     read_pay_serv,

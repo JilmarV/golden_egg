@@ -5,12 +5,12 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Bill.bill_model import Bill
-from FastAPI.app.Bill.bill_schema import BillCreate
-from FastAPI.app.Order.order_model import Order
-from FastAPI.app.User.user_model import User
-from FastAPI.app.Role.role_model import Role
+from app.db.session import get_db
+from app.Bill.bill_model import Bill
+from app.Bill.bill_schema import BillCreate
+from app.Order.order_model import Order
+from app.User.user_model import User
+from app.Role.role_model import Role
 
 
 # Create a new bill in database

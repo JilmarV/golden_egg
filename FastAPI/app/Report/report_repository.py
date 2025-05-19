@@ -6,13 +6,13 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 from datetime import datetime
 from sqlalchemy import func, desc
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Report.report_model import Report
-from FastAPI.app.Report.report_schema import ReportCreate
-from FastAPI.app.Bill.bill_model import Bill
-from FastAPI.app.Order.order_model import Order
-from FastAPI.app.User.user_model import User
-from FastAPI.app.Role.role_model import Role
+from app.db.session import get_db
+from app.Report.report_model import Report
+from app.Report.report_schema import ReportCreate
+from app.Bill.bill_model import Bill
+from app.Order.order_model import Order
+from app.User.user_model import User
+from app.Role.role_model import Role
 
 
 def create_report(report: ReportCreate, db: Session):

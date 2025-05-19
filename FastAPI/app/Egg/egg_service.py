@@ -3,8 +3,8 @@
 from datetime import date
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from FastAPI.app.Egg.egg_schema import EggCreate
-from FastAPI.app.Egg.egg_repository import (
+from app.Egg.egg_schema import EggCreate
+from app.Egg.egg_repository import (
     create_egg,
     get_all_eggs,
     get_egg_by_id,
@@ -13,8 +13,8 @@ from FastAPI.app.Egg.egg_repository import (
     delete_egg,
     search_eggs_stock,
 )
-from FastAPI.app.Supplier.supplier_model import Supplier
-from FastAPI.app.TypeEgg.typeegg_model import TypeEgg
+from app.Supplier.supplier_model import Supplier
+from app.TypeEgg.typeegg_model import TypeEgg
 
 
 # Service to create a new egg
@@ -90,7 +90,7 @@ def delete_egg_service(egg_id: int, db: Session):
 
 def get_eggs_stock_service(type_egg_id: int, db: Session):
     """Get eggs in stock by type egg ID."""
-    return search_eggs_stock(type_egg_id, db)
+    return search_eggs_stock(type_egg
 
 
 def get_total_egg_quantity_serv(db: Session):

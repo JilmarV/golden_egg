@@ -2,9 +2,9 @@
 
 from sqlalchemy.orm import Session
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Supplier.supplier_model import Supplier
-from FastAPI.app.Supplier.supplier_schema import SupplierCreate
+from app.db.session import get_db
+from app.Supplier.supplier_model import Supplier
+from app.Supplier.supplier_schema import SupplierCreate
 
 from fastapi import HTTPException, Depends
 

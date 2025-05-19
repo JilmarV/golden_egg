@@ -2,8 +2,8 @@
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Egg.egg_service import (
+from app.db.session import get_db
+from app.Egg.egg_service import (
     create_egg_service,
     get_all_eggs_service,
     get_egg_by_id_service,
@@ -12,7 +12,7 @@ from FastAPI.app.Egg.egg_service import (
     delete_egg_service,
     get_eggs_stock_service,
 )
-from FastAPI.app.Egg.egg_schema import EggCreate, EggResponse
+from app.Egg.egg_schema import EggCreate, EggResponse
 
 router = APIRouter()
 

@@ -4,7 +4,7 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, ForeignKey, String, Float, DateTime
 from sqlalchemy.orm import relationship
-from FastAPI.app.db.database import Base
+from app.db.database import Base
 
 
 class Pay(Base):

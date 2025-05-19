@@ -2,9 +2,9 @@
 
 from sqlalchemy.orm import Session
 
-from FastAPI.app.db.session import get_db
-from FastAPI.app.Role.role_schema import RoleCreate, RoleResponse
-from FastAPI.app.Role.role_service import (
+from app.db.session import get_db
+from app.Role.role_schema import RoleCreate, RoleResponse
+from app.Role.role_service import (
     create_role_serv,
     read_role_serv,
     read_roles_serv,
