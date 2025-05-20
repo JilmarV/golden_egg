@@ -16,7 +16,7 @@ def create_order(order: OrderCreate, db: Session):
     Returns:
         Order: The created order.
     """
-    db_order = Order(**order.dict())
+    db_order = Order(**order.model_dump())
     db.add(db_order)
     db.commit()
     db.refresh(db_order)
@@ -56,7 +56,7 @@ def delete_order(order_id: int, db: Session):
         order_id (int): The ID of the order to delete.
         db (Session): The database session.
     Returns:
-        dict: A message indicating the order was deleted successfully.
+        model_dump: A message indicating the order was deleted successfully.
     Raises:
         HTTPException: If the order is not found.
     """
@@ -83,7 +83,7 @@ def update_order(order_id: int, order_update: OrderCreate, db: Session):
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
 
-    for key, value in order_update.dict(exclude_unset=True).items():
+    for key, value in order_update.model_dump(exclude_unset=True).items():
         setattr(order, key, value)
 
     db.commit()

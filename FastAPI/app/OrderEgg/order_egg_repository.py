@@ -18,7 +18,7 @@ def create_order_egg(order_egg: OrderEggCreate, db: Session):
     Returns:
         OrderEgg: The newly created order egg record.
     """
-    db_order_egg = OrderEgg(**order_egg.dict())
+    db_order_egg = OrderEgg(**order_egg.model_dump())
     db.add(db_order_egg)
     db.commit()
     db.refresh(db_order_egg)
@@ -71,7 +71,7 @@ def delete_order_egg(order_egg_id: int, db: Session = Depends(get_db)):
         HTTPException: If the OrderEgg with the given ID is not found, a 404 error is raised.
 
     Returns:
-        dict: A dictionary containing a success message indicating the OrderEgg was deleted.
+        model_dump: A model_dumpionary containing a success message indicating the OrderEgg was deleted.
     """
     order_egg = db.query(OrderEgg).filter(OrderEgg.id == order_egg_id).first()
     if order_egg is None:
@@ -102,7 +102,7 @@ def update_order_egg(
     if order_egg is None:
         raise HTTPException(status_code=404, detail="OrderEgg not found")
 
-    for key, value in order_egg_update.dict(exclude_unset=True).items():
+    for key, value in order_egg_update.model_dump(exclude_unset=True).items():
         setattr(order_egg, key, value)
 
     db.commit()

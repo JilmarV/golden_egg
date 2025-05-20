@@ -4,7 +4,6 @@
 
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from app.db.session import get_db
 from app.User.user_schema import UserCreate
 from app.Auth.auth_service import get_password_hash
 from app.Role.role_model import Role
