@@ -15,7 +15,20 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.db.database import Base
 from app.db.session import get_db
+from app.User.user_model import User
+from app.Role.role_model import Role
+from app.Auth.auth_service import get_current_user, require_admin
 
+def override_require_admin():
+    user = User(id= 1,name ="admin", phone_number="3334445566", email= "Juas@Juas.com", username="admin", password="321",address="1",enable= True, roles=[Role(id=1, name="ADMIN")])
+    return user
+
+app.dependency_overrides[get_current_user] = override_require_admin
+app.dependency_overrides[require_admin] = override_require_admin
+
+@pytest.fixture
+def client():
+    yield TestClient(app)
 
 # Use in-memory SQLite for testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -39,7 +52,6 @@ def test_db():
         db.close()
         Base.metadata.drop_all(bind=engine)
 
-
 @pytest.fixture
 def client(test_db):
     """Overrides the dependency to use the test database."""
@@ -51,6 +63,11 @@ def client(test_db):
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+def test_override_direct():
+    from app.Auth import auth_service
+    from app.main import app
+    assert auth_service.require_admin in app.dependency_overrides, "Override for require_admin is not active"
 
 def test_create_user(client):
     """Test creating a user."""

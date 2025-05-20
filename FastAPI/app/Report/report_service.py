@@ -32,7 +32,7 @@ def read_report_serv(report_id: int, db: Session = Depends(get_db)):
 
 def create_report_serv(report: ReportCreate, db: Session = Depends(get_db)):
     """Creates a new report."""
-    if report.dateReport > datetime.now():
+    if report.dateReport > datetime.now().date():
         raise HTTPException(status_code=400, detail="Report date cannot be in the future")
     if not report.type.strip():
         raise HTTPException(status_code=400, detail="Type is required")
@@ -50,7 +50,7 @@ def update_report_serv(
     report_id: int, report_update: ReportCreate, db: Session = Depends(get_db)
 ):
     """Updates an existing report."""
-    if report_update.dateReport > datetime.now():
+    if report_update.dateReport > datetime.now().date():
         raise HTTPException(status_code=400, detail="Report date cannot be in the future")
     if not report_update.type.strip():
         raise HTTPException(status_code=400, detail="Type is required")

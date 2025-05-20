@@ -8,7 +8,6 @@ from fastapi import Depends, HTTPException
 from app.Order.order_repository import (
     create_order,
     delete_order,
-    get_orders_in_current_month,
     read_order,
     read_orders,
     update_order,
@@ -31,7 +30,7 @@ def read_order_serv(order_id: int, db: Session):
 
 def create_order_serv(order: OrderCreate, db: Session):
     """Create a new order after validating that user exists."""
-    if order.totalPrice > 0:
+    if order.totalPrice <= 0:
         raise HTTPException(status_code=400, detail="the total price has to be greater than 0")
     user = db.query(User).filter(User.id == order.user_id).first()
     if not user:
@@ -49,7 +48,7 @@ def update_order_serv(
     if not existing_order:
         raise HTTPException(status_code=404, detail="Order not found")
 
-    if existing_order.totalPrice > 0:
+    if existing_order.totalPrice <= 0:
         raise HTTPException(status_code=400, detail="the total price has to be greater than 0")
     
     if not existing_order.state.strip():
@@ -71,18 +70,9 @@ def get_orders_by_month_serv(year: int, month: int, db: Session):
     """Get all orders in a specific month."""
     return read_orders_by_month(db, year, month)
 
-
-def get_orders_in_current_month_serv(db: Session):
-    """Get all orders in the current month."""
-    now = datetime.now()
-    start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    return get_orders_in_current_month(db, start, end)
-
-
-def count_orders_in_current_month_serv(db: Session):
+def count_orders_in_month_serv(year: int, month: int,db: Session):
     """Count all orders in the current month."""
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    return len(get_orders_in_current_month(db, start, end))
+    return len(read_orders_by_month(db, year, month))

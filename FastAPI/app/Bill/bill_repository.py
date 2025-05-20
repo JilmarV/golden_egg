@@ -97,16 +97,18 @@ def get_best_customer_of_month(start, end, db: Session) -> str:
     best_customer = (
         db.query(User)
         .join(User.roles)
-        .join(User.bills)
+        .join(User.orders)
+        .join(Order.bill)
         .filter(
             Bill.issueDate >= start,
             Bill.issueDate <= end,
-            Role.name == "CUSTOMER",
+            Role.name == "CUSTOMER"
         )
         .group_by(User.id)
-        .order_by(func.count(Bill.id).desc())  # pylint: disable=not-callable
+        .order_by(func.count(Bill.id).desc()) 
         .first()
     )
+
 
     return best_customer.name if best_customer else None
 

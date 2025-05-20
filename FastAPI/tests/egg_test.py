@@ -188,11 +188,12 @@ def test_delete_egg(client):
     get_response = client.get(f"/egg/{created_egg['id']}")
     assert get_response.status_code == 404
 
-def test_get_month_egg(client):
+def test_get_egg_stock(client):
     """Test retrieving all eggs."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post(
+    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    client.post("/typeeggs/", json={"name": "AA"})
+    response = client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,
@@ -201,11 +202,12 @@ def test_get_month_egg(client):
             "sellPrice": 100,
             "entryPrice": 90,
             "color": "White",
-            "type_egg_id": 1,
+            "type_egg_id": 2,
             "supplier_id": 1
         }
     )
-    client.post(
+    assert response.status_code == 201
+    response = client.post(
         "/egg/",
         json={
             "avalibleQuantity": 91,
@@ -218,7 +220,45 @@ def test_get_month_egg(client):
             "supplier_id": 1
         }
     )
-    response = client.get("/egg/countThisMonth/")
-    assert response.status_code == 200
+    assert response.status_code == 201
+    response = client.get("/egg/search/stock/1")
     data = response.json()
-    assert len(data) > 0
+    print(data)
+    assert len(data) == 1
+
+def test_get_month_egg(client):
+    """Test retrieving all eggs."""
+    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    response = client.post(
+        "/egg/",
+        json={
+            "avalibleQuantity": 30,
+            "expirationDate": "2026-02-01",
+            "entryDate": "2025-05-21",
+            "sellPrice": 100,
+            "entryPrice": 90,
+            "color": "White",
+            "type_egg_id": 1,
+            "supplier_id": 1
+        }
+    )
+    assert response.status_code == 201
+    response = client.post(
+        "/egg/",
+        json={
+            "avalibleQuantity": 91,
+            "expirationDate": "2026-02-01",
+            "entryDate": "2025-05-21",
+            "sellPrice": 100,
+            "entryPrice": 90,
+            "color": "White",
+            "type_egg_id": 1,
+            "supplier_id": 1
+        }
+    )
+    assert response.status_code == 201
+    response = client.get("/egg/search/count_this_month")
+    data = response.json()
+    print(data)
+    assert data >= 2

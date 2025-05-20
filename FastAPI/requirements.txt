@@ -53,3 +53,5 @@ python-dotenv==1.0.1
 
 # Data validation and settings management using Python type hints; includes email validators.
 pydantic[email]==2.5.3
+
+python-multipart

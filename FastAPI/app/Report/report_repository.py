@@ -107,7 +107,7 @@ def get_top_client_spender_this_month(db: Session = Depends(get_db)):
     """Returns the name of the client who has spent the most this month."""
     start_of_month = datetime.now().replace(
         day=1, hour=0, minute=0, second=0, microsecond=0
-    )
+    ).date()
     result = (
         db.query(User.name, func.sum(Bill.totalprice).label("total_spent"))
         .join(User.orders)

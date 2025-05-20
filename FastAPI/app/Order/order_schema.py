@@ -2,7 +2,7 @@
 
 # pylint: disable=too-few-public-methods
 
-
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 from app.User.user_schema import UserResponse
@@ -24,6 +24,10 @@ class OrderResponse(OrderBase):
     """Schema for Order response."""
 
     id: int
+    orderDate: datetime
+    totalPrice: float
+    state: str
+    user_id: int
     user: Optional[UserResponse] = None
 
     class Config:

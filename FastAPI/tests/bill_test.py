@@ -58,7 +58,7 @@ def test_create_bill(client):
     response = client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     assert response.status_code == 201
     print(response.json())
-    response = client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
+    response = client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1})
     assert response.status_code == 201
     response = client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
     print(response.json())
@@ -141,14 +141,14 @@ def test_count_this_month_bills(client):
     print(response.json())
     assert response.status_code == 200
     count = response.json()
-    assert isinstance(count, int)
-    assert count > 0
+    print(count)
+    assert len(count) == 5
 
 def test_best_client(client):
     """Test the customer with the most bills."""
     client.post("/role/", json={"name": "CUSTOMER"})
     client.post("/user/", json={"name": "User", "phone_number": "3143333333", "email": "SomeEmail2@Mail.com", "username":"user2","password": "123","address": "Somewh2ere","enabled": True, "role_ids": [1]})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/user/", json={"name": "User2", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
     client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
     client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
@@ -159,7 +159,8 @@ def test_best_client(client):
     response = client.get("/bill/customer/bestCustomer")
     print(response.json())
     assert response.status_code == 200
-    print(response.json())
+    data = response.json()
+    assert data == "User"
 
 def test_get_all_company(client):
     """Test the employees procesed bills."""

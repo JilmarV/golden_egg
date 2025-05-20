@@ -72,7 +72,7 @@ def total_earnings_by_month(db: Session, year: int, month: int) -> float:
         end_date = datetime(year, month + 1, 1)
 
     total = (
-        db.query(sum(Pay.amount_paid))
+        db.query(func.sum(Pay.amount_paid))
         .filter(and_(Pay.issueDate >= start_date, Pay.issueDate < end_date))
         .scalar()
     )

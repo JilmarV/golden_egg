@@ -141,9 +141,20 @@ def test_total_earnings(client):
     client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
     client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
     client.post("/pay/",json={"amount_paid": 20100,"payment_method": "cash", "user_id": 1,"bill_id": 1},)
-    response = client.get(f"/pay/earnings/total_earnings/")
+    response = client.get("/pay/earnings/total_earnings")
     print(response.json())
     assert response.status_code == 200
     data = response.json()
-    assert len(data) > 0
-    
+    assert data == 20100
+
+def test_total_earnings_month(client):
+    """Test retrieving a specific pay."""
+    client.post("/role/", json={"name": "CUSTOMER"})
+    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    client.post("/bill/", json={"totalprice": 5000, "paid": False, "order_id": 1})
+    client.post("/pay/",json={"amount_paid": 20100,"payment_method": "cash", "user_id": 1,"bill_id": 1},)
+    response = client.get("/pay/earnings/total_earnings_month", params={"year": 2025, "month": 5})
+    print(response.json())
+    assert response.status_code == 200
+    data = response.json()
+    assert data == {'Del mes:': 5, 'En el año:': 2025, 'Total Pagado': 20100.0}

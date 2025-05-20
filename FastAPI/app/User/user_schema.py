@@ -19,7 +19,6 @@ class UserBase(BaseModel):
     @field_validator("phone_number")
     @classmethod
     def validate_phone(cls, value):
-        # Verifica que solo tenga dígitos (puedes modificar esto para tu formato)
         if not re.fullmatch(r"\+?[0-9\- ]{10,15}", value):
             raise ValueError("Numero de teléfono inválido")
         return value

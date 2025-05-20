@@ -59,7 +59,7 @@ def test_create_report(client):
         "/report/",
         json={
             "type": "Monthly Report",
-            "dateReport": "2025-10-21",
+            "dateReport": "2025-04-21",
             "content": "This is the content of the report.",
         },
     )
@@ -75,7 +75,7 @@ def test_get_report(client):
         "/report/",
         json={
             "type": "Monthly Report",
-            "dateReport": "2025-06-15",
+            "dateReport": "2025-04-15",
             "content": "This is the content of the report.",
         },
     )
@@ -86,7 +86,7 @@ def test_get_report(client):
     assert response.status_code == 200
     data = response.json()
     assert data["type"] == "Monthly Report"
-    assert data["dateReport"] == "2025-06-15"
+    assert data["dateReport"] == "2025-04-15"
     assert data["content"] == "This is the content of the report."
 
 
@@ -96,7 +96,7 @@ def test_get_all_reports(client):
         "/report/",
         json={
             "type": "Monthly Report",
-            "dateReport": "2025-11-12",
+            "dateReport": "2025-04-12",
             "content": "This is the content of the report.",
         },
     )
@@ -173,7 +173,7 @@ def test_get_total_client_bills_route(client):
         "/report/",
         json={
             "type": "Monthly Report",
-            "dateReport": "2025-11-12",
+            "dateReport": "2025-04-12",
             "content": "This is the content of the report.",
         },
     )
@@ -199,7 +199,7 @@ def test_get_top_client_spender_this_month(client):
         "/report/",
         json={
             "type": "Monthly Report",
-            "dateReport": "2025-11-12",
+            "dateReport": "2025-04-12",
             "content": "This is the content of the report.",
         },
     )
