@@ -1,6 +1,7 @@
 """Service module for Egg operations."""
 
 from datetime import date
+from datetime import timedelta
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.Egg.egg_schema import EggCreate
@@ -65,11 +66,16 @@ def update_egg_service(egg_id: int, egg: EggCreate, db: Session):
     if egg.sellPrice <= 0:
         raise HTTPException(status_code=400, detail="Buy price must be greater than 0")
     if egg.avalibleQuantity <= 0:
-        raise HTTPException(status_code=400, detail="Quantity must be greater than 0")
+        raise HTTPException(status_code=400, detail="Quantity must be greater than 0")  
     if egg.expirationDate <= date.today():
         raise HTTPException(
             status_code=400, detail="Expiration date must be in the future"
         )
+    max = date.today() + timedelta(days=30)
+    if egg.expirationDate > max:
+            raise HTTPException(
+            status_code=400, detail="Expiration date cannot exceed one month from today"
+        ) 
     supplier = db.query(Supplier).filter(Supplier.id == egg.supplier_id).first()
     if not supplier:
         raise HTTPException(status_code=404, detail="Supplier not found")

@@ -18,11 +18,19 @@ from fastapi import Depends
 
 
 def create_supplier_serv(supplier: SupplierCreate, db: Session = Depends(get_db)):
-    """Creates a new supplier."""
-    for attr in ["address"]:
-        if check_previous_supplier(db, attr, getattr(supplier, attr)):
-            raise HTTPException(status_code=400, detail=f"{attr.capitalize()} Supplier already exists")
+    """Creates a new supplier with field validation and duplication checks."""
+
+    if not supplier.name.strip():
+        raise HTTPException(status_code=400, detail="Name is required")
+
+    if not supplier.address.strip():
+        raise HTTPException(status_code=400, detail="Address is required")
+
+    if check_previous_supplier(db, "address", supplier.address.strip()):
+        raise HTTPException(status_code=400, detail="Address already exists")
+
     return create_supplier(supplier, db)
+
 
 
 def read_suppliers_serv(db: Session = Depends(get_db)):
@@ -41,8 +49,15 @@ def update_supplier_serv(
     db: Session = Depends(get_db),
 ):
     """Updates a supplier by ID."""
-    return update_supplier(supplier_id, supplier_update, db)
+    if not supplier_update.name.strip():
+        raise HTTPException(status_code=400, detail="Name is required")
 
+    if not supplier_update.address.strip():
+        raise HTTPException(status_code=400, detail="Address is required")
+
+    if check_previous_supplier(db, "address", supplier_update.address.strip()):
+        raise HTTPException(status_code=400, detail="Address already exists")
+    return update_supplier(supplier_id, supplier_update, db)
 
 def delete_supplier_serv(supplier_id: int, db: Session = Depends(get_db)):
     """Deletes a supplier by ID."""

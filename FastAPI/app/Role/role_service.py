@@ -21,6 +21,8 @@ def create_role_serv(role: RoleCreate, db: Session = Depends(get_db)):
     for attr in ["name"]:
         if check_previous_role(db, attr, getattr(role, attr)):
             raise HTTPException(status_code=400, detail=f"{attr.capitalize()} Role already exists")
+    if not role.name.strip():
+        raise HTTPException(status_code=400, detail="name is required")
     return create_role(role, db)
 
 
@@ -38,6 +40,8 @@ def update_role_serv(
     role_id: int, role_update: RoleCreate, db: Session = Depends(get_db)
 ):
     """Updates an existing role by ID."""
+    if not role_update.name.strip():
+        raise HTTPException(status_code=400, detail="name is required")
     return update_role(role_id, role_update, db)
 
 

@@ -10,7 +10,6 @@ class OrderEggBase(BaseModel):
 
     quantity: int
     unit_price: float
-    unit_price: float
     sub_total: float
     egg_id: int
     order_id: int

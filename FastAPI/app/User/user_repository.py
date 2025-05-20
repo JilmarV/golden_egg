@@ -69,3 +69,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 
 def read_users_by_role(role_id: int,db: Session):
     return db.query(User).filter(User.roles.any(Role.id == role_id)).all()
+
+def get_user_by_username(db: Session, username: str) -> User:
+    """Retrieve a user by their username."""
+    return db.query(User).filter(User.username == username).first()

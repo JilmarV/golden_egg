@@ -16,6 +16,7 @@ from app.OrderEgg import order_egg_model, order_egg_router
 from app.TypeEgg import typeegg_model, typeegg_router
 from app.UserRole import userrole_model
 from app.WebVisit import webvisit_router, webvisit_model
+from app.Auth import auth_router
 from fastapi import FastAPI
 
 # Create all tables
@@ -31,6 +32,7 @@ order_egg_model.Base.metadata.create_all(bind=engine)
 typeegg_model.Base.metadata.create_all(bind=engine)
 userrole_model.Base.metadata.create_all(bind=engine)
 webvisit_model.Base.metadata.create_all(bind=engine)
+
 
 # FastAPI app initialization
 app = FastAPI(
@@ -59,3 +61,5 @@ app.include_router(typeegg_router.router, prefix="/typeeggs")
 app.include_router(order_egg_router.router, prefix="/orderegg")
 app.include_router(bill_router.router, prefix="/bill")
 app.include_router(webvisit_router.router, prefix="/visit")
+app.include_router(auth_router.router)
+

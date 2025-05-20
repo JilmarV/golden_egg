@@ -45,6 +45,11 @@ def read_bill_serv(bill_id: int, db: Session):
 # Service function to create a new bill in the database
 def create_bill_serv(bill: BillCreate, db: Session):
     """Create a new bill after validating that the order exists."""
+    
+    # Business validation: totalprice must be > 0
+    if bill.totalprice <= 0:
+        raise HTTPException(status_code=400, detail="Total price must be greater than zero")
+
     order = db.query(Order).filter(Order.id == bill.order_id).first()
     if not order:
         raise HTTPException(
@@ -72,6 +77,10 @@ def update_bill_serv(
     if not bill:
         raise HTTPException(status_code=404, detail="Bill not found")
 
+    # Business validation: totalprice must be > 0
+    if bill.totalprice <= 0:
+        raise HTTPException(status_code=400, detail="Total price must be greater than zero")
+    
     order = db.query(Order).filter(Order.id == bill_update.order_id).first()
     if not order:
         raise HTTPException(
