@@ -27,7 +27,6 @@ class OrderResponse(OrderBase):
     orderDate: datetime
     totalPrice: float
     state: str
-    user_id: int
     user: Optional[UserResponse] = None
 
     class Config:

@@ -31,6 +31,11 @@ class EggResponse(EggBase):
     """Output schema for returning egg data, including related supplier."""
 
     id: int
+    avalibleQuantity: int
+    expirationDate: date
+    entryDate: date
+    sellPrice: float
+    entryPrice: float
     supplier: Optional[SupplierResponse] = None
     type_egg: Optional[TypeEggResponse] = None
 

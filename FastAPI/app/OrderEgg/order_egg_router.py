@@ -32,7 +32,7 @@ def create_order_egg_route(order_egg: OrderEggCreate, db: Session = Depends(get_
     return create_order_egg_serv(order_egg, db)
 
 
-@router.get("/{orderEgg_id}")
+@router.get("/{order_egg_id}")
 def get_order_egg_route(order_egg_id: int, db: Session = Depends(get_db)):
     """
     Retrieve the details of a specific order egg by its ID.
@@ -49,7 +49,7 @@ def get_order_egg_route(order_egg_id: int, db: Session = Depends(get_db)):
     return read_order_egg_serv(order_egg_id, db)
 
 
-@router.delete("/{orderEgg_id}")
+@router.delete("/{order_egg_id}")
 def delete_order_egg_route(order_egg_id: int, db: Session = Depends(get_db)):
     """
     Deletes an order egg record from the database.
@@ -78,7 +78,7 @@ def read_order_eggs_route(db: Session = Depends(get_db)):
     return read_order_eggs_serv(db)
 
 
-@router.put("/{orderEgg_id}")
+@router.put("/{order_egg_id}")
 def update_order_egg_route(
     order_egg_id: int,
     order_egg_update: OrderEggCreate,

@@ -27,11 +27,11 @@ def read_order_egg_serv(order_egg_id: int, db: Session = Depends(get_db)):
 
 def create_order_egg_serv(order_egg: OrderEggCreate, db: Session = Depends(get_db)):
     """Create a new order egg after validating that user and order exist."""
-    if order_egg.quantity > 0:
+    if order_egg.quantity <= 0:
         raise HTTPException(status_code=400, detail="the amount of has to be greater than or equal to 0")
-    if order_egg.unit_price >0:
+    if order_egg.unit_price <= 0:
         raise HTTPException(status_code=400, detail=" the unit price must be greater than 0")
-    if order_egg.sub_total >0:
+    if order_egg.sub_total <= 0:
         raise HTTPException(status_code=400, detail=" the sub total must be greater than 0")
     return create_order_egg(order_egg, db)
 
@@ -43,11 +43,11 @@ def update_order_egg_serv(
     existing_order_egg = read_order_egg(order_egg_id, db)
     if not existing_order_egg:
         raise HTTPException(status_code=404, detail="OrderEgg not found")
-    if existing_order_egg.quantity > 0:
+    if existing_order_egg.quantity <= 0:
         raise HTTPException(status_code=400, detail="the amount of has to be greater than or equal to 0")
-    if existing_order_egg.unit_price >0:
+    if existing_order_egg.unit_price <= 0:
         raise HTTPException(status_code=400, detail=" the unit price must be greater than 0")
-    if existing_order_egg.sub_total >0:
+    if existing_order_egg.sub_total <= 0:
         raise HTTPException(status_code=400, detail=" the sub total must be greater than 0")
     return update_order_egg(order_egg_id, order_egg_update, db)
 
