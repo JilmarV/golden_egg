@@ -38,7 +38,7 @@ class UserResponse(BaseModel):
     username: str
     address: str
     enabled: bool
-    roles: List[RoleResponse]  # 👈 Aquí devuelves la info de los roles
+    roles: List[RoleResponse]
 
     class Config:
         from_attributes = True

@@ -2,6 +2,8 @@
 
 from sqlalchemy.orm import Session
 from fastapi import Depends
+from fastapi import HTTPException
+from datetime import datetime
 
 from app.db.session import get_db
 from app.Report.report_schema import ReportCreate
@@ -30,6 +32,12 @@ def read_report_serv(report_id: int, db: Session = Depends(get_db)):
 
 def create_report_serv(report: ReportCreate, db: Session = Depends(get_db)):
     """Creates a new report."""
+    if report.dateReport > datetime.now():
+        raise HTTPException(status_code=400, detail="Report date cannot be in the future")
+    if not report.type.strip():
+        raise HTTPException(status_code=400, detail="Type is required")
+    if not report.content.strip():
+        raise HTTPException(status_code=400, detail="Content is required")
     return create_report(report, db)
 
 
@@ -42,6 +50,12 @@ def update_report_serv(
     report_id: int, report_update: ReportCreate, db: Session = Depends(get_db)
 ):
     """Updates an existing report."""
+    if report_update.dateReport > datetime.now():
+        raise HTTPException(status_code=400, detail="Report date cannot be in the future")
+    if not report_update.type.strip():
+        raise HTTPException(status_code=400, detail="Type is required")
+    if not report_update.content.strip():
+        raise HTTPException(status_code=400, detail="Content is required")
     return update_report(report_id, report_update, db)
 
 

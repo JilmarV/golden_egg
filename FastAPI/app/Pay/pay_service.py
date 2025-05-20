@@ -5,6 +5,7 @@
 from sqlalchemy.orm import Session
 
 from fastapi import Depends
+from fastapi import HTTPException
 from app.db.session import get_db
 from app.Pay.pay_schema import PayCreate
 from app.Pay.pay_repository import (
@@ -30,6 +31,10 @@ def read_pay_serv(pay_id: int, db: Session = Depends(get_db)):
 
 def create_pay_serv(pay: PayCreate, db: Session = Depends(get_db)):
     """Create a new payment after validating that user and pay exist."""
+    if pay.amount_paid > 0:
+        raise HTTPException(status_code=400, detail="the amount paid must be greater than 0")
+    if not pay.payment_method.strip():
+        raise HTTPException(status_code=400, detail="payment method is required")
     return create_pay(pay, db)
 
 
@@ -40,6 +45,10 @@ def delete_pay_serv(pay_id: int, db: Session = Depends(get_db)):
 
 def update_pay_serv(pay_id: int, pay_update: PayCreate, db: Session = Depends(get_db)):
     """Update an existing payment after validating that user and pay exist."""
+    if pay_update.amount_paid > 0:
+        raise HTTPException(status_code=400, detail="the amount paid must be greater than 0")
+    if not pay_update.payment_method.strip():
+        raise HTTPException(status_code=400, detail="payment method is required")
     return update_pay(pay_id, pay_update, db)
 
 

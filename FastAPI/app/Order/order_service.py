@@ -31,9 +31,13 @@ def read_order_serv(order_id: int, db: Session):
 
 def create_order_serv(order: OrderCreate, db: Session):
     """Create a new order after validating that user exists."""
+    if order.totalPrice > 0:
+        raise HTTPException(status_code=400, detail="the total price has to be greater than 0")
     user = db.query(User).filter(User.id == order.user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    if not order.state.strip():
+        raise HTTPException(status_code=400, detail="Order is required")
     return create_order(order, db)
 
 
@@ -45,6 +49,12 @@ def update_order_serv(
     if not existing_order:
         raise HTTPException(status_code=404, detail="Order not found")
 
+    if existing_order.totalPrice > 0:
+        raise HTTPException(status_code=400, detail="the total price has to be greater than 0")
+    
+    if not existing_order.state.strip():
+        raise HTTPException(status_code=400, detail="Order is required")
+    
     user = db.query(User).filter(User.id == order_update.user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
