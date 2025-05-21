@@ -1,10 +1,9 @@
 """Repository module for Order operations."""
 
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
 from app.Order.order_schema import OrderCreate
-from app.db.session import get_db
 from app.Order.order_model import Order
 
 

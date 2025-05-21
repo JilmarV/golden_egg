@@ -1,8 +1,7 @@
 """Service layer for supplier operations."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy.orm import Session
+from fastapi import Depends
 from fastapi import HTTPException
 from app.Supplier.supplier_schema import SupplierCreate
 from app.Supplier.supplier_repository import (
@@ -11,10 +10,9 @@ from app.Supplier.supplier_repository import (
     read_supplier,
     update_supplier,
     delete_supplier,
-    check_previous_supplier
+    check_previous_supplier,
 )
 from app.db.session import get_db
-from fastapi import Depends
 
 
 def create_supplier_serv(supplier: SupplierCreate, db: Session = Depends(get_db)):
@@ -30,7 +28,6 @@ def create_supplier_serv(supplier: SupplierCreate, db: Session = Depends(get_db)
         raise HTTPException(status_code=400, detail="Address already exists")
 
     return create_supplier(supplier, db)
-
 
 
 def read_suppliers_serv(db: Session = Depends(get_db)):
@@ -58,6 +55,7 @@ def update_supplier_serv(
     if check_previous_supplier(db, "address", supplier_update.address.strip()):
         raise HTTPException(status_code=400, detail="Address already exists")
     return update_supplier(supplier_id, supplier_update, db)
+
 
 def delete_supplier_serv(supplier_id: int, db: Session = Depends(get_db)):
     """Deletes a supplier by ID."""

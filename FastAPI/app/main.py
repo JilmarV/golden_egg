@@ -1,6 +1,5 @@
 """Main entry point for FastAPI application, including all routers and database initialization."""
 
-# pylint: disable= undefined-variable
 # App module imports
 from app.db.database import engine
 from app.User import user_router, user_model
@@ -61,4 +60,3 @@ app.include_router(order_egg_router.router, prefix="/orderegg")
 app.include_router(bill_router.router, prefix="/bill")
 app.include_router(webvisit_router.router, prefix="/visit")
 app.include_router(auth_router.router)
-

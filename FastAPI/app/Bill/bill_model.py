@@ -1,5 +1,7 @@
 """SQLAlchemy model for the Bill table."""
 
+# pylint: disable=too-few-public-methods
+
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Float, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship

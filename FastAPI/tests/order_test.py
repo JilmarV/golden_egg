@@ -28,7 +28,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 
 @pytest.fixture(scope="function")
-def test_db():
+def _test_db():
     """Creates a fresh database for each test."""
     Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
@@ -40,10 +40,11 @@ def test_db():
 
 
 @pytest.fixture
-def client(test_db):
+def _client(_test_db):
     """Overrides the dependency to use the test database."""
+
     def override_get_db():
-        yield test_db
+        yield _test_db
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
@@ -51,11 +52,23 @@ def client(test_db):
     app.dependency_overrides.clear()
 
 
-def test_create_order(client):
+def test_create_order(_client):
     """Test creating an order."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    response = _client.post(
         "/order/",
         json={
             "totalPrice": 20100,
@@ -71,11 +84,23 @@ def test_create_order(client):
     assert data["user_id"] == 1
 
 
-def test_get_orders(client):
+def test_get_orders(_client):
     """Test retrieving all orders."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    _client.post(
         "/order/",
         json={
             "totalPrice": 40000,
@@ -83,36 +108,56 @@ def test_get_orders(client):
             "user_id": 1,
         },
     )
-    response = client.get("/order/")
+    response = _client.get("/order/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
-def test_get_order(client):
+def test_get_order(_client):
     """Test retrieving a specific order."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    response = client.post(
-        "/order/",
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
         json={
-            "totalPrice": 40000,
-            "state": "pending",
-            "user_id": 1
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
         },
     )
+    response = _client.post(
+        "/order/",
+        json={"totalPrice": 40000, "state": "pending", "user_id": 1},
+    )
     created_order = response.json()
-    response = client.get(f"/order/{created_order['id']}")
+    response = _client.get(f"/order/{created_order['id']}")
     print(response.json())
     assert response.status_code == 200
     data = response.json()
     assert data["totalPrice"] == 40000
 
 
-def test_update_order(client):
+def test_update_order(_client):
     """Test updating an order."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    response = _client.post(
         "/order/",
         json={
             "totalPrice": 40000,
@@ -123,7 +168,7 @@ def test_update_order(client):
     assert response.status_code == 201
     data = response.json()
     order_id = data["id"]
-    response = client.put(
+    response = _client.put(
         f"/order/{order_id}",
         json={
             "totalPrice": 50000,
@@ -131,7 +176,7 @@ def test_update_order(client):
             "user_id": 1,
         },
     )
-    
+
     print(response.json())
     assert response.status_code == 200
     data = response.json()
@@ -140,11 +185,23 @@ def test_update_order(client):
     assert data["user_id"] == 1
 
 
-def test_delete_order(client):
+def test_delete_order(_client):
     """Test deleting an order."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    response = _client.post(
         "/order/",
         json={
             "totalPrice": 40000,
@@ -153,41 +210,42 @@ def test_delete_order(client):
         },
     )
     created_order = response.json()
-    response = client.delete(f"/order/{created_order['id']}")
+    response = _client.delete(f"/order/{created_order['id']}")
     assert response.status_code == 200
-    get_response = client.get(f"/order/{created_order['id']}")
+    get_response = _client.get(f"/order/{created_order['id']}")
     assert get_response.status_code == 404
     
-def test_get_orders_year_month(client):
+
+def test_get_orders_year_month(_client):
     """Test retrieving a specific order."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    response = client.post(
-        "/order/",
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
         json={
-            "totalPrice": 40000,
-            "state": "pending",
-            "user_id": 1
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
         },
     )
-    response = client.post(
+    response = _client.post(
         "/order/",
-        json={
-            "totalPrice": 30000,
-            "state": "pending",
-            "user_id": 1
-        },
+        json={"totalPrice": 40000, "state": "pending", "user_id": 1},
     )
-    response = client.post(
+    response = _client.post(
         "/order/",
-        json={
-            "totalPrice": 20000,
-            "state": "pending",
-            "user_id": 1
-        },
+        json={"totalPrice": 30000, "state": "pending", "user_id": 1},
+    )
+    response = _client.post(
+        "/order/",
+        json={"totalPrice": 20000, "state": "pending", "user_id": 1},
     )
     created_order = response.json()
-    response = client.get("/order/search/totalOrdersMonth", params={"year": 2025, "month": 5})
+    response = _client.get("/order/search/totalOrdersMonth", params={"year": 2025, "month": 5})
     print(response.json())
     assert response.status_code == 200
     data = response.json()

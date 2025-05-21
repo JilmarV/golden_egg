@@ -1,7 +1,5 @@
 """Repository functions for managing roles in the database."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.Role.role_model import Role
@@ -54,5 +52,7 @@ def delete_role(role_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Role deleted successfully"}
 
+
 def check_previous_role(db: Session, field_name: str, value: str):
+    """Checks if a role with the given field name and value exists in the database."""
     return db.query(Role).filter(getattr(Role, field_name) == value).first()

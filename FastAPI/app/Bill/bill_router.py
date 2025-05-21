@@ -1,15 +1,12 @@
 """Router module for Bill endpoints."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from sqlalchemy.orm import Session
-
 from app.db.session import get_db
-
 from fastapi import APIRouter, Depends
 from typing import List
 from app.User.user_schema import UserResponse
-from app.Bill.bill_schema import BillCreate, BillResponse
+from app.Bill.bill_schema import BillCreate
+from app.Bill.bill_schema import BillResponse
 from app.Bill.bill_service import (
     count_customer_bills_current_month_serv,
     create_bill_serv,
@@ -111,7 +108,7 @@ def update_bill_route(
 
 
 @router.get("/customer/countThisMonth")
-def get_customer_bills_count_route(db: Session = Depends(get_db), response_model=int):
+def get_customer_bills_count_route(db: Session = Depends(get_db)):
     """
     Retrieve the count of bills associated with a customer.
 
@@ -174,7 +171,7 @@ def get_all_customer_bills_route(db: Session = Depends(get_db), response_model=l
 
 
 @router.get("/company/monthlySalesTotal")
-def get_monthly_sales_total_route(db: Session = Depends(get_db), response_model=float):
+def get_monthly_sales_total_route(db: Session = Depends(get_db)):
     """
     Retrieves the total amount of sales for the current month.
     Only bills from customers are considered in the calculation.

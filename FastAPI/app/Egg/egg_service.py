@@ -66,7 +66,7 @@ def update_egg_service(egg_id: int, egg: EggCreate, db: Session):
     if egg.sellPrice <= 0:
         raise HTTPException(status_code=400, detail="Buy price must be greater than 0")
     if egg.avalibleQuantity <= 0:
-        raise HTTPException(status_code=400, detail="Quantity must be greater than 0")  
+        raise HTTPException(status_code=400, detail="Quantity must be greater than 0")
     if egg.expirationDate <= date.today():
         raise HTTPException(
             status_code=400, detail="Expiration date must be in the future"

@@ -1,5 +1,6 @@
 """SQLAlchemy model for the Report entity."""
 
+# pylint: disable=too-few-public-methods
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
 from app.db.database import Base
