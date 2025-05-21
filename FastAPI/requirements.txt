@@ -57,4 +57,4 @@ pydantic[email]==2.5.3
 # --- FORM HANDLING ---
 
 # Required for handling form data in FastAPI, including file uploads and form submissions
-python-multipart==0.0.20
+python-multipart

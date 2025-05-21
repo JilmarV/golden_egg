@@ -239,7 +239,7 @@ def test_get_egg_stock(_client):
 def test_get_month_egg(client):
     """Test retrieving all eggs."""
     _client.post(
-        "/supplier/",js on={"name": "Supplier2", "address": "Somewhere"}
+        "/supplier/",json={"name": "Supplier2", "address": "Somewhere"}
     )
     _client.post("/typeeggs/", json={"name": "SupremeEgg"})
     _response = _client.post(
