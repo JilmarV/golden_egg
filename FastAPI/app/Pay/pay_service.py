@@ -8,6 +8,8 @@ from fastapi import Depends
 from fastapi import HTTPException
 from app.db.session import get_db
 from app.Pay.pay_schema import PayCreate
+from app.User.user_model import User
+from app.Bill.bill_model import Bill
 from app.Pay.pay_repository import (
     create_pay,
     read_pays,
@@ -35,6 +37,12 @@ def create_pay_serv(pay: PayCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="the amount paid must be greater than 0")
     if not pay.payment_method.strip():
         raise HTTPException(status_code=400, detail="payment method is required")
+    user = db.query(User).filter(User.id == pay.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    bill = db.query(Bill).filter(Bill.id == pay.bill_id).first()
+    if not bill:
+        raise HTTPException(status_code=404, detail="Bill not found")
     return create_pay(pay, db)
 
 
@@ -49,6 +57,12 @@ def update_pay_serv(pay_id: int, pay_update: PayCreate, db: Session = Depends(ge
         raise HTTPException(status_code=400, detail="the amount paid must be greater than 0")
     if not pay_update.payment_method.strip():
         raise HTTPException(status_code=400, detail="payment method is required")
+    user = db.query(User).filter(User.id == pay_update.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    bill = db.query(Bill).filter(Bill.id == pay_update.bill_id).first()
+    if not bill:
+        raise HTTPException(status_code=404, detail="Bill not found")
     return update_pay(pay_id, pay_update, db)
 
 
