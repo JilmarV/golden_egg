@@ -6,7 +6,6 @@ from typing import Optional
 from pydantic import BaseModel
 
 from app.User.user_schema import UserResponse
-from app.Bill.bill_schema import BillResponse
 
 
 class PayBase(BaseModel):

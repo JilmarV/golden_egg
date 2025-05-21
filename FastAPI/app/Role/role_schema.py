@@ -19,6 +19,6 @@ class RoleResponse(RoleBase):
     id: int
 
     class Config:
-        """Enable ORM mode for response models."""  # pylint: disable=too-few-public-methods
+        """Enable ORM mode for response models."""
 
         orm_mode = True

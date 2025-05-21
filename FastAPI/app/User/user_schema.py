@@ -8,6 +8,7 @@ import re
 
 class UserBase(BaseModel):
     """Base schema with common user fields."""
+
     name: str
     phone_number: constr(min_length=10, max_length=10)
     email: EmailStr
@@ -19,6 +20,7 @@ class UserBase(BaseModel):
     @field_validator("phone_number")
     @classmethod
     def validate_phone(cls, value):
+        """Validates the phone number format."""
         # Verifica que solo tenga dígitos (puedes modificar esto para tu formato)
         if not re.fullmatch(r"\+?[0-9\- ]{10,15}", value):
             raise ValueError("Numero de teléfono inválido")
@@ -27,10 +29,13 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     """Schema for creating a new user."""
+
     password: str
 
 
 class UserResponse(BaseModel):
+    """Schema for user response data."""
+
     id: int
     name: str
     phone_number: str
@@ -41,4 +46,6 @@ class UserResponse(BaseModel):
     roles: List[RoleResponse]
 
     class Config:
+        """Pydantic configuration."""
+
         from_attributes = True

@@ -6,7 +6,7 @@
 from datetime import datetime
 from calendar import monthrange
 from pytest import Session
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 from app.Order.order_model import Order
 from app.Bill.bill_model import Bill
 from app.Bill.bill_repository import (
@@ -16,7 +16,6 @@ from app.Bill.bill_repository import (
     get_all_bills_for_customers,
     get_best_customer_of_month,
     get_bill_by_id,
-    get_db,
     update_bill,
     count_customer_bills_in_range,
     get_monthly_sales_total,
@@ -45,10 +44,12 @@ def read_bill_serv(bill_id: int, db: Session):
 # Service function to create a new bill in the database
 def create_bill_serv(bill: BillCreate, db: Session):
     """Create a new bill after validating that the order exists."""
-    
+
     # Business validation: totalprice must be > 0
     if bill.totalprice <= 0:
-        raise HTTPException(status_code=400, detail="Total price must be greater than zero")
+        raise HTTPException(
+            status_code=400, detail="Total price must be greater than zero"
+        )
 
     order = db.query(Order).filter(Order.id == bill.order_id).first()
     if not order:
@@ -69,9 +70,7 @@ def delete_bill_serv(bill_id: int, db: Session):
 
 
 # Service function to update an existing bill by its ID
-def update_bill_serv(
-    bill_id: int, bill_update: BillCreate, db: Session
-):
+def update_bill_serv(bill_id: int, bill_update: BillCreate, db: Session):
     """Update an existing bill after validating that the order exists."""
     bill = get_bill_by_id(bill_id, db)
     if not bill:
@@ -79,8 +78,10 @@ def update_bill_serv(
 
     # Business validation: totalprice must be > 0
     if bill.totalprice <= 0:
-        raise HTTPException(status_code=400, detail="Total price must be greater than zero")
-    
+        raise HTTPException(
+            status_code=400, detail="Total price must be greater than zero"
+        )
+
     order = db.query(Order).filter(Order.id == bill_update.order_id).first()
     if not order:
         raise HTTPException(

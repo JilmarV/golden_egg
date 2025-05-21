@@ -1,7 +1,5 @@
 """Pydantic schema for WebVisit responses."""
 
-# pylint: disable=too-few-public-methods
-
 from datetime import datetime
 from pydantic import BaseModel
 

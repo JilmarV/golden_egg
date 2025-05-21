@@ -2,7 +2,7 @@
 
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-
+from fastapi import Depends
 from app.TypeEgg.typeegg_repository import (
     create_typeegg,
     read_typeegg,
@@ -12,8 +12,6 @@ from app.TypeEgg.typeegg_repository import (
     get_db,
 )
 from app.TypeEgg.typeegg_schema import TypeEggCreate
-
-from fastapi import Depends
 
 
 def create_typeegg_service(typeegg: TypeEggCreate, db: Session = Depends(get_db)):

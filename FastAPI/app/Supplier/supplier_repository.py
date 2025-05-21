@@ -57,5 +57,17 @@ def delete_supplier(supplier_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Supplier deleted successfully"}
 
+
 def check_previous_supplier(db: Session, field_name: str, value: str):
+    """
+    Checks if a supplier with a specific field value already exists in the database.
+
+    Args:
+        db (Session): The SQLAlchemy database session.
+        field_name (str): The name of the Supplier model field to filter by.
+        value (str): The value to search for in the specified field.
+
+    Returns:
+        Supplier or None: The first Supplier instance matching the criteria, or None if not found.
+    """
     return db.query(Supplier).filter(getattr(Supplier, field_name) == value).first()

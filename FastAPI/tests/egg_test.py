@@ -1,7 +1,5 @@
 """Test cases for Egg endpoints."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, redefined-outer-name
-
 # Standard library
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -28,7 +26,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 
 @pytest.fixture(scope="function")
-def test_db():
+def _test_db():
     """Creates a fresh database for each test."""
     Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
@@ -40,10 +38,11 @@ def test_db():
 
 
 @pytest.fixture
-def client(test_db):
+def _client(_test_db):
     """Overrides the dependency to use the test database."""
+
     def override_get_db():
-        yield test_db
+        yield _test_db
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
@@ -51,13 +50,15 @@ def client(test_db):
     app.dependency_overrides.clear()
 
 
-def test_create_egg(client):
+def test_create_egg(_client):
     """Test creating an egg."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
     print(response.json())
-    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    response = _client.post("/typeeggs/", json={"name": "SupremeEgg"})
     print(response.json())
-    response = client.post(
+    response = _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,
@@ -67,8 +68,8 @@ def test_create_egg(client):
             "entryPrice": 90,
             "color": "White",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
     print(response.json())
     assert response.status_code == 201
@@ -78,11 +79,13 @@ def test_create_egg(client):
     assert "id" in data
 
 
-def test_read_eggs(client):
+def test_read_eggs(_client):
     """Test retrieving all eggs."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post(
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
+    response = _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,
@@ -92,20 +95,22 @@ def test_read_eggs(client):
             "entryPrice": 90,
             "color": "White",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
-    response = client.get("/egg/")
+    response = _client.get("/egg/")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0
 
 
-def test_read_egg(client):
+def test_read_egg(_client):
     """Test retrieving a specific egg."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    create_response = client.post(
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
+    response = _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    create_response = _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,
@@ -115,22 +120,24 @@ def test_read_egg(client):
             "entryPrice": 90,
             "color": "White",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
     created_egg = create_response.json()
-    response = client.get(f"/egg/{created_egg['id']}")
+    response = _client.get(f"/egg/{created_egg['id']}")
     assert response.status_code == 200
     data = response.json()
     assert data["color"] == "White"
     assert data["expirationDate"] == "2026-02-01"
 
 
-def test_update_egg(client):
+def test_update_egg(_client):
     """Test updating an egg."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    create_response = client.post(
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
+    response = _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    create_response = _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,
@@ -140,11 +147,11 @@ def test_update_egg(client):
             "entryPrice": 90,
             "color": "White",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
     created_egg = create_response.json()
-    response = client.put(
+    response = _client.put(
         f"/egg/{created_egg['id']}",
         json={
             "avalibleQuantity": 90,
@@ -154,8 +161,8 @@ def test_update_egg(client):
             "entryPrice": 9000,
             "color": "Brown",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
     assert response.status_code == 200
     data = response.json()
@@ -163,13 +170,15 @@ def test_update_egg(client):
     assert data["expirationDate"] == "2025-09-01"
 
 
-def test_delete_egg(client):
+def test_delete_egg(_client):
     """Test deleting an egg."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
     print(response.json())
-    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    response = _client.post("/typeeggs/", json={"name": "SupremeEgg"})
     print(response.json())
-    create_response = client.post(
+    create_response = _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,
@@ -179,20 +188,23 @@ def test_delete_egg(client):
             "entryPrice": 90,
             "color": "White",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
     created_egg = create_response.json()
-    response = client.delete(f"/egg/{created_egg['id']}")
+    response = _client.delete(f"/egg/{created_egg['id']}")
     assert response.status_code == 200
-    get_response = client.get(f"/egg/{created_egg['id']}")
+    get_response = _client.get(f"/egg/{created_egg['id']}")
     assert get_response.status_code == 404
 
-def test_get_month_egg(client):
+
+def test_get_month_egg(_client):
     """Test retrieving all eggs."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    response = client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post(
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
+    response = _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,
@@ -202,10 +214,10 @@ def test_get_month_egg(client):
             "entryPrice": 90,
             "color": "White",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
-    client.post(
+    _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 91,
@@ -215,10 +227,10 @@ def test_get_month_egg(client):
             "entryPrice": 90,
             "color": "White",
             "type_egg_id": 1,
-            "supplier_id": 1
-        }
+            "supplier_id": 1,
+        },
     )
-    response = client.get("/egg/countThisMonth/")
+    response = _client.get("/egg/countThisMonth/")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0

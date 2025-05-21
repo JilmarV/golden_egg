@@ -1,7 +1,5 @@
 """SQLAlchemy model for the User entity in the system."""
 
-# pylint: disable=import-error, too-few-public-methods
-
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 from app.db.database import Base

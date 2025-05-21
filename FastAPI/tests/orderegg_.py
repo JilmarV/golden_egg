@@ -1,7 +1,5 @@
 """Test cases for Order endpoints."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, redefined-outer-name
-
 # Standard library
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -28,7 +26,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 
 @pytest.fixture(scope="function")
-def test_db():
+def _test_db():
     """Creates a fresh database for each test."""
     Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
@@ -40,10 +38,11 @@ def test_db():
 
 
 @pytest.fixture
-def client(test_db):
+def _client(_test_db):
     """Overrides the dependency to use the test database."""
+
     def override_get_db():
-        yield test_db
+        yield _test_db
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
@@ -51,16 +50,16 @@ def client(test_db):
     app.dependency_overrides.clear()
 
 
-def test_create_orderEgg(client):
+def test_create_order_egg(_client):
     """Test creating an orderEgg."""
-    response = client.post(
+    response = _client.post(
         "/orderEgg/",
         json={
             "quantity": 30,
             "unit_price": 900,
             "sub_total": 180000,
             "egg_id": 1,
-            "order_id": 1
+            "order_id": 1,
         },
     )
     assert response.status_code == 201
@@ -72,63 +71,63 @@ def test_create_orderEgg(client):
     assert data["order_id"] == 1
 
 
-def test_get_orderEggs(client):
+def test_get_order_eggs(_client):
     """Test retrieving all orderEggs."""
-    client.post(
+    _client.post(
         "/orderEgg/",
         json={
             "quantity": 30,
             "unit_price": 900,
             "sub_total": 180000,
             "egg_id": 1,
-            "order_id": 1
+            "order_id": 1,
         },
     )
-    response = client.get("/orderEgg/")
+    response = _client.get("/orderEgg/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
-def test_get_orderEgg(client):
+def test_get_order_egg(_client):
     """Test retrieving a specific orderEgg."""
-    response = client.post(
+    response = _client.post(
         "/orderEgg/",
         json={
             "quantity": 33,
             "unit_price": 900,
             "sub_total": 180000,
             "egg_id": 1,
-            "order_id": 1
+            "order_id": 1,
         },
     )
-    created_orderEgg = response.json()
-    response = client.get(f"/orderEgg/{created_orderEgg['id']}")
+    created_order_egg = response.json()
+    response = _client.get(f"/orderEgg/{created_order_egg['id']}")
     assert response.status_code == 200
     data = response.json()
     assert data["quantity"] == 33
 
 
-def test_update_orderEgg(client):
+def test_update_order_egg(_client):
     """Test updating an orderEgg."""
-    response = client.post(
+    response = _client.post(
         "/orderEgg/",
         json={
             "quantity": 33,
             "unit_price": 900,
             "sub_total": 180000,
             "egg_id": 1,
-            "order_id": 1
+            "order_id": 1,
         },
     )
-    created_orderEgg = response.json()
-    response = client.put(
-        f"/orderEgg/{created_orderEgg['id']}",
+    created_order_egg = response.json()
+    response = _client.put(
+        f"/orderEgg/{created_order_egg['id']}",
         json={
             "quantity": 44,
             "unit_price": 180,
             "sub_total": 240000,
             "egg_id": 1,
-            "order_id": 1
+            "order_id": 1,
         },
     )
     assert response.status_code == 200
@@ -138,20 +137,20 @@ def test_update_orderEgg(client):
     assert data["sub_total"] == 240000
 
 
-def test_delete_orderEgg(client):
+def test_delete_order_egg(_client):
     """Test deleting an orderEgg."""
-    response = client.post(
+    response = _client.post(
         "/orderEgg/",
         json={
             "quantity": 44,
             "unit_price": 180,
             "sub_total": 240000,
             "egg_id": 1,
-            "order_id": 1
+            "order_id": 1,
         },
     )
-    created_orderEgg = response.json()
-    response = client.delete(f"/orderEgg/{created_orderEgg['id']}")
+    created_order_egg = response.json()
+    response = _client.delete(f"/orderEgg/{created_order_egg['id']}")
     assert response.status_code == 200
-    get_response = client.get(f"/orderEgg/{created_orderEgg['id']}")
+    get_response = _client.get(f"/orderEgg/{created_order_egg['id']}")
     assert get_response.status_code == 404

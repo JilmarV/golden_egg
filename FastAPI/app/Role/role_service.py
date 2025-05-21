@@ -1,6 +1,7 @@
 """Service layer for role operations."""
 
 from sqlalchemy.orm import Session
+from fastapi import Depends
 from fastapi import HTTPException
 from app.db.session import get_db
 from app.Role.role_schema import RoleCreate
@@ -11,16 +12,16 @@ from app.Role.role_repository import (
     update_role,
     delete_role,
     check_previous_role,
-    )
-
-from fastapi import Depends
+)
 
 
 def create_role_serv(role: RoleCreate, db: Session = Depends(get_db)):
     """Creates a new role."""
     for attr in ["name"]:
         if check_previous_role(db, attr, getattr(role, attr)):
-            raise HTTPException(status_code=400, detail=f"{attr.capitalize()} Role already exists")
+            raise HTTPException(
+                status_code=400, detail=f"{attr.capitalize()} Role already exists"
+            )
     if not role.name.strip():
         raise HTTPException(status_code=400, detail="name is required")
     return create_role(role, db)

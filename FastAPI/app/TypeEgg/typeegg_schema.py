@@ -1,7 +1,5 @@
 """Pydantic schemas for the TypeEgg model."""
 
-# pylint: disable=too-few-public-methods
-
 from pydantic import BaseModel
 
 
@@ -20,7 +18,6 @@ class TypeEggResponse(TypeEggBase):
 
     id: int
 
-    # pylint: disable=too-few-public-methods
     class Config:
         """Pydantic configuration to enable ORM mode."""
 

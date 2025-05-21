@@ -1,7 +1,5 @@
 """Test cases for Supplier endpoints."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, redefined-outer-name
-
 # Standard library
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -29,7 +27,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 
 @pytest.fixture(scope="function")
-def test_db():
+def _test_db():
     """Creates a fresh database for each test."""
     Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
@@ -41,11 +39,11 @@ def test_db():
 
 
 @pytest.fixture
-def client(test_db):
+def _client(_test_db):
     """Overrides the dependency to use the test database."""
 
     def override_get_db():
-        yield test_db
+        yield _test_db
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
@@ -53,62 +51,72 @@ def client(test_db):
     app.dependency_overrides.clear()
 
 
-def test_create_supplier(client):
+def test_create_supplier(_client):
     """Test creating a supplier."""
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
     assert response.status_code == 201
     data = response.json()
     assert data["name"] == "Supplier2"
 
 
-def test_get_supplier(client):
+def test_get_supplier(_client):
     """Test getting a supplier."""
     # First, create a supplier
-    response = client.post("/supplier/", json={"name": "Supplier", "address": "Someplace"})
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier", "address": "Someplace"}
+    )
     assert response.status_code == 201
     supplier_id = response.json()["id"]
 
     # Now, get the supplier
-    response = client.get(f"/supplier/{supplier_id}")
+    response = _client.get(f"/supplier/{supplier_id}")
     assert response.status_code == 200
     data = response.json()
     assert data["name"] == "Supplier"
 
 
-def test_get_all_suppliers(client):
+def test_get_all_suppliers(_client):
     """Test getting all suppliers."""
     # Create some suppliers
-    client.post("/supplier/", json={"name": "Supplier1", "address": "Someplace"})
-    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    _client.post("/supplier/", json={"name": "Supplier1", "address": "Someplace"})
+    _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
 
     # Get all suppliers
-    response = client.get("/supplier/")
+    response = _client.get("/supplier/")
     assert response.status_code == 200
     data = response.json()
     assert len(data) >= 2
 
 
-def test_update_supplier(client):
+def test_update_supplier(_client):
     """Test updating a supplier."""
     # First, create a supplier
-    response = client.post("/supplier/", json={"name": "Supplier1", "address": "Someplace"})
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier1", "address": "Someplace"}
+    )
     assert response.status_code == 201
     supplier_id = response.json()["id"]
     # Now, update the supplier
-    response = client.put(f"/supplier/{supplier_id}", json={"name": "Supplier2", "address": "Somewhere"})
+    response = _client.put(
+        f"/supplier/{supplier_id}", json={"name": "Supplier2", "address": "Somewhere"}
+    )
     assert response.status_code == 200
     data = response.json()
     assert data["name"] == "Supplier2"
 
 
-def test_delete_supplier(client):
+def test_delete_supplier(_client):
     """Test deleting a supplier."""
     # First, create a supplier
-    response = client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    response = _client.post(
+        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+    )
     assert response.status_code == 201
     supplier_id = response.json()["id"]
     # Now, delete the supplier
-    response = client.delete(f"/supplier/{supplier_id}")
+    response = _client.delete(f"/supplier/{supplier_id}")
     assert response.status_code == 200
     data = response.json()
     assert data["message"] == "Supplier deleted successfully"

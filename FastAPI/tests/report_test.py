@@ -1,7 +1,5 @@
 """Test cases for Report endpoints."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, redefined-outer-name
-
 # Standard library
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -29,7 +27,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 
 @pytest.fixture(scope="function")
-def test_db():
+def _test_dbb():
     """Creates a fresh database for each test."""
     Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
@@ -41,11 +39,11 @@ def test_db():
 
 
 @pytest.fixture
-def client(test_db):
+def _client(_test_db):
     """Overrides the dependency to use the test database."""
 
     def override_get_db():
-        yield test_db
+        yield _test_db
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
@@ -53,9 +51,9 @@ def client(test_db):
     app.dependency_overrides.clear()
 
 
-def test_create_report(client):
+def test_create_report(_client):
     """Test creating a report."""
-    response = client.post(
+    response = _client.post(
         "/report/",
         json={
             "type": "Monthly Report",
@@ -69,9 +67,9 @@ def test_create_report(client):
     assert data["content"] == "This is the content of the report."
 
 
-def test_get_report(client):
+def test_get_report(_client):
     """Test retrieving a report."""
-    response = client.post(
+    response = _client.post(
         "/report/",
         json={
             "type": "Monthly Report",
@@ -82,7 +80,7 @@ def test_get_report(client):
     assert response.status_code == 201
     data = response.json()
     report_id = data["id"]
-    response = client.get(f"/report/{report_id}")
+    response = _client.get(f"/report/{report_id}")
     assert response.status_code == 200
     data = response.json()
     assert data["type"] == "Monthly Report"
@@ -90,9 +88,9 @@ def test_get_report(client):
     assert data["content"] == "This is the content of the report."
 
 
-def test_get_all_reports(client):
+def test_get_all_reports(_client):
     """Test retrieving all reports."""
-    response = client.post(
+    response = _client.post(
         "/report/",
         json={
             "type": "Monthly Report",
@@ -102,15 +100,15 @@ def test_get_all_reports(client):
     )
     assert response.status_code == 201
     data = response.json()
-    response = client.get("/report/")
+    response = _client.get("/report/")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0
 
 
-def test_update_report(client):
+def test_update_report(_client):
     """Test updating a report."""
-    response = client.post(
+    response = _client.post(
         "/report/",
         json={
             "type": "Monthly Report",
@@ -121,7 +119,7 @@ def test_update_report(client):
     assert response.status_code == 201
     data = response.json()
     report_id = data["id"]
-    response = client.put(
+    response = _client.put(
         f"/report/{report_id}",
         json={
             "type": "Updated Report",
@@ -136,9 +134,9 @@ def test_update_report(client):
     assert data["content"] == "Updated content."
 
 
-def test_delete_report(client):
+def test_delete_report(_client):
     """Test deleting a report."""
-    response = client.post(
+    response = _client.post(
         "/report/",
         json={
             "type": "Monthly Report",
@@ -149,27 +147,66 @@ def test_delete_report(client):
     assert response.status_code == 201
     data = response.json()
     report_id = data["id"]
-    response = client.delete(f"/report/{report_id}")
+    response = _client.delete(f"/report/{report_id}")
     assert response.status_code == 200
     data = response.json()
     assert data["message"] == "Report deleted successfully"
 
     # Verify that the report no longer exists
-    response = client.get(f"/report/{report_id}")
+    response = _client.get(f"/report/{report_id}")
     assert response.status_code == 404
 
-def test_get_total_client_bills_route(client):
+
+def test_get_total_client_bills_route(_client):
     """Test retrieving all reports."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
-    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
-    client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
-    client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
-    client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
-    client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    _client.post(
+        "/order/",
+        json={
+            "totalPrice": 20100,
+            "state": "pending",
+            "user_id": 1,
+        },
+    )
+    _client.post(
+        "/order/",
+        json={
+            "totalPrice": 20100,
+            "state": "pending",
+            "user_id": 2,
+        },
+    )
+    _client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
+    _client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
+    _client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
+    _client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
+    response = _client.post(
         "/report/",
         json={
             "type": "Monthly Report",
@@ -179,23 +216,62 @@ def test_get_total_client_bills_route(client):
     )
     assert response.status_code == 201
     data = response.json()
-    response = client.get("/bills/clients/month-total")
+    response = _client.get("/bills/clients/month-total")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0
 
-def test_get_top_client_spender_this_month(client):
+
+def test_get_top_client_spender_this_month(_client):
     """Test retrieving all reports."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 1,},)
-    client.post("/order/",json={"totalPrice": 20100,"state": "pending","user_id": 2,},)
-    client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
-    client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
-    client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
-    client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    _client.post(
+        "/user/",
+        json={
+            "name": "User",
+            "phone_number": "3133333333",
+            "email": "SomeEmail@Mail.com",
+            "username": "user",
+            "password": "123",
+            "address": "Somewhere",
+            "enabled": True,
+            "role_ids": [1],
+        },
+    )
+    _client.post(
+        "/order/",
+        json={
+            "totalPrice": 20100,
+            "state": "pending",
+            "user_id": 1,
+        },
+    )
+    _client.post(
+        "/order/",
+        json={
+            "totalPrice": 20100,
+            "state": "pending",
+            "user_id": 2,
+        },
+    )
+    _client.post("/bill/", json={"totalprice": 1000, "paid": False, "order_id": 1})
+    _client.post("/bill/", json={"totalprice": 2000, "paid": False, "order_id": 1})
+    _client.post("/bill/", json={"totalprice": 3000, "paid": False, "order_id": 1})
+    _client.post("/bill/", json={"totalprice": 4000, "paid": False, "order_id": 2})
+    response = _client.post(
         "/report/",
         json={
             "type": "Monthly Report",
@@ -205,7 +281,7 @@ def test_get_top_client_spender_this_month(client):
     )
     assert response.status_code == 201
     data = response.json()
-    response = client.get("/bills/monthlySalesTotal")
+    response = _client.get("/bills/monthlySalesTotal")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0

@@ -1,7 +1,5 @@
 """SQLAlchemy model for the Role entity."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods
-
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.db.database import Base

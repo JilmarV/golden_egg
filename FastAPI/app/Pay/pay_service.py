@@ -34,7 +34,9 @@ def read_pay_serv(pay_id: int, db: Session = Depends(get_db)):
 def create_pay_serv(pay: PayCreate, db: Session = Depends(get_db)):
     """Create a new payment after validating that user and pay exist."""
     if pay.amount_paid > 0:
-        raise HTTPException(status_code=400, detail="the amount paid must be greater than 0")
+        raise HTTPException(
+            status_code=400, detail="the amount paid must be greater than 0"
+        )
     if not pay.payment_method.strip():
         raise HTTPException(status_code=400, detail="payment method is required")
     user = db.query(User).filter(User.id == pay.user_id).first()
@@ -54,7 +56,9 @@ def delete_pay_serv(pay_id: int, db: Session = Depends(get_db)):
 def update_pay_serv(pay_id: int, pay_update: PayCreate, db: Session = Depends(get_db)):
     """Update an existing payment after validating that user and pay exist."""
     if pay_update.amount_paid > 0:
-        raise HTTPException(status_code=400, detail="the amount paid must be greater than 0")
+        raise HTTPException(
+            status_code=400, detail="the amount paid must be greater than 0"
+        )
     if not pay_update.payment_method.strip():
         raise HTTPException(status_code=400, detail="payment method is required")
     user = db.query(User).filter(User.id == pay_update.user_id).first()

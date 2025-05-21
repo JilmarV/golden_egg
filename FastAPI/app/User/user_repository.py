@@ -1,7 +1,5 @@
 """Repository functions for managing users in the database."""
 
-# pylint: disable=import-error, no-name-in-module
-
 from app.db.session import get_db
 from app.User.user_model import User
 from app.Role.role_model import Role
@@ -21,7 +19,7 @@ def create_user(user_data: UserCreate, roles: list[Role], db: Session):
         password=user_data.password,
         address=user_data.address,
         enabled=user_data.enabled,
-        roles=roles
+        roles=roles,
     )
     db.add(db_user)
     db.commit()
@@ -55,8 +53,12 @@ def update_user(user_id: int, user_update: UserCreate, db: Session = Depends(get
     db.refresh(user)
     return user
 
+
 def check_previous_user(db: Session, field_name: str, value: str):
+    """Checks if a user with the given field name and value already exists."""
+
     return db.query(User).filter(getattr(User, field_name) == value).first()
+
 
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     """Deletes a user from the database by its ID."""
@@ -67,8 +69,11 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "User deleted successfully"}
 
-def read_users_by_role(role_id: int,db: Session):
+
+def read_users_by_role(role_id: int, db: Session):
+    """Retrieves all users with a specific role."""
     return db.query(User).filter(User.roles.any(Role.id == role_id)).all()
+
 
 def get_user_by_username(db: Session, username: str) -> User:
     """Retrieve a user by their username."""

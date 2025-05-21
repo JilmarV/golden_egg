@@ -5,7 +5,8 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 from datetime import datetime
-from sqlalchemy import func, desc
+from sqlalchemy import func
+from sqlalchemy import desc
 from app.db.session import get_db
 from app.Report.report_model import Report
 from app.Report.report_schema import ReportCreate

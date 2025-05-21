@@ -4,8 +4,7 @@
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException
-from app.db.session import get_db
+from fastapi import HTTPException
 from app.Bill.bill_model import Bill
 from app.Bill.bill_schema import BillCreate
 from app.Order.order_model import Order
