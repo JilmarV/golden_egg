@@ -21,4 +21,4 @@ class RoleResponse(RoleBase):
     class Config:
         """Enable ORM mode for response models."""
 
-        orm_mode = True
+        from_attributes = True

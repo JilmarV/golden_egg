@@ -10,7 +10,7 @@ from fastapi import HTTPException, Depends
 
 def create_supplier(supplier: SupplierCreate, db: Session):
     """Creates a new supplier."""
-    db_supplier = Supplier(**supplier.dict())
+    db_supplier = Supplier(**supplier.model_dump())
     db.add(db_supplier)
     db.commit()
     db.refresh(db_supplier)
@@ -40,7 +40,7 @@ def update_supplier(
     if supplier is None:
         raise HTTPException(status_code=404, detail="Supplier not found")
 
-    for key, value in supplier_update.dict(exclude_unset=True).items():
+    for key, value in supplier_update.model_dump(exclude_unset=True).items():
         setattr(supplier, key, value)
 
     db.commit()

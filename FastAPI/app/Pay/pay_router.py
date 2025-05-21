@@ -55,7 +55,7 @@ def delete_pay_route(pay_id: int, db: Session = Depends(get_db)):
     return {"message": "Pay deleted successfully"}
 
 
-@router.get("/total_earnings")
+@router.get("/earnings/total_earnings")
 def total_pay_route(db: Session = Depends(get_db)):
     """
     Endpoint to retrieve the total earnings.
@@ -69,8 +69,6 @@ def total_pay_route(db: Session = Depends(get_db)):
     """
     return get_total_earnings_serv(db)
 
-
-# Añadir como obtiene el mes y año
 @router.get("/earnings/total_earnings_month")
 def total_pay_month_route(year: int, month: int, db: Session = Depends(get_db)):
     """

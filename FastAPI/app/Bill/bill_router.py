@@ -3,6 +3,8 @@
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from fastapi import APIRouter, Depends
+from typing import List
+from app.User.user_schema import UserResponse
 from app.Bill.bill_schema import BillCreate
 from app.Bill.bill_schema import BillResponse
 from app.Bill.bill_service import (
@@ -38,7 +40,7 @@ def create_bill_route(bill: BillCreate, db: Session = Depends(get_db)):
 
 
 # Endpoint to retrieve a specific bill by its ID
-@router.get("/{bill_id}")
+@router.get("/{bill_id}", response_model=BillResponse)
 def get_bill_route(bill_id: int, db: Session = Depends(get_db)):
     """
     Retrieve a bill by its ID.
@@ -55,7 +57,7 @@ def get_bill_route(bill_id: int, db: Session = Depends(get_db)):
 
 
 # Endpoint to retrieve all bills
-@router.get("/")
+@router.get("/", response_model= List[BillResponse])
 def read_bills_route(db: Session = Depends(get_db)):
     """
     Handles the HTTP GET request to retrieve all bills.
@@ -121,7 +123,7 @@ def get_customer_bills_count_route(db: Session = Depends(get_db)):
 
 
 @router.get("/customer/bestCustomer")
-def get_best_customer_route(db: Session = Depends(get_db)):
+def get_best_customer_route(db: Session = Depends(get_db), response_model=UserResponse):
     """
     Retrieve the best customer based on the number of bills.
 
@@ -135,8 +137,8 @@ def get_best_customer_route(db: Session = Depends(get_db)):
     return get_best_customer_of_month_serv(db)
 
 
-@router.get("/company/getAllOfCompany")
-def get_all_bills_of_company_route(db: Session = Depends(get_db)):
+@router.get("/company/getAllOfCompany", response_model= List[BillResponse])
+def get_all_bills_of_company_route(db: Session = Depends(get_db), response_model=list):
     """
     Retrieve all bills associated with a company.
 
@@ -153,8 +155,8 @@ def get_all_bills_of_company_route(db: Session = Depends(get_db)):
     return get_all_bills_for_company_serv(db)
 
 
-@router.get("/customer/getAllOfCustomers")
-def get_all_customer_bills_route(db: Session = Depends(get_db)):
+@router.get("/customer/getAllOfCustomers", response_model= List[BillResponse])
+def get_all_customer_bills_route(db: Session = Depends(get_db), response_model=list[BillResponse]):
     """
     Retrieve all bills associated with customers (users with the "CUSTOMER" role).
 

@@ -10,7 +10,7 @@ from app.Egg.egg_model import Egg
 # Create a new egg in the database
 def create_egg(egg: EggCreate, db: Session = Depends(get_db)):
     """Create a new egg record in the database."""
-    db_egg = Egg(**egg.dict())
+    db_egg = Egg(**egg.model_dump())
     db.add(db_egg)
     db.commit()
     db.refresh(db_egg)
@@ -42,7 +42,7 @@ def update_egg(egg_id: int, egg: EggCreate, db: Session = Depends(get_db)):
     if not db_egg:
         raise HTTPException(status_code=404, detail="Egg not found")
 
-    for key, value in egg.dict().items():
+    for key, value in egg.model_dump().items():
         setattr(db_egg, key, value)
     db.commit()
     db.refresh(db_egg)

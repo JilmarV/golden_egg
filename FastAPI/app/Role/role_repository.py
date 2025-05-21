@@ -9,7 +9,7 @@ from fastapi import Depends, HTTPException
 
 def create_role(role: RoleCreate, db: Session):
     """Creates a new role in the database."""
-    db_role = Role(**role.dict())
+    db_role = Role(**role.model_dump())
     db.add(db_role)
     db.commit()
     db.refresh(db_role)
@@ -35,7 +35,7 @@ def update_role(role_id: int, role_update: RoleCreate, db: Session = Depends(get
     if role is None:
         raise HTTPException(status_code=404, detail="Role not found")
 
-    for key, value in role_update.dict(exclude_unset=True).items():
+    for key, value in role_update.model_dump(exclude_unset=True).items():
         setattr(role, key, value)
 
     db.commit()

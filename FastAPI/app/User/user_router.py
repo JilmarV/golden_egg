@@ -39,7 +39,7 @@ def create_user_route(user: UserCreate, db: Session = Depends(get_db)):
     return create_user_serv(user, db)
 
 
-@router.get("/me", response_model=UserResponse)
+@router.get("/search/me", response_model=UserResponse)
 def get_logged_user(current_user: User = Depends(get_current_user)):
     """
     Retrieve the currently authenticated user.
@@ -53,8 +53,11 @@ def get_logged_user(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-@router.get("/{user_id}", response_model=UserResponse)
-def get_user_route(user_id: int, db: Session = Depends(get_db)):
+@router.get("/{user_id}", response_model=UserResponse, dependencies=[Depends(require_admin)])
+def get_user_route(
+    user_id: int,
+    db: Session = Depends(get_db),
+):
     """
     Retrieve a user by their user ID.
 
@@ -71,8 +74,11 @@ def get_user_route(user_id: int, db: Session = Depends(get_db)):
     return read_user_serv(user_id, db)
 
 
-@router.delete("/{user_id}", response_model=dict)
-def delete_user_route(user_id: int, db: Session = Depends(get_db)):
+@router.delete("/{user_id}", response_model=dict, dependencies=[Depends(require_admin)])
+def delete_user_route(
+    user_id: int,
+    db: Session = Depends(get_db),
+):
     """
     Deletes a user from the database based on the provided user ID.
 
@@ -86,24 +92,19 @@ def delete_user_route(user_id: int, db: Session = Depends(get_db)):
     return delete_user_serv(user_id, db)
 
 
-@router.get("/", response_model=List[UserResponse])
-def read_users_route(db: Session = Depends(get_db)):
-    """
-    Endpoint to retrieve a list of users from the database.
-
-    Args:
-        db (Session, optional): SQLAlchemy database session dependency.
-        Automatically provided by FastAPI's Depends.
-
-    Returns:
-        List[User]: A list of user objects retrieved from the database.
-    """
+@router.get("/", response_model=List[UserResponse], dependencies=[Depends(require_admin)])
+def read_users_route(
+    db: Session = Depends(get_db),
+):
+    """Retrieves all users."""
     return read_users_serv(db)
 
 
-@router.put("/{user_id}", response_model=UserResponse)
+@router.put("/{user_id}", response_model=UserResponse, dependencies=[Depends(require_admin)])
 def update_user_route(
-    user_id: int, user_update: UserCreate, db: Session = Depends(get_db)
+    user_id: int,
+    user_update: UserCreate,
+    db: Session = Depends(get_db),
 ):
     """
     Update an existing user's information.
@@ -119,8 +120,11 @@ def update_user_route(
     return update_user_serv(user_id, user_update, db)
 
 
-@router.get("/byrole/{role_id}", response_model=List[UserResponse])
-def get_users_by_role(role_id: int, db: Session = Depends(get_db)):
+@router.get("/byrole/{role_id}", response_model=List[UserResponse], dependencies=[Depends(require_admin)])
+def get_users_by_role(
+    role_id: int,
+    db: Session = Depends(get_db),
+):
     """
     Retrieve a list of users filtered by their role ID.
 

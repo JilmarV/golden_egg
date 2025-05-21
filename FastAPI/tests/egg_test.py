@@ -198,13 +198,51 @@ def test_delete_egg(_client):
     assert get_response.status_code == 404
 
 
-def test_get_month_egg(_client):
+def test_get_egg_stock(_client):
     """Test retrieving all eggs."""
+    _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post("/typeeggs/", json={"name": "AA"})
     response = _client.post(
-        "/supplier/", json={"name": "Supplier2", "address": "Somewhere"}
+        "/egg/",
+        json={
+            "avalibleQuantity": 30,
+            "expirationDate": "2026-02-01",
+            "entryDate": "2025-05-21",
+            "sellPrice": 100,
+            "entryPrice": 90,
+            "color": "White",
+            "type_egg_id": 2,
+            "supplier_id": 1
+        }
     )
-    response = _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    assert response.status_code == 201
+    response = _client.post(
+        "/egg/",
+        json={
+            "avalibleQuantity": 91,
+            "expirationDate": "2026-02-01",
+            "entryDate": "2025-05-21",
+            "sellPrice": 100,
+            "entryPrice": 90,
+            "color": "White",
+            "type_egg_id": 1,
+            "supplier_id": 1
+        }
+    )
+    assert response.status_code == 201
+    response = _client.get("/egg/search/count_this_month")
+    data = response.json()
+    print(data)
+    assert data >= 2
+
+def test_get_month_egg(client):
+    """Test retrieving all eggs."""
     _client.post(
+        "/supplier/",js on={"name": "Supplier2", "address": "Somewhere"}
+    )
+    _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _response = _client.post(
         "/egg/",
         json={
             "avalibleQuantity": 30,

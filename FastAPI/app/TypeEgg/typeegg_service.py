@@ -16,7 +16,7 @@ from app.TypeEgg.typeegg_schema import TypeEggCreate
 
 def create_typeegg_service(typeegg: TypeEggCreate, db: Session = Depends(get_db)):
     """Creates a new TypeEgg using the repository."""
-    if not TypeEggCreate.name.strip():
+    if not typeegg.name.strip():
         raise HTTPException(status_code=400, detail="name is required")
     return create_typeegg(typeegg, db)
 
@@ -37,7 +37,7 @@ def update_typeegg_service(
     db: Session = Depends(get_db),
 ):
     """Updates an existing TypeEgg by ID."""
-    if not TypeEggCreate.name.strip():
+    if not typeegg_update.name.strip():
         raise HTTPException(status_code=400, detail="name is required")
     return update_typeegg(typeegg_id, typeegg_update, db)
 

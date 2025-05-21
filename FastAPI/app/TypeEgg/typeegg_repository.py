@@ -10,7 +10,7 @@ from fastapi import Depends, HTTPException
 
 def create_typeegg(typeegg: TypeEggCreate, db: Session):
     """Creates a new TypeEgg in the database."""
-    db_typeegg = TypeEgg(**typeegg.dict())
+    db_typeegg = TypeEgg(**typeegg.model_dump())
     db.add(db_typeegg)
     db.commit()
     db.refresh(db_typeegg)
@@ -38,7 +38,7 @@ def update_typeegg(
     if typeegg is None:
         raise HTTPException(status_code=404, detail="TypeEgg not found")
 
-    for key, value in typeegg_update.dict(exclude_unset=True).items():
+    for key, value in typeegg_update.model_dump(exclude_unset=True).items():
         setattr(typeegg, key, value)
 
     db.commit()

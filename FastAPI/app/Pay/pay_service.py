@@ -33,7 +33,7 @@ def read_pay_serv(pay_id: int, db: Session = Depends(get_db)):
 
 def create_pay_serv(pay: PayCreate, db: Session = Depends(get_db)):
     """Create a new payment after validating that user and pay exist."""
-    if pay.amount_paid > 0:
+    if pay.amount_paid <= 0:
         raise HTTPException(
             status_code=400, detail="the amount paid must be greater than 0"
         )
@@ -55,7 +55,7 @@ def delete_pay_serv(pay_id: int, db: Session = Depends(get_db)):
 
 def update_pay_serv(pay_id: int, pay_update: PayCreate, db: Session = Depends(get_db)):
     """Update an existing payment after validating that user and pay exist."""
-    if pay_update.amount_paid > 0:
+    if pay_update.amount_paid <= 0:
         raise HTTPException(
             status_code=400, detail="the amount paid must be greater than 0"
         )
@@ -77,6 +77,6 @@ def get_total_earnings_serv(db: Session = Depends(get_db)):
 
 def get_total_earnings_by_month_serv(
     year: int, month: int, db: Session = Depends(get_db)
-) -> float:
+):
     """Get total earnings for a specific month and year."""
     return total_earnings_by_month(db, year, month)

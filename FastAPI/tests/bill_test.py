@@ -284,8 +284,8 @@ def test_count_this_month_bills(_client):
     print(response.json())
     assert response.status_code == 200
     count = response.json()
-    assert isinstance(count, int)
-    assert count > 0
+    print(count)
+    assert len(count) == 5
 
 
 def test_best_client(_client):
@@ -307,7 +307,7 @@ def test_best_client(_client):
     _client.post(
         "/user/",
         json={
-            "name": "User",
+            "name": "User2",
             "phone_number": "3133333333",
             "email": "SomeEmail@Mail.com",
             "username": "user",
@@ -341,7 +341,8 @@ def test_best_client(_client):
     response = _client.get("/bill/customer/bestCustomer")
     print(response.json())
     assert response.status_code == 200
-    print(response.json())
+    data = response.json()
+    assert data == "User"
 
 
 def test_get_all_company(_client):

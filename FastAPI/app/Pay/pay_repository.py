@@ -27,7 +27,7 @@ def create_pay(pay: PayCreate, db: Session):
     user = db.query(User).filter(User.id == pay.user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    db_pay = Pay(**pay.dict())
+    db_pay = Pay(**pay.model_dump())
     db.add(db_pay)
     db.commit()
     db.refresh(db_pay)
@@ -56,7 +56,7 @@ def update_pay(pay_id: int, pay: PayCreate, db: Session):
     if not db_pay:
         raise HTTPException(status_code=404, detail="Pay not found")
 
-    for key, value in pay.dict().items():
+    for key, value in pay.model_dump().items():
         setattr(db_pay, key, value)
     db.commit()
     db.refresh(db_pay)
@@ -72,7 +72,7 @@ def total_earnings_by_month(db: Session, year: int, month: int) -> float:
         end_date = datetime(year, month + 1, 1)
 
     total = (
-        db.query(sum(Pay.amount_paid))
+        db.query(func.sum(Pay.amount_paid))
         .filter(and_(Pay.issueDate >= start_date, Pay.issueDate < end_date))
         .scalar()
     )

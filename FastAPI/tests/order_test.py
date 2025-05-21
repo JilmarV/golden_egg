@@ -214,9 +214,9 @@ def test_delete_order(_client):
     assert response.status_code == 200
     get_response = _client.get(f"/order/{created_order['id']}")
     assert get_response.status_code == 404
+    
 
-
-def test_get_orders_month(_client):
+def test_get_orders_year_month(_client):
     """Test retrieving a specific order."""
     _client.post("/role/", json={"name": "CUSTOMER"})
     _client.post(
@@ -245,44 +245,8 @@ def test_get_orders_month(_client):
         json={"totalPrice": 20000, "state": "pending", "user_id": 1},
     )
     created_order = response.json()
-    response = _client.get(f"/order/{created_order['id']}")
+    response = _client.get("/order/search/totalOrdersMonth", params={"year": 2025, "month": 5})
     print(response.json())
     assert response.status_code == 200
     data = response.json()
-
-
-def test_count_orders_month(_client):
-    """Test retrieving a specific order."""
-    _client.post("/role/", json={"name": "CUSTOMER"})
-    _client.post(
-        "/user/",
-        json={
-            "name": "User",
-            "phone_number": "3133333333",
-            "email": "SomeEmail@Mail.com",
-            "username": "user",
-            "password": "123",
-            "address": "Somewhere",
-            "enabled": True,
-            "role_ids": [1],
-        },
-    )
-    response = _client.post(
-        "/order/",
-        json={"totalPrice": 40000, "state": "pending", "user_id": 1},
-    )
-    response = _client.post(
-        "/order/",
-        json={"totalPrice": 30000, "state": "pending", "user_id": 1},
-    )
-    response = _client.post(
-        "/order/",
-        json={"totalPrice": 20000, "state": "pending", "user_id": 1},
-    )
-    created_order = response.json()
-    response = _client.get(f"/order/{created_order['id']}")
-    print(response.json())
-    assert response.status_code == 200
-    count = response.json()
-    assert isinstance(count, int)
-    assert count > 0
+    assert len(data) == 3

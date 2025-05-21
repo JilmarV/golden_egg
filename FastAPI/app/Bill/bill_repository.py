@@ -15,7 +15,7 @@ from app.Role.role_model import Role
 # Create a new bill in database
 def create_bill(bill: BillCreate, db: Session):
     """Create a new bill record in the database."""
-    db_bill = Bill(**bill.dict())
+    db_bill = Bill(**bill.model_dump())
     db.add(db_bill)
     db.commit()
     db.refresh(db_bill)
@@ -47,7 +47,7 @@ def update_bill(bill_id: int, bill: BillCreate, db: Session):
     if not db_bill:
         raise HTTPException(status_code=404, detail="Bill not found")
 
-    for key, value in bill.dict().items():
+    for key, value in bill.model_dump().items():
         setattr(db_bill, key, value)
     db.commit()
     db.refresh(db_bill)
@@ -96,16 +96,18 @@ def get_best_customer_of_month(start, end, db: Session) -> str:
     best_customer = (
         db.query(User)
         .join(User.roles)
-        .join(User.bills)
+        .join(User.orders)
+        .join(Order.bill)
         .filter(
             Bill.issueDate >= start,
             Bill.issueDate <= end,
-            Role.name == "CUSTOMER",
+            Role.name == "CUSTOMER"
         )
         .group_by(User.id)
-        .order_by(func.count(Bill.id).desc())  # pylint: disable=not-callable
+        .order_by(func.count(Bill.id).desc()) 
         .first()
     )
+
 
     return best_customer.name if best_customer else None
 

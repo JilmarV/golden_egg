@@ -23,7 +23,7 @@ class BillCreate(BillBase):
     class Config:
         """Pydantic configuration for ORM mode."""
 
-        orm_mode = True
+        from_attributes = True
 
 
 # Schema for responding with Bill data, inherits from BillBase
@@ -38,4 +38,4 @@ class BillResponse(BillBase):
     class Config:
         """Pydantic configuration for ORM mode."""
 
-        orm_mode = True  # Enables compatibility with ORM objects
+        from_attributes = True  # Enables compatibility with ORM objects

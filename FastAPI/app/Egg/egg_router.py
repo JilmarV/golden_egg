@@ -113,8 +113,7 @@ def get_eggs_stock(type_egg_id: int, db: Session = Depends(get_db)):
     """
     return get_eggs_stock_service(type_egg_id, db)
 
-
-@router.get("/countThisMonth", response_model=EggResponse)
+@router.get("/search/count_this_month", response_model = int)
 def get_total_egg_quantity_route(db: Session = Depends(get_db)):
     """
     Retrieves the total quantity of eggs in the database.

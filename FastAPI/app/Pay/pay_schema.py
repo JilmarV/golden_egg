@@ -35,4 +35,4 @@ class PayResponse(PayBase):
     class Config:
         """Pydantic configuration for ORM mode."""
 
-        orm_mode = True
+        from_attributes = True

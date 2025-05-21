@@ -18,7 +18,7 @@ from app.Role.role_model import Role
 
 def create_report(report: ReportCreate, db: Session):
     """Creates a new report."""
-    db_report = Report(**report.dict())
+    db_report = Report(**report.model_dump())
     db.add(db_report)
     db.commit()
     db.refresh(db_report)
@@ -56,7 +56,7 @@ def update_report(
     if report is None:
         raise HTTPException(status_code=404, detail="Report not found")
 
-    for key, value in report_update.dict(exclude_unset=True).items():
+    for key, value in report_update.model_dump(exclude_unset=True).items():
         setattr(report, key, value)
 
     db.commit()
@@ -108,7 +108,7 @@ def get_top_client_spender_this_month(db: Session = Depends(get_db)):
     """Returns the name of the client who has spent the most this month."""
     start_of_month = datetime.now().replace(
         day=1, hour=0, minute=0, second=0, microsecond=0
-    )
+    ).date()
     result = (
         db.query(User.name, func.sum(Bill.totalprice).label("total_spent"))
         .join(User.orders)
