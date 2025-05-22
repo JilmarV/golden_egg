@@ -59,6 +59,17 @@ def check_previous_user(db: Session, field_name: str, value: str):
 
     return db.query(User).filter(getattr(User, field_name) == value).first()
 
+def check_previous_user_edit(
+    db: Session, field_name: str, value: str, exclude_user_id: int = None
+):
+    """
+    Checks if a user with the given field name and value already exists,
+    optionally excluding a specific user by ID.
+    """
+    query = db.query(User).filter(getattr(User, field_name) == value)
+    if exclude_user_id is not None:
+        query = query.filter(User.id != exclude_user_id)
+    return query.first()
 
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     """Deletes a user from the database by its ID."""

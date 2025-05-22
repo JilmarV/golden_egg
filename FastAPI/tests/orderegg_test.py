@@ -1,65 +1,15 @@
 """Test cases for Order endpoints."""
 
-# pylint: disable=import-error, no-name-in-module, too-few-public-methods, redefined-outer-name
 
-# Standard library
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
-
-# Third-party
-import pytest
-from fastapi.testclient import TestClient
-
-# Application
-from app.main import app
-from app.db.database import Base
-from app.db.session import get_db
-
-# In-memory database
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},
-    poolclass=StaticPool,
-)
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-@pytest.fixture(scope="function")
-def test_db():
-    """Creates a fresh database for each test."""
-    Base.metadata.create_all(bind=engine)
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-        Base.metadata.drop_all(bind=engine)
-
-
-@pytest.fixture
-def client(test_db):
-    """Overrides the dependency to use the test database."""
-    def override_get_db():
-        yield test_db
-
-    app.dependency_overrides[get_db] = override_get_db
-    with TestClient(app) as test_client:
-        yield test_client
-    app.dependency_overrides.clear()
-
-
-def test_create_orderEgg(client):
+def test_create_orderEgg(_client):
     """Test creating an orderEgg."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
-    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
+    _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    response = _client.post(
         "/orderegg/",
         json={
             "quantity": 30,
@@ -78,15 +28,15 @@ def test_create_orderEgg(client):
     assert data["order_id"] == 1
 
 
-def test_get_orderEggs(client):
+def test_get_orderEggs(_client):
     """Test retrieving all orderEggs."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
-    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
-    client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
+    _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    _client.post(
         "/orderegg/",
         json={
             "quantity": 30,
@@ -96,20 +46,20 @@ def test_get_orderEggs(client):
             "order_id": 1
         },
     )
-    response = client.get("/orderegg/")
+    response = _client.get("/orderegg/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
-def test_get_orderEgg(client):
+def test_get_orderEgg(_client):
     """Test retrieving a specific orderEgg."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
-    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
+    _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    response = _client.post(
         "/orderegg/",
         json={
             "quantity": 33,
@@ -120,22 +70,22 @@ def test_get_orderEgg(client):
         },
     )
     created_orderEgg = response.json()
-    response = client.get(f"/orderegg/{created_orderEgg['id']}")
+    response = _client.get(f"/orderegg/{created_orderEgg['id']}")
     print(response.json())
     assert response.status_code == 200
     data = response.json()
     assert data["quantity"] == 33
 
 
-def test_update_orderEgg(client):
+def test_update_orderEgg(_client):
     """Test updating an orderEgg."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
-    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
+    _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    response = _client.post(
         "/orderegg/",
         json={
             "quantity": 33,
@@ -146,7 +96,7 @@ def test_update_orderEgg(client):
         },
     )
     created_orderEgg = response.json()
-    response = client.put(
+    response = _client.put(
         f"/orderegg/{created_orderEgg['id']}",
         json={
             "quantity": 44,
@@ -163,15 +113,15 @@ def test_update_orderEgg(client):
     assert data["sub_total"] == 240000
 
 
-def test_delete_orderEgg(client):
+def test_delete_orderEgg(_client):
     """Test deleting an orderEgg."""
-    client.post("/role/", json={"name": "CUSTOMER"})
-    client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
-    client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
-    client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
-    client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
-    response = client.post(
+    _client.post("/role/", json={"name": "CUSTOMER"})
+    _client.post("/user/", json={"name": "User", "phone_number": "3133333333", "email": "SomeEmail@Mail.com", "username":"user","password": "123","address": "Somewhere","enabled": True, "role_ids": [1]})
+    _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
+    _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
+    _client.post("/typeeggs/", json={"name": "SupremeEgg"})
+    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    response = _client.post(
         "/orderegg/",
         json={
             "quantity": 44,
@@ -182,7 +132,7 @@ def test_delete_orderEgg(client):
         },
     )
     created_orderEgg = response.json()
-    response = client.delete(f"/orderegg/{created_orderEgg['id']}")
+    response = _client.delete(f"/orderegg/{created_orderEgg['id']}")
     assert response.status_code == 200
-    get_response = client.get(f"/orderegg/{created_orderEgg['id']}")
+    get_response = _client.get(f"/orderegg/{created_orderEgg['id']}")
     assert get_response.status_code == 404

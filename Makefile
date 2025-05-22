@@ -1,5 +1,5 @@
 run-test:
-	@docker-compose exec fastapi bash -c "cd /app && pytest -v"
+	@docker-compose exec golden_egg-api-1 bash -c "cd /app && pytest -v"
 
 validate-pylint:
 	@pylint FastAPI/app/

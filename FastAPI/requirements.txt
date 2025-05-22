@@ -39,7 +39,7 @@ gunicorn==21.2.0
 pylint==3.3.7
 
 # Powerful testing framework for writing unit, functional, and integration tests.
-pytest==8.3.5
+pytest
 
 # Asynchronous HTTP client used for integration testing or making external API calls.
 httpx==0.27.0
@@ -47,7 +47,7 @@ httpx==0.27.0
 # --- CONFIGURATION MANAGEMENT ---
 
 # Loads environment variables from a .env file into the application environment.
-python-dotenv==1.0.1
+python-dotenv
 
 # --- DATA VALIDATION ---
 

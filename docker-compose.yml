@@ -61,6 +61,7 @@ services:
           memory: 512M
     environment:
       - DATABASE_URL=mysql+pymysql://user:password@mysql:3306/mydatabase
+      - PYTHONPATH=/app
     networks:
       - net-golden-egg
     depends_on:
