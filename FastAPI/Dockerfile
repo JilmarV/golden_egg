@@ -5,6 +5,8 @@ WORKDIR /app
 # Sets the working directory inside the container to "/app".
 # All subsequent instructions will run from this location.
 
+ENV PYTHONPATH=/app
+
 COPY requirements.txt .
 # Copies the dependency file from your local machine to the container.
 # This allows Docker to cache dependencies and speed up rebuilds.

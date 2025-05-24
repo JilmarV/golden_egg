@@ -13,6 +13,7 @@ from app.User.user_repository import (
     update_user,
     read_users_by_role,
     check_previous_user,
+    check_previous_user_edit
 )
 
 
@@ -88,7 +89,7 @@ def update_user_serv(user_id: int, user_update: UserCreate, db: Session):
 
     for attr in ["email", "username", "address"]:
         value = getattr(user_update, attr).strip()
-        if check_previous_user(db, attr, value, exclude_user_id=user_id):
+        if check_previous_user_edit(db, attr, value, exclude_user_id=user_id):
             raise HTTPException(
                 status_code=400,
                 detail=f"{attr.capitalize()} is already registered for another user",

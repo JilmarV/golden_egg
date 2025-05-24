@@ -1,54 +1,5 @@
 """Test cases for Egg endpoints."""
 
-# Standard library
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
-
-# Third-party
-import pytest
-from fastapi.testclient import TestClient
-
-# Application
-from app.main import app
-from app.db.database import Base
-from app.db.session import get_db
-
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},
-    poolclass=StaticPool,
-)
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-@pytest.fixture(scope="function")
-def _test_db():
-    """Creates a fresh database for each test."""
-    Base.metadata.create_all(bind=engine)
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-        Base.metadata.drop_all(bind=engine)
-
-
-@pytest.fixture
-def _client(_test_db):
-    """Overrides the dependency to use the test database."""
-
-    def override_get_db():
-        yield _test_db
-
-    app.dependency_overrides[get_db] = override_get_db
-    with TestClient(app) as test_client:
-        yield test_client
-    app.dependency_overrides.clear()
-
 
 def test_create_egg(_client):
     """Test creating an egg."""
@@ -236,7 +187,7 @@ def test_get_egg_stock(_client):
     print(data)
     assert data >= 2
 
-def test_get_month_egg(client):
+def test_get_month_egg(_client):
     """Test retrieving all eggs."""
     _client.post(
         "/supplier/",json={"name": "Supplier2", "address": "Somewhere"}
@@ -255,6 +206,7 @@ def test_get_month_egg(client):
             "supplier_id": 1,
         },
     )
+    assert _response.status_code == 201
     _client.post(
         "/egg/",
         json={
@@ -268,7 +220,8 @@ def test_get_month_egg(client):
             "supplier_id": 1,
         },
     )
-    response = _client.get("/egg/countThisMonth/")
+    response = _client.get("/egg/search/count_this_month")
     assert response.status_code == 200
     data = response.json()
-    assert len(data) > 0
+    print(data)
+    assert data == 2
