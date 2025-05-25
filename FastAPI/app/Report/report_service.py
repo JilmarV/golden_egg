@@ -13,10 +13,6 @@ from app.Report.report_repository import (
     create_report,
     delete_report,
     update_report,
-    get_bills_by_staff_roles,
-    get_bills_by_client_role,
-    get_total_client_bills_this_month,
-    get_top_client_spender_this_month,
 )
 
 
@@ -61,23 +57,3 @@ def update_report_serv(
     if not report_update.content.strip():
         raise HTTPException(status_code=400, detail="Content is required")
     return update_report(report_id, report_update, db)
-
-
-def get_staff_bills_serv(db: Session = Depends(get_db)):
-    """Service: Get all bills from staff (Employee or Admin)."""
-    return get_bills_by_staff_roles(db)
-
-
-def get_client_bills_serv(db: Session = Depends(get_db)):
-    """Service: Get all bills from clients."""
-    return get_bills_by_client_role(db)
-
-
-def get_monthly_total_client_bills_serv(db: Session = Depends(get_db)):
-    """Service: Get total price of client bills this month."""
-    return get_total_client_bills_this_month(db)
-
-
-def get_top_client_this_month_serv(db: Session = Depends(get_db)):
-    """Service: Get top spending client this month."""
-    return get_top_client_spender_this_month(db)

@@ -1,60 +1,67 @@
 # --- FASTAPI STACK ---
 
-# Modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints.
+# FastAPI: framework moderno y rápido para construir APIs con Python.
 fastapi==0.103.1
 
-# Lightweight ASGI server to run FastAPI apps in development and production.
+# Uvicorn: servidor ASGI ligero y rápido para ejecutar aplicaciones FastAPI.
 uvicorn==0.23.2
+
 
 # --- DATABASE & ORM ---
 
-# SQL toolkit and ORM that gives full power and flexibility of SQL in Python.
+# SQLAlchemy: ORM completo y flexible para trabajar con bases de datos SQL.
 sqlalchemy==2.0.21
 
-# Pure Python MySQL client, needed for SQLAlchemy to connect to MySQL or MariaDB.
+# PyMySQL: cliente MySQL puro en Python, usado por SQLAlchemy para conectar con MySQL/MariaDB.
 pymysql==1.1.0
+
 
 # --- SECURITY & AUTHENTICATION ---
 
-# Cryptography library used for encryption, decryption, key generation, and digital signatures.
+# Cryptography: biblioteca de cifrado y firmas digitales (soporte requerido por python-jose).
 cryptography==41.0.4
 
-# JWT (JSON Web Token) implementation in Python with cryptography support, used for token-based authentication.
+# python-jose: implementación de JWT en Python, compatible con cryptography.
 python-jose[cryptography]==3.3.0
 
-# Password hashing and verification library, includes bcrypt scheme.
+# Passlib: biblioteca para hashing seguro de contraseñas (incluye bcrypt).
 passlib[bcrypt]==1.7.4
 
-# Optional: explicit bcrypt dependency, required by passlib internally.
+# Bcrypt: algoritmo robusto de hashing, requerido por passlib.
 bcrypt>=4.0.1
+
 
 # --- PRODUCTION DEPLOYMENT ---
 
-# Production-grade WSGI HTTP server for Python web applications.
+# Gunicorn: servidor WSGI para despliegue en producción (aunque Uvicorn es preferido con FastAPI + ASGI).
 gunicorn==21.2.0
+
 
 # --- CODE QUALITY & TESTING ---
 
-# Static analysis tool to enforce coding standards and catch errors early.
+# Pylint: herramienta de análisis estático de código para mantener buenas prácticas y estilo limpio.
 pylint==3.3.7
 
-# Powerful testing framework for writing unit, functional, and integration tests.
+# Pytest: framework de testing flexible para tests unitarios y de integración.
 pytest
 
-# Asynchronous HTTP client used for integration testing or making external API calls.
+# HTTPX: cliente HTTP asíncrono ideal para pruebas y llamadas a APIs externas.
 httpx==0.27.0
+
 
 # --- CONFIGURATION MANAGEMENT ---
 
-# Loads environment variables from a .env file into the application environment.
+# Python-dotenv: carga variables de entorno desde archivos `.env` al entorno de ejecución.
 python-dotenv
+
 
 # --- DATA VALIDATION ---
 
-# Data validation and settings management using Python type hints; includes email validators.
+# Pydantic: validación de datos basada en anotaciones de tipo, versión 2.x con validadores extendidos.
 pydantic[email]==2.5.3
+
 
 # --- FORM HANDLING ---
 
-# Required for handling form data in FastAPI, including file uploads and form submissions
+# python-multipart: permite recibir formularios y archivos en FastAPI (para OAuth2, uploads, etc.).
 python-multipart

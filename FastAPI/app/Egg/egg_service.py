@@ -25,6 +25,8 @@ def create_egg_service(egg: EggCreate, db: Session):
         raise HTTPException(status_code=400, detail="Color is required")
     if egg.sellPrice <= 0:
         raise HTTPException(status_code=400, detail="Buy price must be greater than 0")
+    if egg.entryPrice <= 0:
+        raise HTTPException(status_code=400, detail="Entry price must be greater than 0")
     if egg.avalibleQuantity <= 0:
         raise HTTPException(status_code=400, detail="Quantity must be greater than 0")
     if egg.expirationDate <= date.today():
@@ -65,6 +67,8 @@ def update_egg_service(egg_id: int, egg: EggCreate, db: Session):
         raise HTTPException(status_code=400, detail="Color is required")
     if egg.sellPrice <= 0:
         raise HTTPException(status_code=400, detail="Buy price must be greater than 0")
+    if egg.entryPrice <= 0:
+        raise HTTPException(status_code=400, detail="Entry price must be greater than 0")
     if egg.avalibleQuantity <= 0:
         raise HTTPException(status_code=400, detail="Quantity must be greater than 0")
     if egg.expirationDate <= date.today():

@@ -3,6 +3,7 @@
 from pydantic import BaseModel, EmailStr, constr, field_validator
 from app.Role.role_schema import RoleResponse
 from typing import List
+from typing import Annotated
 import re
 
 
@@ -10,9 +11,9 @@ class UserBase(BaseModel):
     """Base schema with common user fields."""
 
     name: str
-    phone_number: constr(min_length=10, max_length=10)
+    phone_number: Annotated[str, constr(min_length=10, max_length=10)]
     email: EmailStr
-    username: constr(min_length=3, max_length=50)
+    username: Annotated[str, constr(min_length=3, max_length=50)]
     address: str
     enabled: bool
     role_ids: List[int]
