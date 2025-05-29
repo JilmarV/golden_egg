@@ -14,14 +14,14 @@ class Egg(Base):
     __tablename__ = "egg"
 
     id = Column(Integer, primary_key=True, index=True)
-    avalibleQuantity = Column(Integer, nullable=False)
+    availableQuantity = Column(Integer, nullable=False)
     entryDate = Column(DateTime, default=datetime.utcnow)
     expirationDate = Column(DateTime, default=datetime.utcnow)
     entryPrice = Column(Float, nullable=False)
     sellPrice = Column(Float, nullable=False)
     color = Column(String(50), nullable=False)
 
-    type_egg_id = Column(Integer, ForeignKey("typeEgg.id"), nullable=False)
+    type_egg_id = Column(Integer, ForeignKey("type_egg.id"), nullable=False)
     type_egg = relationship("TypeEgg", back_populates="eggs")
 
     supplier_id = Column(Integer, ForeignKey("supplier.id"))

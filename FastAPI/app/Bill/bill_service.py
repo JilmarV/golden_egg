@@ -2,11 +2,10 @@
 
 # pylint: disable=no-name-in-module
 
-
 from datetime import datetime
 from calendar import monthrange
-from pytest import Session
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
 from app.Order.order_model import Order
 from app.Bill.bill_model import Bill
 from app.Bill.bill_repository import (
@@ -23,16 +22,11 @@ from app.Bill.bill_repository import (
 from app.Bill.bill_schema import BillCreate
 
 
-# Service function to read all bills from the database
 def read_bills_serv(db: Session):
     """Retrieve all bills from the database."""
-    bills = db.query(Bill).all()
-    if not bills:
-        raise HTTPException(status_code=404, detail="No bills found")
-    return bills
+    return db.query(Bill).all()
 
 
-# Service function to read a specific bill by its ID
 def read_bill_serv(bill_id: int, db: Session):
     """Retrieve a single bill by ID, or raise 404 if not found."""
     bill = get_bill_by_id(bill_id, db)
@@ -41,26 +35,13 @@ def read_bill_serv(bill_id: int, db: Session):
     return bill
 
 
-# Service function to create a new bill in the database
 def create_bill_serv(bill: BillCreate, db: Session):
-    """Create a new bill after validating that the order exists."""
-
-    # Business validation: totalprice must be > 0
-    if bill.totalprice <= 0:
-        raise HTTPException(
-            status_code=400, detail="Total price must be greater than zero"
-        )
-
+    """Create a new bill after validating the input."""
     order = db.query(Order).filter(Order.id == bill.order_id).first()
-    if not order:
-        raise HTTPException(
-            status_code=404, detail="Order with the given ID does not exist"
-        )
-
+    validate_bill_or_throw(order, bill.totalprice, bill.issueDate)
     return create_bill(bill, db)
 
 
-# Service function to delete a bill by its ID
 def delete_bill_serv(bill_id: int, db: Session):
     """Delete a bill by ID, or raise 404 if not found."""
     bill = get_bill_by_id(bill_id, db)
@@ -69,91 +50,86 @@ def delete_bill_serv(bill_id: int, db: Session):
     return delete_bill(bill_id, db)
 
 
-# Service function to update an existing bill by its ID
 def update_bill_serv(bill_id: int, bill_update: BillCreate, db: Session):
-    """Update an existing bill after validating that the order exists."""
+    """Update an existing bill after validating the input."""
     bill = get_bill_by_id(bill_id, db)
     if not bill:
         raise HTTPException(status_code=404, detail="Bill not found")
 
-    # Business validation: totalprice must be > 0
-    if bill.totalprice <= 0:
-        raise HTTPException(
-            status_code=400, detail="Total price must be greater than zero"
-        )
-
     order = db.query(Order).filter(Order.id == bill_update.order_id).first()
-    if not order:
-        raise HTTPException(
-            status_code=404, detail="Order with the given ID does not exist"
-        )
-
+    validate_bill_or_throw(order, bill_update.totalprice, bill_update.issueDate)
     return update_bill(bill_id, bill_update, db)
 
 
+def get_bills_by_customer_serv(customer_id: int, db: Session):
+    """Retrieve all bills for a specific customer by user ID."""
+    bills = (
+        db.query(Bill)
+        .join(Bill.order)
+        .filter(Order.user_id == customer_id)
+        .all()
+    )
+    return bills
+
+
 def count_customer_bills_current_month_serv(db: Session):
-    """
-    Count the number of bills for users with role 'CUSTOMER'
-    issued during the current month.
-    """
+    """Count the number of bills for users with role 'CUSTOMER' issued this month."""
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     last_day = monthrange(now.year, now.month)[1]
     end = now.replace(day=last_day, hour=23, minute=59, second=59, microsecond=999999)
-
     return count_customer_bills_in_range(start, end, db)
 
 
 def get_best_customer_of_month_serv(db: Session) -> str:
-    """
-    Get the best customer of the month based on the number of bills issued.
-    """
+    """Get the best customer of the month based on number of bills issued."""
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
-    return get_best_customer_of_month(start, end, db)
+    result = get_best_customer_of_month(start, end, db)
+    if not result:
+        return None
+    return result
 
 
 def get_all_bills_for_company_serv(db: Session):
-    """
-    Retrieve all bills for the company.
-    """
-    bills = get_all_bills_for_company(db)
-    if not bills:
-        raise HTTPException(status_code=404, detail="No bills found")
-    return bills
+    """Retrieve all bills for users with company roles."""
+    return get_all_bills_for_company(db)
 
 
 def get_all_bills_for_customers_serv(db: Session):
-    """
-    Retrieve all bills associated with customers (users with the "CUSTOMER" role).
-
-    Args:
-        db (Session): The database session dependency.
-
-    Returns:
-        List: A list of bills associated with customers.
-    """
-    bills = get_all_bills_for_customers(db)
-    if not bills:
-        raise HTTPException(status_code=404, detail="No customer bills found")
-    return bills
+    """Retrieve all bills associated with customers."""
+    return get_all_bills_for_customers(db)
 
 
 def get_monthly_sales_total_serv(db: Session) -> float:
-    """
-    Retrieves the total amount of sales for the current month.
-    Only bills from customers are considered in the calculation.
-
-    Args:
-        db (Session): The database session dependency.
-
-    Returns:
-        float: The total monthly sales amount.
-    """
+    """Retrieve the total amount of sales for the current month."""
     now = datetime.now()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
-
     total = get_monthly_sales_total(start, end, db)
     return total or 0.0
+
+
+def validate_bill_or_throw(order: Order, totalprice: float, issue_date: datetime):
+    """
+    Validates a bill's order, total price, and issue date.
+    Raises an HTTPException if any validation fails.
+    """
+    if not order:
+        raise HTTPException(
+            status_code=404,
+            detail="Order with the given ID does not exist"
+        )
+
+    if totalprice <= 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Total price must be greater than zero"
+        )
+
+    if issue_date > datetime.now():
+        raise HTTPException(
+            status_code=400,
+            detail="Issue date cannot be in the future"
+        )

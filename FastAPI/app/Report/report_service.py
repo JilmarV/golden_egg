@@ -1,8 +1,7 @@
 """Service layer for handling Report operations."""
 
 from sqlalchemy.orm import Session
-from fastapi import Depends
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
 from datetime import datetime
 
 from app.db.session import get_db
@@ -28,15 +27,14 @@ def read_report_serv(report_id: int, db: Session = Depends(get_db)):
 
 def create_report_serv(report: ReportCreate, db: Session = Depends(get_db)):
     """Creates a new report."""
-    if report.dateReport > datetime.now().date():
-        raise HTTPException(
-            status_code=400, detail="Report date cannot be in the future"
-        )
-    if not report.type.strip():
-        raise HTTPException(status_code=400, detail="Type is required")
-    if not report.content.strip():
-        raise HTTPException(status_code=400, detail="Content is required")
+    validate_report_or_throw(report)
     return create_report(report, db)
+
+
+def update_report_serv(report_id: int, report_update: ReportCreate, db: Session = Depends(get_db)):
+    """Updates an existing report."""
+    validate_report_or_throw(report_update)
+    return update_report(report_id, report_update, db)
 
 
 def delete_report_serv(report_id: int, db: Session = Depends(get_db)):
@@ -44,16 +42,11 @@ def delete_report_serv(report_id: int, db: Session = Depends(get_db)):
     return delete_report(report_id, db)
 
 
-def update_report_serv(
-    report_id: int, report_update: ReportCreate, db: Session = Depends(get_db)
-):
-    """Updates an existing report."""
-    if report_update.dateReport > datetime.now().date():
-        raise HTTPException(
-            status_code=400, detail="Report date cannot be in the future"
-        )
-    if not report_update.type.strip():
-        raise HTTPException(status_code=400, detail="Type is required")
-    if not report_update.content.strip():
-        raise HTTPException(status_code=400, detail="Content is required")
-    return update_report(report_id, report_update, db)
+def validate_report_or_throw(report: ReportCreate):
+    """Validates the fields of a report and raises exceptions if invalid."""
+    if not report.type.strip():
+        raise HTTPException(status_code=400, detail="Tipo de reporte no válido")
+    if report.dateReport > datetime.now().date():
+        raise HTTPException(status_code=400, detail="Fecha de reporte inválida")
+    if not report.content.strip():
+        raise HTTPException(status_code=400, detail="Contenido inválido")

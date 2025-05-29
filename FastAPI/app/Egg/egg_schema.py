@@ -13,14 +13,14 @@ from app.TypeEgg.typeegg_schema import TypeEggResponse
 class EggBase(BaseModel):
     """Base schema for Egg model."""
 
-    avalibleQuantity: int
+    availableQuantity: int
     expirationDate: date
     entryDate: date
     sellPrice: float
     entryPrice: float
-    color: str  # Color of the egg
+    color: str
     type_egg_id: int
-    supplier_id: int  # ID of the supplier
+    supplier_id: int 
 
 
 class EggCreate(EggBase):
@@ -31,15 +31,22 @@ class EggResponse(EggBase):
     """Output schema for returning egg data, including related supplier."""
 
     id: int
-    avalibleQuantity: int
-    expirationDate: date
-    entryDate: date
-    sellPrice: float
-    entryPrice: float
     supplier: Optional[SupplierResponse] = None
     type_egg: Optional[TypeEggResponse] = None
 
     class Config:
         """Pydantic configuration for ORM mode."""
+        from_attributes = True
 
+
+class EggSummaryDto(BaseModel):
+    """Egg model, grouping by type and color."""
+
+    type_egg: TypeEggResponse
+    color: str
+    sellPrice: float
+    expirationDate: date
+
+    class Config:
+        """Pydantic configuration for ORM mode."""
         from_attributes = True

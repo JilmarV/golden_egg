@@ -13,8 +13,11 @@ from app.Egg.egg_service import (
     update_egg_service,
     get_eggs_stock_service,
     get_total_egg_quantity_serv,
+    get_egg_summaries_service,
+    find_eggs_by_color_and_type_service
 )
 from app.Egg.egg_schema import EggCreate, EggResponse
+from app.Egg.egg_schema import EggSummaryDto
 from fastapi import APIRouter, Depends
 
 router = APIRouter()
@@ -125,3 +128,31 @@ def get_total_egg_quantity_route(db: Session = Depends(get_db)):
         int: The total quantity of eggs in the database.
     """
     return get_total_egg_quantity_serv(db)
+
+@router.get("/summaries", response_model=list[EggSummaryDto])
+def get_egg_summaries_route(db: Session = Depends(get_db)):
+    """
+    Retrieves summarized data of eggs grouped by type and color.
+
+    Args:
+        db (Session): The database session dependency.
+
+    Returns:
+        List[EggSummaryDto]: Summary including type, color, max sell price and expiration.
+    """
+    return get_egg_summaries_service(db)
+
+@router.get("/filter", response_model=list[EggResponse])
+def find_eggs_by_color_and_type_route(color: str, type_egg_id: int, db: Session = Depends(get_db)):
+    """
+    Retrieves eggs filtered by color and type.
+
+    Args:
+        color (str): The color to filter eggs.
+        type_egg_id (int): The ID of the type to filter eggs.
+        db (Session): The database session dependency.
+
+    Returns:
+        List[EggResponse]: Eggs matching the color and type, ordered by expiration date.
+    """
+    return find_eggs_by_color_and_type_service(color, type_egg_id, db)
