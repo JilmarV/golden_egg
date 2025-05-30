@@ -2,16 +2,17 @@
 
 from typing import List
 from pytest import Session
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.Order.order_schema import OrderCreate, OrderResponse
 from app.Order.order_service import (
+    count_orders_by_customer_serv,
     create_order_serv,
     read_order_serv,
     delete_order_serv,
     read_orders_serv,
     update_order_serv,
     get_orders_by_month_serv,
-    count_orders_this_month_serv
+    count_orders_this_month_serv,
 )
 from app.db.session import (
     get_db,
@@ -108,7 +109,8 @@ def update_order_route(
     """
     return update_order_serv(order_id, order_update, db)
 
-#Añadir de donde saca el año y mes
+
+# Añadir de donde saca el año y mes
 @router.get("/search/totalOrdersMonth", response_model=List[OrderResponse])
 def total_orders_by_month_route(year: int, month: int, db: Session = Depends(get_db)):
     """
@@ -122,6 +124,26 @@ def total_orders_by_month_route(year: int, month: int, db: Session = Depends(get
         float: The total number of orders for the specified month.
     """
     return get_orders_by_month_serv(year, month, db)
+
+
+@router.get("/count-by-customer/{customer_id}", response_model=int)
+def count_orders_by_customer_route(customer_id: int, db: Session = Depends(get_db)):
+    """
+    Counts the number of orders for a specific customer.
+
+    Args:
+        customer_id (int): The ID of the customer whose orders are to be counted.
+        db (Session, optional): The database session dependency.
+        Defaults to the session provided by `get_db`.
+
+    Returns:
+        int: The count of orders for the specified customer.
+    """
+    try:
+        return count_orders_by_customer_serv(customer_id, db)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
 
 @router.get("/search/totalOrdersThisMonth")
 def total_orders_by_this_month_route(db: Session = Depends(get_db)):

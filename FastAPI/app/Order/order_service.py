@@ -2,10 +2,11 @@
 
 # pylint: disable=no-name-in-module
 
-from datetime import datetime
+# from datetime import datetime
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.Order.order_repository import (
+    count_orders_by_customer,
     create_order,
     delete_order,
     read_order,
@@ -71,9 +72,19 @@ def get_orders_by_month_serv(year: int, month: int, db: Session):
     """Get all orders in a specific month."""
     return read_orders_by_month(db, year, month)
 
+
 def count_orders_this_month_serv(db: Session):
     """Count all orders in the current month."""
     now = datetime.now()
-    year = now.year 
-    month = now.month   
+    year = now.year
+    month = now.month
     return len(read_orders_by_month(db, year, month))
+
+
+def count_orders_by_customer_serv(customer_id: int, db: Session):
+    """Count the number of orders for a specific customer."""
+    user = db.query(User).filter(User.id == customer_id).first()
+    if not user:
+        raise ValueError(f"No user found with ID {customer_id}")
+
+    return count_orders_by_customer(db, customer_id)
