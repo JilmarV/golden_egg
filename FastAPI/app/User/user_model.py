@@ -16,7 +16,7 @@ class User(Base):
     phone_number = Column(String(50), unique=True)
     email = Column(String(50), unique=True)
     username = Column(String(50), unique=True)
-    password = Column(String(50))
+    password = Column(String(200))
     address = Column(String(50), unique=True)
     enabled = Column(Boolean)
 

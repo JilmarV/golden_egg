@@ -11,6 +11,7 @@ from app.Order.order_service import (
     read_orders_serv,
     update_order_serv,
     get_orders_by_month_serv,
+    count_orders_this_month_serv
 )
 from app.db.session import (
     get_db,
@@ -121,3 +122,17 @@ def total_orders_by_month_route(year: int, month: int, db: Session = Depends(get
         float: The total number of orders for the specified month.
     """
     return get_orders_by_month_serv(year, month, db)
+
+@router.get("/search/totalOrdersThisMonth")
+def total_orders_by_this_month_route(db: Session = Depends(get_db)):
+    """
+    Retrieves the total number of orders for a specific month.
+    Args:
+        year (int): The year for which to retrieve the total orders.
+        month (int): The month for which to retrieve the total orders.
+        db (Session, optional): The database session dependency.
+        Defaults to the session provided by `get_db`.
+    Returns:
+        float: The total number of orders for the specified month.
+    """
+    return count_orders_this_month_serv(db)

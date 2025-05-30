@@ -28,7 +28,8 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 
 # Bcrypt: algoritmo robusto de hashing, requerido por passlib.
-bcrypt>=4.0.1
+#bcrypt>=4.0.1
+bcrypt>=3.2.0
 
 
 # --- PRODUCTION DEPLOYMENT ---

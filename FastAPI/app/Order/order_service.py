@@ -71,9 +71,9 @@ def get_orders_by_month_serv(year: int, month: int, db: Session):
     """Get all orders in a specific month."""
     return read_orders_by_month(db, year, month)
 
-def count_orders_in_month_serv(year: int, month: int,db: Session):
+def count_orders_this_month_serv(db: Session):
     """Count all orders in the current month."""
     now = datetime.now()
-    start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    year = now.year 
+    month = now.month   
     return len(read_orders_by_month(db, year, month))
