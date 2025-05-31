@@ -8,7 +8,7 @@ from app.db.database import Base
 class TypeEgg(Base):
     """Represents an egg type in the system."""
 
-    __tablename__ = "typeEgg"
+    __tablename__ = "type_egg"
 
     id = Column(Integer, primary_key=True)  # Primary key
     name = Column(String(50), unique=True, nullable=False)

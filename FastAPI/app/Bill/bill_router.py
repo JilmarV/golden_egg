@@ -123,7 +123,7 @@ def get_customer_bills_count_route(db: Session = Depends(get_db)):
 
 
 @router.get("/customer/bestCustomer")
-def get_best_customer_route(db: Session = Depends(get_db), response_model=UserResponse):
+def get_best_customer_route(db: Session = Depends(get_db)):
     """
     Retrieve the best customer based on the number of bills.
 
@@ -138,7 +138,7 @@ def get_best_customer_route(db: Session = Depends(get_db), response_model=UserRe
 
 
 @router.get("/company/getAllOfCompany", response_model= List[BillResponse])
-def get_all_bills_of_company_route(db: Session = Depends(get_db), response_model=list):
+def get_all_bills_of_company_route(db: Session = Depends(get_db)):
     """
     Retrieve all bills associated with a company.
 

@@ -3,19 +3,20 @@
 # pylint: disable=too-few-public-methods
 
 from datetime import date
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ReportBase(BaseModel):
     """Base fields for a report."""
 
-    type: str
-    dateReport: date
-    content: str
+    type: str = Field(..., min_length=1, example="Ventas")
+    dateReport: date = Field(..., example="2025-05-28")
+    content: str = Field(..., min_length=1, example="Informe detallado de ventas del mes.")
 
 
 class ReportCreate(ReportBase):
     """Schema for creating a report."""
+    pass
 
 
 class ReportResponse(ReportBase):
@@ -24,12 +25,11 @@ class ReportResponse(ReportBase):
     id: int
 
     class Config:
-        """Pydantic configuration for ORM compatibility."""
-
-        from_attributes = True
+        orm_mode = True 
+        from_attributes = True 
 
 
 class TopSpenderResponse(BaseModel):
     """Schema for top-spending client name."""
-
-    name: str
+    
+    name: str = Field(..., example="Juan Pérez")

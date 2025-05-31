@@ -16,6 +16,9 @@ from app.UserRole import userrole_model
 from app.WebVisit import webvisit_router, webvisit_model
 from app.Auth import auth_router
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # Create all tables
 user_model.Base.metadata.create_all(bind=engine)
@@ -31,7 +34,6 @@ typeegg_model.Base.metadata.create_all(bind=engine)
 userrole_model.Base.metadata.create_all(bind=engine)
 webvisit_model.Base.metadata.create_all(bind=engine)
 
-
 # FastAPI app initialization
 app = FastAPI(
     title="FastAPI",
@@ -40,14 +42,20 @@ app = FastAPI(
     redoc_url="/redoc",
     openapi_url="/openapi.json",
     swagger_ui_parameters={
-        "defaultmodelsExpandDepth": -1,
+        "defaultModelsExpandDepth": -1,
         "persistAuthorization": True,
     },
 )
 
-# PYTHONPATH=/app pytest
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],  # O "*" para pruebas
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# routers
+# Routers
 app.include_router(user_router.router, prefix="/user")
 app.include_router(role_router.router, prefix="/role")
 app.include_router(supplier_router.router, prefix="/supplier")
@@ -59,4 +67,5 @@ app.include_router(typeegg_router.router, prefix="/typeeggs")
 app.include_router(order_egg_router.router, prefix="/orderegg")
 app.include_router(bill_router.router, prefix="/bill")
 app.include_router(webvisit_router.router, prefix="/visit")
-app.include_router(auth_router.router)
+app.include_router(auth_router.router, prefix="/auth")
+

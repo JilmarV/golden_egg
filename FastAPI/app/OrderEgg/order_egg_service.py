@@ -41,6 +41,12 @@ def create_order_egg_serv(order_egg: OrderEggCreate, db: Session = Depends(get_d
         raise HTTPException(
             status_code=400, detail=" the sub total must be greater than 0"
         )
+    egg = db.query(Egg).filter(Egg.id == order_egg.egg_id).first()
+    if not egg:
+        raise HTTPException(status_code=404, detail="Egg not found")
+    orden = db.query(Order).filter(Order.id == order_egg.order_id).first()
+    if not orden:
+        raise HTTPException(status_code=404, detail="Order not found")
     return create_order_egg(order_egg, db)
 
 
@@ -63,6 +69,12 @@ def update_order_egg_serv(
         raise HTTPException(
             status_code=400, detail=" the sub total must be greater than 0"
         )
+    egg = db.query(Egg).filter(Egg.id == order_egg_update.egg_id).first()
+    if not egg:
+        raise HTTPException(status_code=404, detail="Egg not found")
+    orden = db.query(Order).filter(Order.id == order_egg_update.order_id).first()
+    if not orden:
+        raise HTTPException(status_code=404, detail="Order not found")
     return update_order_egg(order_egg_id, order_egg_update, db)
 
 

@@ -13,6 +13,7 @@ from app.User.user_service import (
     read_users_serv,
     update_user_serv,
     read_users_by_role_serv,
+    read_user_by_username_serv,
 )
 
 from app.Auth.auth_service import get_current_user, require_admin
@@ -120,7 +121,7 @@ def update_user_route(
     return update_user_serv(user_id, user_update, db)
 
 
-@router.get("/byrole/{role_id}", response_model=List[UserResponse], dependencies=[Depends(require_admin)])
+@router.get("/byrole/{role_id}", dependencies=[Depends(require_admin)])
 def get_users_by_role(
     role_id: int,
     db: Session = Depends(get_db),
@@ -135,4 +136,24 @@ def get_users_by_role(
     Returns:
         List[User]: A list of user objects associated with the specified role.
     """
-    return read_users_by_role_serv(role_id, db)
+    return len(read_users_by_role_serv(role_id, db))
+
+@router.get("/getByUsername/{username}", response_model=UserResponse)
+def get_user_by_username_route(
+    username: str,
+    db: Session = Depends(get_db),
+):
+    """
+    Retrieve a user by their user ID.
+
+    Args:
+        user_id (int): The ID of the user to retrieve.
+        db (Session, optional): SQLAlchemy database session dependency.
+
+    Returns:
+        User: The user object corresponding to the provided user_id.
+
+    Raises:
+        HTTPException: If the user does not exist or the current user lacks admin privileges.
+    """
+    return read_user_by_username_serv(username, db)

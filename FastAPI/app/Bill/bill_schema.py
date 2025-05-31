@@ -13,11 +13,13 @@ class BillBase(BaseModel):
     totalprice: float  # The total price of the bill
     paid: bool  # Indicates whether the bill has been paid
     order_id: int  # The ID of the associated order
+    issueDate: datetime
 
 
 # Schema for creating a new Bill, inherits from BillBase
 class BillCreate(BillBase):
     """Input schema for creating a new bill."""
+    issueDate: datetime 
 
     # No additional fields required; inherits from BillBase.
     class Config:

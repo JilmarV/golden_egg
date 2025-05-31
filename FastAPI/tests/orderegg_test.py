@@ -8,7 +8,7 @@ def test_create_orderEgg(_client):
     _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
     _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
     _client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    _client.post("/egg/",json={"availableQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
     response = _client.post(
         "/orderegg/",
         json={
@@ -35,7 +35,7 @@ def test_get_orderEggs(_client):
     _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
     _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
     _client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    _client.post("/egg/",json={"availableQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
     _client.post(
         "/orderegg/",
         json={
@@ -58,7 +58,7 @@ def test_get_orderEgg(_client):
     _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
     _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
     _client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    _client.post("/egg/",json={"availableQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
     response = _client.post(
         "/orderegg/",
         json={
@@ -84,7 +84,7 @@ def test_update_orderEgg(_client):
     _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
     _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
     _client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    _client.post("/egg/",json={"availableQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
     response = _client.post(
         "/orderegg/",
         json={
@@ -120,7 +120,7 @@ def test_delete_orderEgg(_client):
     _client.post("/order/",json={"totalPrice": 40000,"state": "pending","user_id": 1})
     _client.post("/supplier/", json={"name": "Supplier2", "address": "Somewhere"})
     _client.post("/typeeggs/", json={"name": "SupremeEgg"})
-    _client.post("/egg/",json={"avalibleQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
+    _client.post("/egg/",json={"availableQuantity": 30,"expirationDate": "2026-02-01","entryDate": "2025-05-21","sellPrice": 100,"entryPrice": 90,"color": "White","type_egg_id": 1,"supplier_id": 1})
     response = _client.post(
         "/orderegg/",
         json={

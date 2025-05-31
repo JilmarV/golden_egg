@@ -13,7 +13,8 @@ from app.User.user_repository import (
     update_user,
     read_users_by_role,
     check_previous_user,
-    check_previous_user_edit
+    check_previous_user_edit,
+    get_user_by_username
 )
 
 
@@ -108,3 +109,7 @@ def update_user_serv(user_id: int, user_update: UserCreate, db: Session):
 def read_users_by_role_serv(role_id: int, db: Session):
     """Service to get users by role ID."""
     return read_users_by_role(role_id, db)
+
+def read_user_by_username_serv(username: str, db: Session):
+    """Service to get users by role ID."""
+    return get_user_by_username(username, db)

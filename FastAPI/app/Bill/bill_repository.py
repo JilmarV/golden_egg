@@ -68,13 +68,13 @@ def delete_bill(bill_id: int, db: Session):
 
 
 # Counts the number of bills for users with role 'CUSTOMER' issued within a date range
-def count_customer_bills_in_range(start, end, db: Session):
+def count_customer_bills_in_range(start, end, db: Session) -> int:
     """
     Counts the number of bills for users with the role 'CUSTOMER'
     between the given start and end dates.
     """
     count = (
-        db.query(Bill)  # pylint: disable=not-callable
+        db.query(func.count(Bill.id))
         .join(Bill.order)
         .join(Order.user)
         .join(User.roles)
@@ -83,10 +83,9 @@ def count_customer_bills_in_range(start, end, db: Session):
             Bill.issueDate <= end,
             Role.name == "CUSTOMER",
         )
-        .all()
+        .scalar()
     )
-    print(count)
-    return count
+    return count or 0
 
 
 def get_best_customer_of_month(start, end, db: Session) -> str:

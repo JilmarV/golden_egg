@@ -110,3 +110,14 @@ def read_orders_by_month(db: Session, year: int, month: int) -> float:
         .filter(Order.orderDate >= start_date, Order.orderDate < end_date)
         .all()
     )
+
+
+def count_orders_by_customer(db: Session, customer_id: int) -> int:
+    """Count the number of orders for a specific customer.
+    Args:
+        db (Session): The database session.
+        customer_id (int): The ID of the customer.
+    Returns:
+        int: The number of orders for the specified customer.
+    """
+    return db.query(Order).filter(Order.customerId == customer_id).count()

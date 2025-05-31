@@ -26,7 +26,6 @@ def test_create_user(_client):
 
 def test_get_user(_client):
     """Test getting a user."""
-
     response = _client.post("/role/", json={"name": "ADMIN"})
     assert response.status_code == 201
 
@@ -40,20 +39,20 @@ def test_get_user(_client):
             "password": "admin123",
             "address": "HQ",
             "enabled": True,
-            "role_ids": [1],  
+            "role_ids": [1],
         },
     )
     assert response.status_code == 201
 
     response = _client.post(
-        "/login",
+        "/auth/login",
         data={"username": "adminuser", "password": "admin123"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-
     assert response.status_code == 200
     token = response.json()["access_token"]
     auth_headers = {"Authorization": f"Bearer {token}"}
+
     # First, create a user
     response = _client.post("/role/", json={"name": "EMPLOYEE"})
     response = _client.post(
@@ -82,8 +81,6 @@ def test_get_user(_client):
 
 def test_get_all_users(_client):
     """Test getting all users."""
-
-    
     response = _client.post("/role/", json={"name": "ADMIN"})
     assert response.status_code == 201
 
@@ -97,17 +94,16 @@ def test_get_all_users(_client):
             "password": "admin123",
             "address": "HQ",
             "enabled": True,
-            "role_ids": [1],  
+            "role_ids": [1],
         },
     )
     assert response.status_code == 201
 
     response = _client.post(
-        "/login",
+        "/auth/login",
         data={"username": "adminuser", "password": "admin123"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-
     assert response.status_code == 200
     token = response.json()["access_token"]
     auth_headers = {"Authorization": f"Bearer {token}"}
@@ -142,7 +138,7 @@ def test_get_all_users(_client):
     )
 
     # Get all users
-    response = _client.get("/user/", headers= auth_headers)
+    response = _client.get("/user/", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) >= 2
@@ -150,7 +146,6 @@ def test_get_all_users(_client):
 
 def test_update_user(_client):
     """Test updating a user."""
-    
     response = _client.post("/role/", json={"name": "ADMIN"})
     assert response.status_code == 201
 
@@ -164,17 +159,16 @@ def test_update_user(_client):
             "password": "admin123",
             "address": "HQ",
             "enabled": True,
-            "role_ids": [1],  
+            "role_ids": [1],
         },
     )
     assert response.status_code == 201
 
     response = _client.post(
-        "/login",
+        "/auth/login",
         data={"username": "adminuser", "password": "admin123"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-
     assert response.status_code == 200
     token = response.json()["access_token"]
     auth_headers = {"Authorization": f"Bearer {token}"}
@@ -206,7 +200,8 @@ def test_update_user(_client):
             "address": "Somewhere123",
             "enabled": True,
             "role_ids": [2],
-        }, headers=auth_headers
+        },
+        headers=auth_headers
     )
     assert response.status_code == 200
     data = response.json()
@@ -228,17 +223,16 @@ def test_delete_user(_client):
             "password": "admin123",
             "address": "HQ",
             "enabled": True,
-            "role_ids": [1],  
+            "role_ids": [1],
         },
     )
     assert response.status_code == 201
 
     response = _client.post(
-        "/login",
+        "/auth/login",
         data={"username": "adminuser", "password": "admin123"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-
     assert response.status_code == 200
     token = response.json()["access_token"]
     auth_headers = {"Authorization": f"Bearer {token}"}
@@ -280,17 +274,16 @@ def test_get_users_by_role(_client):
             "password": "admin123",
             "address": "HQ",
             "enabled": True,
-            "role_ids": [1],  
+            "role_ids": [1],
         },
     )
     assert response.status_code == 201
 
     response = _client.post(
-        "/login",
+        "/auth/login",
         data={"username": "adminuser", "password": "admin123"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-
     assert response.status_code == 200
     token = response.json()["access_token"]
     auth_headers = {"Authorization": f"Bearer {token}"}
@@ -337,7 +330,7 @@ def test_get_users_by_role(_client):
         },
     )
     # Get all users
-    response = _client.get("/user/byrole/3", headers = auth_headers)
+    response = _client.get("/user/byrole/3", headers=auth_headers)
     print(response.json())
     assert response.status_code == 200
     data = response.json()
